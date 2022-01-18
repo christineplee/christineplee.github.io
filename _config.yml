@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Bilge Mutlu, Professor of Computer Science, University of Wisconsin-Madison"
+title                    : "Bilge Mutlu"
 title_separator          : "-"
 name                     : &name "Bilge Mutlu"
 description              : &description "Professor of Computer Science, University of Wisconsin-Madison"
@@ -81,7 +81,7 @@ analytics:
 # Site Author
 author:
   name             : "Bilge Mutlu"
-  avatar           : "profile.png"
+  avatar           : "Bilge-Mutlu-Photo.jpg"
   bio              : "Sheldon B. and Marianne S. Lubar Professor of Computer Science, Psychology, and Industrial Engineering"
   location         : "University of Wisconsin–Madison"
   employer         :
