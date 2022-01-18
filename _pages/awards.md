@@ -9,40 +9,40 @@ author_profile: true
 
 ### 2021
 
-**H.I. Romnes Faculty Fellowship**
-University of Wisconsin–Madison
+**H.I. Romnes Faculty Fellowship**  
+University of Wisconsin–Madison\
 
-**Sheldon B. and Marianne S. Lubar Professorship**
-Department of Computer Sciences, University of Wisconsin–Madison
+**Sheldon B. and Marianne S. Lubar Professorship**  
+Department of Computer Sciences, University of Wisconsin–Madison\
 
 ### 2020
 
-**Provost’s Early Career Award**
-University of Wisconsin–Madison
+**Provost’s Early Career Award**  
+University of Wisconsin–Madison\
 
 ### 2013
 
-**Allen Newell Award for Research Excellence**
-Carnegie Mellon University
+**Allen Newell Award for Research Excellence**  
+Carnegie Mellon University\
 With Jodi Forlizzi, Sara Kiesler, Carl DiSalvo, Min Kyung Lee, and Cristen Torrey for the “Elucidation of the fundamental principles of human-robot interaction and its associated methods.”
 
 ### 2012
 
-**NSF CAREER Award**
+NSF CAREER Award
 
 ### 2002
 
-**Fulbright Fellowship**
+Fulbright Fellowship
 
 
 ## Paper Awards
 
 ### 2020
 
-HRI 2020
-Honorable Mention (Top 12 in 279)
-ACM/IEEE Human-Robot Interaction (HRI 2020)
-Praveena, Rakita, Mutlu, & Gleicher: Supporting Perception of Weight through Motion-induced Sensory Conflicts in Robot Teleoperation
+HRI 2020  
+Honorable Mention (Top 12 in 279)\
+ACM/IEEE Human-Robot Interaction (HRI 2020)  
+Praveena, Rakita, Mutlu, & Gleicher: Supporting Perception of Weight through Motion-induced Sensory Conflicts in Robot Teleoperation\
 
 ### 2019
 
