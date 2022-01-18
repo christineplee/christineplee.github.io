@@ -13,3 +13,5 @@ I am Sheldon B. and Marianne S. Lubar Professor of [Computer Science](http://cs.
 I am the chief editor of the [HRI section of the journal Frontiers in Robotics & AI](https://www.frontiersin.org/journals/robotics-and-ai/sections/human-robot-interaction#). If you are an HRI researcher interested in publishing in a rigorous, open-access venue, please submit! I am also an associated editor of [Human-Computer Interaction](https://www.tandfonline.com/toc/hhci20/current) and [Foundations and Trends® in Human-Computer Interaction](https://www.nowpublishers.com/HCI). I am also the secretary-treasurer of the [HCI Consortium](http://hcic.org/).
 
 If you are interested in joining the People and Robots Lab, please read [this page](http://pages.cs.wisc.edu/~bilge/getting-involved-in-research-at-the-hci-lab/).
+
+[Download my CV](https://drive.google.com/file/d/1Pq9XBPEpere0rzyoGxmXvgbgmnK-B6r-/view?usp=sharing)
