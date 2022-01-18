@@ -15,3 +15,47 @@ I am the chief editor of the [HRI section of the journal Frontiers in Robotics &
 If you are interested in joining the People and Robots Lab, please read [this page](http://pages.cs.wisc.edu/~bilge/getting-involved-in-research-at-the-hci-lab/).
 
 ### [Download my CV](https://drive.google.com/file/d/1Pq9XBPEpere0rzyoGxmXvgbgmnK-B6r-/view?usp=sharing)
+
+##Advising
+
+I work with a fantastic group of advisees who come from a diverse set of background including computer science, industrial design, industrial engineering, and history who are already building their own research programs. If you are interested in working with me, please read this page.
+
+### Current Postdoctoral Advisees
+
+* Emmanuel Senft
+* Hajin Lim
+
+### Current Ph.D. Advisees
+
+* Danny Rakita, CS
+* David Porfirio, CS
+* Andrew Schoen, CS
+* Laura Stegner, CS
+* Olivia Zhao, Psychology
+* Pragathi Praveena, CS
+* Bengisu Cagiltay, CS
+* Kevin Welsh, CS
+* Nathan White, CS
+
+### Graduated Ph.D. Advisees
+* Sean Andrist, Microsoft Research
+* Joseph Michaelis, University of Illinois Chicago
+* Tomislav Pejsa, Facebook
+* Chien-Ming Huang, Johns Hopkins University
+* Daniel Szafir, University of Colorado Boulder
+* Irene Rae, Google, Inc.
+* Allison Sauppé, University of Wisconsin–La Crosse
+* Shadeequa Miller, Dell Corporation
+
+### Graduated M.S. Advisees
+* Curt Henrichs, Integrated Dynamic Electron Solutions, Inc.
+* Steven Johnson, Google, Inc.
+* Margaret Pearce, Deepfield
+* Christopher Bodden, Software Engineer
+* Faisal Khan, Argonne National Lab
+
+### Graduated B.S. Advisees
+* Erica Lewis, Intel
+* Nathalie Cheng, Exygy
+* Jonathan Mumm, Atomic Labs
+* Zhi Tan, CMU Robotics Institute
