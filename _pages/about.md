@@ -27,13 +27,17 @@ I work with a fantastic group of advisees who come from a diverse set of backgro
 
 ### Current Ph.D. Advisees
 
-* Danny Rakita, CS
+* Bengisu Cagiltay, CS
+* Amy Eiko, CS
+* Christine Lee, CS
+* Nitzan Orr, CS
 * David Porfirio, CS
+* Pragathi Praveena, CS
+* Danny Rakita, CS
 * Andrew Schoen, CS
 * Laura Stegner, CS
+* Dakota Sullivan, CS
 * Olivia Zhao, Psychology
-* Pragathi Praveena, CS
-* Bengisu Cagiltay, CS
 * Kevin Welsh, CS
 * Nathan White, CS
 
