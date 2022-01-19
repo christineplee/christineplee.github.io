@@ -1,5 +1,5 @@
 ---
-title: "Resarch Thread: HRI Design Tools"
+title: "HRI Design Tools"
 excerpt: "Short description of portfolio item number 1<br/><img src='/images/Programming.png'>"
 collection: portfolio
 author_profile: false
