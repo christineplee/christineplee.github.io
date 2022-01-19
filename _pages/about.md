@@ -21,7 +21,7 @@ If you are interested in joining the People and Robots Lab, please read [this pa
 I work with a fantastic group of advisees who come from a diverse set of background including computer science, industrial design, industrial engineering, and history who are already building their own research programs. If you are interested in working with me, please read this page.
 
 | Current Trainees  | Past Trainees |
-| ------------- | ------------- |
+| :------------- | :------------- |
 | Emmanuel Senft, Postdoctoral Researcher | Sean Andrist, PhD Advisee, Microsoft Research |
 | Hajin Lim, Postdoctoral Researcher | Joseph Michaelis, PhD Advisee, University of Illinois Chicago |
 | Bengisu Cagiltay, CS Graduate Student | Tomislav Pejsa, PhD Advisee, Facebook |
