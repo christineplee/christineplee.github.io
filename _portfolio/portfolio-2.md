@@ -1,11 +1,11 @@
 ---
 title: "Human-Robot Collaboration"
-excerpt: "<img width='300px' src='/images/20180824_Robotics_112-980x608.jpg'>"
+excerpt: "<img width='400px' src='/images/20180824_Robotics_112-980x608.jpg'>"
 collection: portfolio
 author_profile: false
 ---
 
-<img width='300px' src='/images/20180824_Robotics_112-980x608.jpg'>
+<img width='600px' src='/images/20180824_Robotics_112-980x608.jpg'>
 
 A key thread of my work involves designing novel interfaces for collaborative robots to facilitate their intuitive and effective use and their successful adoption to industrial settings. Collaborative robots hold tremendous promise for small-scale manufacturing and task automation, although existing interfaces for control and programming are significant bottlenecks to their effective use and widespread adoption.
 
