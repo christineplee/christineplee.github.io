@@ -18,7 +18,7 @@ If you are interested in joining the People and Robots Lab, please read [this pa
 
 ## Advising
 
-I work with a fantastic group of advisees who come from a diverse set of background including computer science, industrial design, industrial engineering, and history who are already building their own research programs. If you are interested in working with me, please read this page.
+I work with a fantastic group of advisees who come from a diverse set of background including computer science, industrial design, industrial engineering, and history who are already building their own research programs. If you are interested in working with me, please read [this page](/joining/).
 
 | Current Trainees  | Past Trainees |
 | :------------- | :------------- |
