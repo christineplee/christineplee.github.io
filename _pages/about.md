@@ -20,46 +20,22 @@ If you are interested in joining the People and Robots Lab, please read [this pa
 
 I work with a fantastic group of advisees who come from a diverse set of background including computer science, industrial design, industrial engineering, and history who are already building their own research programs. If you are interested in working with me, please read this page.
 
-### Current Postdoctoral Advisees
-
-* Emmanuel Senft
-* Hajin Lim
-
-### Current Ph.D. Advisees
-
-* Bengisu Cagiltay, CS
-* Amy Eiko, CS
-* Christine Lee, CS
-* Nitzan Orr, CS
-* David Porfirio, CS
-* Pragathi Praveena, CS
-* Danny Rakita, CS
-* Andrew Schoen, CS
-* Laura Stegner, CS
-* Dakota Sullivan, CS
-* Olivia Zhao, Psychology
-* Kevin Welsh, CS
-* Nathan White, CS
-
-### Graduated Ph.D. Advisees
-* Sean Andrist, Microsoft Research
-* Joseph Michaelis, University of Illinois Chicago
-* Tomislav Pejsa, Facebook
-* Chien-Ming Huang, Johns Hopkins University
-* Daniel Szafir, University of Colorado Boulder
-* Irene Rae, Google, Inc.
-* Allison Sauppé, University of Wisconsin–La Crosse
-* Shadeequa Miller, Dell Corporation
-
-### Graduated M.S. Advisees
-* Curt Henrichs, Integrated Dynamic Electron Solutions, Inc.
-* Steven Johnson, Google, Inc.
-* Margaret Pearce, Deepfield
-* Christopher Bodden, Software Engineer
-* Faisal Khan, Argonne National Lab
-
-### Graduated B.S. Advisees
-* Erica Lewis, Intel
-* Nathalie Cheng, Exygy
-* Jonathan Mumm, Atomic Labs
-* Zhi Tan, CMU Robotics Institute
+| Current Trainees  | Past Trainees |
+| ------------- | ------------- |
+| Emmanuel Senft, Postdoctoral Researcher | Sean Andrist, PhD Advisee, Microsoft Research |
+| Hajin Lim, Postdoctoral Researcher | Joseph Michaelis, PhD Advisee, University of Illinois Chicago |
+| Bengisu Cagiltay, CS Graduate Student | Tomislav Pejsa, PhD Advisee, Facebook |
+| Amy Eiko, CS Graduate Student | Chien-Ming Huang, PhD Advisee, Johns Hopkins University |
+| Christine Lee, CS Graduate Student | Daniel Szafir, PhD Advisee, University of North Carolina Chapel Hill |
+| Nitzan Orr, CS Graduate Student | Irene Rae, PhD Advisee, Google, Inc. |
+| David Porfirio, CS Graduate Student | Allison Sauppé, PhD Advisee, University of Wisconsin–La Crosse |
+| Pragathi Praveena, CS Graduate Student | Shadeequa Miller, PhD Advisee, Dell Corporation |
+| Danny Rakita, CS Graduate Student | Curt Henrichs, MS Advisee, Integrated Dynamic Electron Solutions, Inc. |
+| Andrew Schoen, CS Graduate Student | Steven Johnson, MS Advisee, Google, Inc. |
+| Laura Stegner, CS Graduate Student | Margaret Pearce, MS Advisee, Deepfield |
+| Dakota Sullivan, CS Graduate Student | Christopher Bodden, MS Advisee, Software Engineer |
+| Olivia Zhao, Psychology Graduate Student | Faisal Khan, MS Advisee, Argonne National Lab |
+| Kevin Welsh, CS Graduate Student | Erica Lewis, BS Advisee, Intel |
+| Nathan White, CS Graduate Student | Nathalie Cheng, BS Advisee, Exygy |
+| | Jonathan Mumm, BS Advisee, Atomic Labs |
+| | Zhi Tan, BS Advisee, CMU Robotics Institute |
