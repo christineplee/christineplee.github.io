@@ -22,20 +22,20 @@ I work with a fantastic group of advisees who come from a diverse set of backgro
 
 | Current Trainees  | Past Trainees |
 | :------------- | :------------- |
-| Emmanuel Senft, Postdoctoral Researcher | Sean Andrist, PhD Advisee, Microsoft Research |
-| Hajin Lim, Postdoctoral Researcher | Joseph Michaelis, PhD Advisee, University of Illinois Chicago |
-| Bengisu Cagiltay, CS Graduate Student | Tomislav Pejsa, PhD Advisee, Facebook |
-| Amy Eiko, CS Graduate Student | Chien-Ming Huang, PhD Advisee, Johns Hopkins University |
-| Christine Lee, CS Graduate Student | Daniel Szafir, PhD Advisee, University of North Carolina Chapel Hill |
-| Nitzan Orr, CS Graduate Student | Irene Rae, PhD Advisee, Google, Inc. |
-| David Porfirio, CS Graduate Student | Allison Sauppé, PhD Advisee, University of Wisconsin–La Crosse |
-| Pragathi Praveena, CS Graduate Student | Shadeequa Miller, PhD Advisee, Dell Corporation |
-| Danny Rakita, CS Graduate Student | Curt Henrichs, MS Advisee, Integrated Dynamic Electron Solutions, Inc. |
-| Andrew Schoen, CS Graduate Student | Steven Johnson, MS Advisee, Google, Inc. |
-| Laura Stegner, CS Graduate Student | Margaret Pearce, MS Advisee, Deepfield |
-| Dakota Sullivan, CS Graduate Student | Christopher Bodden, MS Advisee, Software Engineer |
-| Olivia Zhao, Psychology Graduate Student | Faisal Khan, MS Advisee, Argonne National Lab |
-| Kevin Welsh, CS Graduate Student | Erica Lewis, BS Advisee, Intel |
-| Nathan White, CS Graduate Student | Nathalie Cheng, BS Advisee, Exygy |
-| | Jonathan Mumm, BS Advisee, Atomic Labs |
-| | Zhi Tan, BS Advisee, CMU Robotics Institute |
+| [Emmanuel Senft](https://emmanuel-senft.github.io/), *Postdoctoral Researcher* | [Sean Andrist](https://seanandrist.com), *PhD Advisee,* Microsoft Research |
+| [Hajin Lim](https://www.hajinlim.com), *Postdoctoral Researcher* | [Joseph Michaelis](https://lsri.uic.edu/profiles/michaelis-joseph/), *PhD Advisee,* University of Illinois Chicago |
+| [Bengisu Cagiltay](https://www.linkedin.com/in/bengisucagiltay/), *CS Graduate Student* | [Tomislav Pejsa](http://pages.cs.wisc.edu/~tpejsa/), *PhD Advisee,* Facebook |
+| Amy Eiko, *CS Graduate Student* | [Chien-Ming Huang](https://www.cs.jhu.edu/~cmhuang/), *PhD Advisee,* Johns Hopkins University |
+| Christine Lee, *CS Graduate Student* | [Daniel Szafir](https://cs.unc.edu/person/daniel-szafir/), *PhD Advisee,* University of North Carolina Chapel Hill |
+| Nitzan Orr, *CS Graduate Student* | [Irene Rae](http://rene.chargingwombat.com/), *PhD Advisee,* Google, Inc. |
+| [David Porfirio](http://pages.cs.wisc.edu/~dporfirio/), *CS Graduate Student* | [Allison Sauppé](https://cs.uwlax.edu/~asauppe/), *PhD Advisee,* University of Wisconsin–La Crosse |
+| [Pragathi Praveena](https://www.linkedin.com/in/pragathip/), *CS Graduate Student* | [Shadeequa Miller](https://www.linkedin.com/in/s-dee-miller-58240710), *PhD Advisee,* Dell Corporation |
+| [Danny Rakita](https://uwnarratives.wisc.edu/bio/daniel-rakita/), *CS Graduate Student* | [Curt Henrichs](https://robotics.wisc.edu/staff/henrichs-curt/), *MS Advisee,* Integrated Dynamic Electron Solutions, Inc. |
+| [Andrew Schoen](https://andrewjschoen.github.io/), *CS Graduate Student* | [Steven Johnson](http://pages.cs.wisc.edu/~sjj/), *MS Advisee,* Google, Inc. |
+| [Laura Stegner](http://laurastegner.com/), *CS Graduate Student* | [Margaret Pearce](https://www.linkedin.com/in/margaretpearce), *MS Advisee,* Deepfield |
+| Dakota Sullivan, *CS Graduate Student* | [Christopher Bodden](https://uwnarratives.wisc.edu/bio/christopher-bodden/), *MS Advisee,* Software Engineer |
+| [Olivia Zhao](https://www.olivia-zhao.com/), *Psychology Graduate Student* | [Faisal Khan](https://uwnarratives.wisc.edu/bio/christopher-bodden/), *MS Advisee,* Argonne National Lab |
+| Kevin Welsh, *CS Graduate Student* | [Erica Lewis](http://ericaslewis.com/), *BS Advisee,* Intel |
+| Nathan White, *CS Graduate Student* | [Nathalie Cheng](http://www.linkedin.com/in/nathaliecheng), *BS Advisee,* Exygy |
+| | [Jonathan Mumm](http://www.linkedin.com/in/jonathanrmumm), *BS Advisee,* Atomic Labs |
+| | [Zhi Tan](http://xiangzhitan.com/), *BS Advisee,* CMU Robotics Institute |
