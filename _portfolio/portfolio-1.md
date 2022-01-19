@@ -20,9 +20,9 @@ Students who are participating in this work include:
 
 Some of the tools we have built in this thread of research include:
 
-* [RoVer](https://par.nsf.gov/servlets/purl/10080246) — a visual authoring environment that verifies robot programs for social norms and task completeness [Paper](https://par.nsf.gov/servlets/purl/10080246) | [Talk](https://www.youtube.com/watch?v=hXZwBicPR_E)
+[RoVer](https://par.nsf.gov/servlets/purl/10080246) — a visual authoring environment that verifies robot programs for social norms and task completeness [Paper](https://par.nsf.gov/servlets/purl/10080246) | [Talk](https://www.youtube.com/watch?v=hXZwBicPR_E)
 
-* [Synthé](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf) — an authoring system that enables designers to demonstrate social interactions through role play [Paper](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf) | [Talk](https://www.youtube.com/watch?v=bxrN6dW5lH8)
+[Synthé](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf) — an authoring system that enables designers to demonstrate social interactions through role play [Paper](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf) | [Talk](https://www.youtube.com/watch?v=bxrN6dW5lH8)
 
 <iframe width="250" src="https://www.youtube.com/embed/3Kj5mJ0GmLk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
