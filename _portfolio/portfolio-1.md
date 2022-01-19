@@ -1,9 +1,11 @@
 ---
 title: "Resarch Thread: HRI Design Tools"
-excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
+excerpt: "Short description of portfolio item number 1<br/><img src='/images/Programming.png'>"
 collection: portfolio
 author_profile: false
 ---
+
+<img src='/images/Programming.png'>
 
 Our explorations of the design space for robotic technologies have demonstrated that the interactions afforded by these technologies—such as the robotic arm handing objects over at precisely the right time—can be very powerful but highly complex. Creating such interactions will require designers to perform design tasks that are substantially more complex and will demand methods and tools that empower them in tackling such complexity. In a second thread of research, my group has drawn on formal methods, specifically program analysis and synthesis, to reimagine the design process for robotic technologies as a mixed-initiative interaction where prototyping, simulation, and implementation tasks are performed by the computer and designers can focus on the creative and collaborative aspects of the design process.
 In this thread of research, I build a suite of tools we have been building to support the unique and complex task of designing robotics applications for human use in collaboration with researchers in programming languages. My collaborators in this line of work include:
