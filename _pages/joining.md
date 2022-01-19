@@ -1,11 +1,8 @@
 ---
-permalink: /
+permalink: /joining/
 title: "Getting involved in research at the People and Robots Lab"
 excerpt: "Getting involved in research at the People and Robots Lab"
 author_profile: false
-redirect_from: 
-  - /joining/
-  - /joining.html
 ---
 
 Hello and thank you for your interest in getting involved in the [People and Robots Lab](http://peopleandrobots.wisc.edu)!
