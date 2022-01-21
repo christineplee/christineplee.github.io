@@ -16,6 +16,21 @@ If you are interested in joining the People and Robots Lab, please read [this pa
 
 ### [Download my CV](https://drive.google.com/file/d/1Pq9XBPEpere0rzyoGxmXvgbgmnK-B6r-/view?usp=sharing)
 
+---
+
+## Research
+
+My research in [human-robot interaction (HRI)](https://en.wikipedia.org/wiki/Human–robot_interaction) builds human-centered principles and methods to enable effective and intuitive interactions between people and robotic technologies and facilitate the successful integration of these technologies into human environments. Below are highlights from ongoing projects in the [People and Robots Lab](http://peopleandrobots.wisc.edu/).
+
+<p float="left">
+  <img src="/images/Programming.png" width="150" />
+  <img src="/images/20180824_Robotics_112-980x608.jpg" width="150" /> 
+  <img src="/images/Educational-Robots.png" width="150" />
+  <img src="/images/TBI-Research.jpg" width="150" />
+</p>
+
+---
+
 ## Advising
 
 I work with a fantastic group of advisees who come from a diverse set of background including computer science, industrial design, industrial engineering, and history who are already building their own research programs. If you are interested in working with me, please read [this page](/joining/).
