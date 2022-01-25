@@ -20,28 +20,12 @@ If you are interested in joining the People and Robots Lab, please read [this pa
 
 My research in [human-robot interaction (HRI)](https://en.wikipedia.org/wiki/Human–robot_interaction) builds human-centered principles and methods to enable effective and intuitive interactions between people and robotic technologies and facilitate the successful integration of these technologies into human environments. Below are highlights from ongoing projects in the [People and Robots Lab](http://peopleandrobots.wisc.edu/).
 
-![](../images/Programming.png)![](../images/20180824_Robotics_112-980x608.jpg)![](../images/Educational-Robots.png)![](../images/TBI-Research.jpg)
+![](../images/Programming.png) | **HRI Design Tools:** 
+![](../images/20180824_Robotics_112-980x608.jpg) | **Human-Robot Collaboration:** 
+![](../images/Educational-Robots.png) | **Building Social Companions:**
+![](../images/TBI-Research.jpg) | **Supporting Social Participation:**
 
 | HRI Design Tools | Human-Robot Collaboration | Building Social Companions | Supporting Social Participation |
-
-<p float="left">
-  <figure>
-    <img src="/images/Programming.png" height="120" />
-    <figcaption>HRI Design Tools</figcaption>
-  </figure>
-  <figure>
-    <img src="/images/20180824_Robotics_112-980x608.jpg" height="120" /> 
-    <figcaption>Human-Robot Collaboration</figcaption>
-  </figure>
-  <figure>
-    <img src="/images/Educational-Robots.png" height="120" />
-    <figcaption>Building Social Companions</figcaption>
-  </figure>
-  <figure>
-    <img src="/images/TBI-Research.jpg" height="120" />
-    <figcaption>Supporting Social Participation</figcaption>
-  </figure>
-</p>
 
 ## Advising
 
