@@ -22,7 +22,7 @@ My research in [human-robot interaction (HRI)](https://en.wikipedia.org/wiki/Hum
 
 <style>
 td, th, tr {
-   border: none!important;
+   border: none;
 }
 </style>
 
