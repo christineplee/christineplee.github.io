@@ -14,7 +14,7 @@ I am the chief editor of the [HRI section of the journal Frontiers in Robotics &
 
 If you are interested in joining the People and Robots Lab, please read [this page](http://pages.cs.wisc.edu/~bilge/getting-involved-in-research-at-the-hci-lab/).
 
-[Download my CV](https://drive.google.com/file/d/1Pq9XBPEpere0rzyoGxmXvgbgmnK-B6r-/view?usp=sharing) — _Updated: October 2021_
+**[Download my CV](https://drive.google.com/file/d/1Pq9XBPEpere0rzyoGxmXvgbgmnK-B6r-/view?usp=sharing)** — _Updated: October 2021_
 
 ## Research
 
