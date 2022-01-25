@@ -30,6 +30,14 @@ table, td, th, tr {
 | -- | -- | -- | -- |
 | [HRI Design Tools]((/portfolio/porfolio-1/)) | Human-Robot Collaboration | Building Social Companions | Supporting Social Participation |
 
+## Teaching
+
+I teach undergraduate and graduate classes on human-computer interaction, user experience design, and research methods. Below are courses that I am currently teaching or have taught in the last year.
+
+| [![](../images/Programming.png)](/portfolio/porfolio-1/) | ![](../images/20180824_Robotics_112-980x608.jpg) |
+| -- | -- |
+| [Building User Interfaces]((/portfolio/porfolio-1/)) | HCI Research Methodsn |
+
 ## Advising
 
 I work with a fantastic group of advisees who come from a diverse set of background including computer science, industrial design, industrial engineering, and history who are already building their own research programs. If you are interested in working with me, please read [this page](/joining/).
