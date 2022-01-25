@@ -35,7 +35,7 @@ tr.border-bottom {
 
 | [![](../images/Programming.png)](/portfolio/porfolio-1/) | [![](../images/20180824_Robotics_112-980x608.jpg)](/portfolio/porfolio-2/) | [![](../images/Educational-Robots.png)]((/portfolio/porfolio-3/)) | [![](../images/TBI-Research.jpg)]((/portfolio/porfolio-4/)) |
 | :-: | :-: | :-: | :-: |
-| **[HRI Design Tools]((/portfolio/porfolio-1/))** | **[Human-Robot Collaboration](/portfolio/porfolio-2/)** | **[Building Social Companions](/portfolio/porfolio-3/)** | **[Supporting Social Participation](/portfolio/porfolio-4/)** |
+| [HRI Design Tools]((/portfolio/porfolio-1/)) | [Human-Robot Collaboration](/portfolio/porfolio-2/) | [Building Social Companions](/portfolio/porfolio-3/) | [Supporting Social Participation](/portfolio/porfolio-4/) |
 
 ## Teaching
 
@@ -43,7 +43,7 @@ I teach undergraduate and graduate classes on human-computer interaction, user e
 
 | [![](../images/ux-01-400x284.png)](/teaching/teaching-1/) | [![](../images/hci-01-400x284.png)](/teaching/teaching-2/) |
 | :-: | :-: |
-| **[Building User Interfaces](/teaching/teaching-1/)** | **[HCI Research Methods](/teaching/teaching-2/)** |
+| [Building User Interfaces](/teaching/teaching-1/) | [HCI Research Methods](/teaching/teaching-2/) |
 
 ## Advising
 
