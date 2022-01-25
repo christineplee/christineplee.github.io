@@ -34,9 +34,9 @@ table, td, th, tr {
 
 I teach undergraduate and graduate classes on human-computer interaction, user experience design, and research methods. Below are courses that I am currently teaching or have taught in the last year.
 
-| [![](../images/Programming.png)](/portfolio/porfolio-1/) | ![](../images/20180824_Robotics_112-980x608.jpg) |
+| [![](../images/ux-01-400x284.png)](/portfolio/porfolio-1/) | ![](../images/hci-01-400x284.png) |
 | -- | -- |
-| [Building User Interfaces]((/portfolio/porfolio-1/)) | HCI Research Methodsn |
+| [Building User Interfaces]((/teaching/teaching-1/)) | HCI Research Methodsn |
 
 ## Advising
 
