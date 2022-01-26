@@ -16,6 +16,13 @@ If you are interested in joining the People and Robots Lab, please read [this pa
 
 **[Download my CV](https://drive.google.com/file/d/1Pq9XBPEpere0rzyoGxmXvgbgmnK-B6r-/view?usp=sharing)** — _Updated: October 2021_
 
+<div id="example1"></div>
+<script src="/js/pdfobject.js"></script>
+<script>PDFObject.embed("/files/Mutlu-CV.pdf", "#example1");</script>
+<style>
+   .pdfobject-container { height: 30rem; border: 1rem solid rgba(0,0,0,.1); }
+</style>
+
 ## Research
 
 My research in [human-robot interaction (HRI)](https://en.wikipedia.org/wiki/Human–robot_interaction) builds human-centered principles and methods to enable effective and intuitive interactions between people and robotic technologies and facilitate the successful integration of these technologies into human environments. Below are highlights from ongoing projects in the [People and Robots Lab](http://peopleandrobots.wisc.edu/).
@@ -33,19 +40,19 @@ tr.border-bottom {
 }
 </style>
 
-| [![](../images/Programming.png)](/portfolio/porfolio-1/) | [![](../images/20180824_Robotics_112-980x608.jpg)](/portfolio/porfolio-2/) |
+| [![](../images/Programming.png)](/portfolio/porfolio-1) | [![](../images/20180824_Robotics_112-980x608.jpg)](/portfolio/porfolio-2) |
 | :-: | :-: |
-| [HRI Design Tools]((/portfolio/porfolio-1/)) | [Human-Robot Collaboration](/portfolio/porfolio-2/) | 
-| [![](../images/Educational-Robots.png)]((/portfolio/porfolio-3/)) | [![](../images/TBI-Research.jpg)]((/portfolio/porfolio-4/)) |
-| [Building Social Companions](/portfolio/porfolio-3/) | [Supporting Social Participation](/portfolio/porfolio-4/) |
+| **[HRI Design Tools]((/portfolio/porfolio-1))** | **[Human-Robot Collaboration](/portfolio/porfolio-2)** | 
+| [![](../images/Educational-Robots.png)]((/portfolio/porfolio-3)) | [![](../images/TBI-Research.jpg)]((/portfolio/porfolio-4)) |
+| **[Building Social Companions](/portfolio/porfolio-3)** | **[Supporting Social Participation](/portfolio/porfolio-4)** |
 
 ## Teaching
 
 I teach undergraduate and graduate classes on human-computer interaction, user experience design, and research methods. Below are courses that I am currently teaching or have taught in the last year.
 
-| [![](../images/ux-01-400x284.png)](/teaching/teaching-1/) | [![](../images/hci-01-400x284.png)](/teaching/teaching-2/) |
+| [![](../images/ux-01-400x284.png)](/teaching/teaching-1) | [![](../images/hci-01-400x284.png)](/teaching/teaching-2) |
 | :-: | :-: |
-| [Building User Interfaces](/teaching/teaching-1) | [HCI Research Methods](/teaching/teaching-2) |
+| **[Building User Interfaces](/teaching/teaching-1)** | **[HCI Research Methods](/teaching/teaching-2)** |
 
 ## Advising
 
