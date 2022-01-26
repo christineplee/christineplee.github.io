@@ -23,13 +23,13 @@ Students who are participating in this work include:
 
 Some of the tools we have built in this thread of research include:
 
-[RoVer](https://par.nsf.gov/servlets/purl/10080246) — a visual authoring environment that verifies robot programs for social norms and task completeness — [Paper](https://par.nsf.gov/servlets/purl/10080246), [Talk](https://www.youtube.com/watch?v=hXZwBicPR_E)
+* [RoVer](https://par.nsf.gov/servlets/purl/10080246) — a visual authoring environment that verifies robot programs for social norms and task completeness — [Paper](https://par.nsf.gov/servlets/purl/10080246), [Talk](https://www.youtube.com/watch?v=hXZwBicPR_E)
 
-[Synthé](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf) — an authoring system that enables designers to demonstrate social interactions through role play — [Paper](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf), [Talk](https://www.youtube.com/watch?v=bxrN6dW5lH8)
+* [Synthé](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf) — an authoring system that enables designers to demonstrate social interactions through role play — [Paper](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf), [Talk](https://www.youtube.com/watch?v=bxrN6dW5lH8)
 
-[Figaro](https://dl.acm.org/doi/abs/10.1145/3411764.3446864) — a tangible authoring system to situate human-robot interactions in projected plans of environments — [Paper](https://dl.acm.org/doi/abs/10.1145/3411764.3446864), [Talk](https://www.youtube.com/watch?v=7ox53gOHx4I)
+* [Figaro](https://dl.acm.org/doi/abs/10.1145/3411764.3446864) — a tangible authoring system to situate human-robot interactions in projected plans of environments — [Paper](https://dl.acm.org/doi/abs/10.1145/3411764.3446864), [Talk](https://www.youtube.com/watch?v=7ox53gOHx4I)
 
-[Authr](https://peopleandrobots.wisc.edu/wp-content/uploads/sites/1469/2020/12/Authr__A_Task_Authoring_Environment_for_Human_Robot_Teams__UIST_2020__Camera_Ready_Accessible.pdf) — a visual task authoring environment to translate human work plans into human-robot team workplans — [Paper](https://peopleandrobots.wisc.edu/wp-content/uploads/sites/1469/2020/12/Authr__A_Task_Authoring_Environment_for_Human_Robot_Teams__UIST_2020__Camera_Ready_Accessible.pdf), [Short Talk](https://www.youtube.com/watch?v=mmdvRNBR7mc), [Full Talk](https://www.youtube.com/watch?v=ZeVrv2l92pM)
+* [Authr](https://peopleandrobots.wisc.edu/wp-content/uploads/sites/1469/2020/12/Authr__A_Task_Authoring_Environment_for_Human_Robot_Teams__UIST_2020__Camera_Ready_Accessible.pdf) — a visual task authoring environment to translate human work plans into human-robot team workplans — [Paper](https://peopleandrobots.wisc.edu/wp-content/uploads/sites/1469/2020/12/Authr__A_Task_Authoring_Environment_for_Human_Robot_Teams__UIST_2020__Camera_Ready_Accessible.pdf), [Short Talk](https://www.youtube.com/watch?v=mmdvRNBR7mc), [Full Talk](https://www.youtube.com/watch?v=ZeVrv2l92pM)
 
 <style>
 table, td, th, tr {
@@ -60,12 +60,12 @@ tr.border-bottom {
         <tr>
         <td class="style24" style="width: 400px">
             <div id='outerdiv' style="width:400px; overflow-x:hidden;">
-                <iframe src="https://www.youtube.com/embed/7ox53gOHx4I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/bQP1GYbda5I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </td>
         <td class="style24" style="width: 400px">
             <div id='outerdiv' style="width:400px; overflow-x:hidden;">
-                <iframe src="https://www.youtube.com/embed/mmdvRNBR7mc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/Dbjtg6N4cjY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </td>
     </tr>
