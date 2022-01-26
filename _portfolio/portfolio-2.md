@@ -1,6 +1,6 @@
 ---
 title: "Human-Robot Collaboration"
-excerpt: "<img width='400px' src='/images/20180824_Robotics_112-980x608.jpg'><br><p>This line of work explores new ways of enabling operators to effectively use robotic arms and engineers to form successful human-robot teams.</p>"
+excerpt: "<img width='400px' src='/images/20180824_Robotics_112-980x608.jpg'>  This line of work explores new ways of enabling operators to effectively use robotic arms and engineers to form successful human-robot teams."
 collection: portfolio
 author_profile: false
 ---

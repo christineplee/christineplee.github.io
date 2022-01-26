@@ -1,6 +1,6 @@
 ---
 title: "HRI Design Tools"
-excerpt: "<img width='400px' src='/images/Programming.png'><br><p>This thread of research builds a suite of tools we have been building to support the unique and complex task of designing robotics applications for human use in collaboration with researchers in programming languages.</p>"
+excerpt: "<img width='400px' src='/images/Programming.png'>  This thread of research builds a suite of tools we have been building to support the unique and complex task of designing robotics applications for human use in collaboration with researchers in programming languages."
 collection: portfolio
 author_profile: false
 ---
