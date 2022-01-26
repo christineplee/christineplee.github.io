@@ -1,5 +1,5 @@
 ---
-title: "CS-571 Building User Interfaces"
+title: "CS/Psych/EdPsych-770 HCI Research Methods"
 collection: teaching
 excerpt: "<img width='400px' src='/images/ux-01-400x284.png'>"
 type: "Graduate Course"
