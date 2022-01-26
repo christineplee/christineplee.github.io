@@ -43,13 +43,13 @@ tr.border-bottom {
 <table>
     <tr>
         <td class="style24">
-            <div id='outerdiv' style="width:100%; overflow-x:hidden;">
-                <iframe style="width:100%;" src="https://www.youtube.com/embed/3Kj5mJ0GmLk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div id='outerdiv' style="width:100%; height=100%; overflow-x:hidden;">
+                <iframe style="width:100%;height=100%;" src="https://www.youtube.com/embed/3Kj5mJ0GmLk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </td>
         <td class="style24">
-            <div id='outerdiv' style="width:100%; overflow-x:hidden;">
-                <iframe style="width:100%;" src="https://www.youtube.com/embed/4mml_6Dw7kU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div id='outerdiv' style="width:100%; height=100%; overflow-x:hidden;">
+                <iframe style="width:100%;height=100%;" src="https://www.youtube.com/embed/4mml_6Dw7kU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </td>
     </tr>
