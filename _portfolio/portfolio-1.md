@@ -27,8 +27,6 @@ Some of the tools we have built in this thread of research include:
 
 [Synthé](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf) — an authoring system that enables designers to demonstrate social interactions through role play — [Paper](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf), [Talk](https://www.youtube.com/watch?v=bxrN6dW5lH8)
 
-<iframe width="250" src="https://www.youtube.com/embed/3Kj5mJ0GmLk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe width="250" src="https://www.youtube.com/embed/4mml_6Dw7kU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+| <iframe src="https://www.youtube.com/embed/3Kj5mJ0GmLk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> | <iframe src="https://www.youtube.com/embed/4mml_6Dw7kU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> |
 
 This project is supported by NSF awards [1651129](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1651129) and [1925043](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1925043&HistoricalAwards=false).
