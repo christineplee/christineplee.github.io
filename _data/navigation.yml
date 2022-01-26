@@ -12,5 +12,8 @@ main:
   - title: "Teaching"
     url: /teaching/
 
+  - title: "CV"
+    url: /CV/
+
   - title: "People & Robots Lab"
     url: http://peopleandrobots.wisc.edu/
