@@ -82,9 +82,9 @@ analytics:
 author:
   name             : "Bilge Mutlu"
   avatar           : "Mutlu_Bilge_hs21_1829-square.jpg"
-  bio              : "Sheldon B. and Marianne S. Lubar Professor of Computer Science, University of Wisconsin–Madison"
+  bio              : "Sheldon B. and Marianne S. Lubar Professor of Computer Science"
   location         : "Madison, WI, USA"
-  employer         :
+  employer         : University of Wisconsin–Madison
   pubmed           : 
   googlescholar    : "https://scholar.google.com/citations?user=VGr54BoAAAAJ&hl=en"
   email            :
@@ -216,7 +216,7 @@ defaults:
     values:
       layout: single
       author_profile: true
-      share: true
+      share: false
       comments: true
   # _publications
   - scope:
