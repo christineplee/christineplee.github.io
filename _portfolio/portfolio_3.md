@@ -1,6 +1,6 @@
 ---
 title: "Building Social Companions"
-excerpt: "<img width='400px' src='/images/Educational-Robots.png'>  This line of work contributes to our understanding of how robotic products and services might function in real-world environments is my group’s work on long-term interaction with robotic social companions."
+excerpt: "<img width='400px' src='/images/Educational-Robots.png'> <br><br> This line of work contributes to our understanding of how robotic products and services might function in real-world environments is my group’s work on long-term interaction with robotic social companions."
 collection: portfolio
 author_profile: false
 ---
