@@ -51,7 +51,7 @@ I teach undergraduate and graduate classes on human-computer interaction, user e
 
 I work with a fantastic group of advisees who come from a diverse set of background including computer science, industrial design, industrial engineering, and history who are already building their own research programs. If you are interested in working with me, please read [this page](/joining/).
 
-| Current Trainees  | Past Trainees |
+| Current Advisees  | Past Advisees |
 | :------------- | :------------- |
 | [Emmanuel Senft](https://emmanuel-senft.github.io/), *Postdoctoral Researcher* | [Sean Andrist](https://seanandrist.com), *PhD Advisee,* Microsoft Research |
 | [Hajin Lim](https://www.hajinlim.com), *Postdoctoral Researcher* | [Joseph Michaelis](https://lsri.uic.edu/profiles/michaelis-joseph/), *PhD Advisee,* University of Illinois Chicago |
