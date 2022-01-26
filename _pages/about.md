@@ -33,9 +33,11 @@ tr.border-bottom {
 }
 </style>
 
-| [![](../images/Programming.png)](/portfolio/porfolio-1/) | [![](../images/20180824_Robotics_112-980x608.jpg)](/portfolio/porfolio-2/) | [![](../images/Educational-Robots.png)]((/portfolio/porfolio-3/)) | [![](../images/TBI-Research.jpg)]((/portfolio/porfolio-4/)) |
-| :-: | :-: | :-: | :-: |
-| [HRI Design Tools]((/portfolio/porfolio-1/)) | [Human-Robot Collaboration](/portfolio/porfolio-2/) | [Building Social Companions](/portfolio/porfolio-3/) | [Supporting Social Participation](/portfolio/porfolio-4/) |
+| [![](../images/Programming.png)](/portfolio/porfolio-1/) | [![](../images/20180824_Robotics_112-980x608.jpg)](/portfolio/porfolio-2/) |
+| :-: | :-: |
+| [HRI Design Tools]((/portfolio/porfolio-1/)) | [Human-Robot Collaboration](/portfolio/porfolio-2/) | 
+| [![](../images/Educational-Robots.png)]((/portfolio/porfolio-3/)) | [![](../images/TBI-Research.jpg)]((/portfolio/porfolio-4/)) |
+| [Building Social Companions](/portfolio/porfolio-3/) | [Supporting Social Participation](/portfolio/porfolio-4/) |
 
 ## Teaching
 
