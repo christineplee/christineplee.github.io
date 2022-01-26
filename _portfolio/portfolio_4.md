@@ -1,6 +1,6 @@
 ---
 title: "Supporting Social Participation"
-excerpt: "<img width='400px' src='/images/TBI-Research.jpg'>"
+excerpt: "<img width='400px' src='/images/TBI-Research.jpg'><br><p>This line of work involves the development of conversational, robotic, and CMC interfaces for individuals with specific social and cognitive needs.</p>"
 collection: portfolio
 author_profile: false
 ---
