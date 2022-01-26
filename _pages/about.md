@@ -45,7 +45,7 @@ I teach undergraduate and graduate classes on human-computer interaction, user e
 
 | [![](../images/ux-01-400x284.png)](/teaching/teaching-1/) | [![](../images/hci-01-400x284.png)](/teaching/teaching-2/) |
 | :-: | :-: |
-| [Building User Interfaces](/teaching/teaching-1/) | [HCI Research Methods](/teaching/teaching-2/) |
+| [Building User Interfaces](/teaching/teaching-1) | [HCI Research Methods](/teaching/teaching-2) |
 
 ## Advising
 
