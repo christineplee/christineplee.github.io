@@ -27,16 +27,29 @@ Some of the tools we have built in this thread of research include:
 
 [Synthé](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf) — an authoring system that enables designers to demonstrate social interactions through role play — [Paper](http://pages.cs.wisc.edu/~aws/papers/uist19.pdf), [Talk](https://www.youtube.com/watch?v=bxrN6dW5lH8)
 
+<style>
+table, td, th, tr {
+   border: none;
+}
+thead {
+   background-color: rgba(0, 0, 0, 0.0);
+   border-bottom: 0px;
+}
+tr.border-bottom {
+   border-bottom: 0px;
+}
+</style>
+
 <table>
     <tr>
         <td class="style24" style="width: 300px">
             <div id='outerdiv' style="width:300px; overflow-x:hidden;">
-                <iframe width=300 src="https://www.youtube.com/embed/3Kj5mJ0GmLk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe style="width:100%;" src="https://www.youtube.com/embed/3Kj5mJ0GmLk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </td>
         <td class="style24" style="width: 300px">
             <div id='outerdiv' style="width:300px; overflow-x:hidden;">
-                <iframe width=300 src="https://www.youtube.com/embed/4mml_6Dw7kU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe style="width:100%;" src="https://www.youtube.com/embed/4mml_6Dw7kU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </td>
     </tr>
