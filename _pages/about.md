@@ -56,7 +56,7 @@ I work with a fantastic group of advisees who come from a diverse set of backgro
 | [Emmanuel Senft](https://emmanuel-senft.github.io/), *Postdoctoral Researcher* | [Sean Andrist](https://seanandrist.com), *PhD Advisee,* Microsoft Research |
 | [Hajin Lim](https://www.hajinlim.com), *Postdoctoral Researcher* | [Joseph Michaelis](https://lsri.uic.edu/profiles/michaelis-joseph/), *PhD Advisee,* University of Illinois Chicago |
 | [Bengisu Cagiltay](https://www.linkedin.com/in/bengisucagiltay/), *CS Graduate Student* | [Tomislav Pejsa](http://pages.cs.wisc.edu/~tpejsa/), *PhD Advisee,* Facebook |
-| Amy Eiko, *CS Graduate Student* | [Chien-Ming Huang](https://www.cs.jhu.edu/~cmhuang/), *PhD Advisee,* Johns Hopkins University |
+| Amy Koike, *CS Graduate Student* | [Chien-Ming Huang](https://www.cs.jhu.edu/~cmhuang/), *PhD Advisee,* Johns Hopkins University |
 | Christine Lee, *CS Graduate Student* | [Daniel Szafir](https://cs.unc.edu/person/daniel-szafir/), *PhD Advisee,* University of North Carolina Chapel Hill |
 | Nitzan Orr, *CS Graduate Student* | [Irene Rae](http://rene.chargingwombat.com/), *PhD Advisee,* Google, Inc. |
 | [David Porfirio](http://pages.cs.wisc.edu/~dporfirio/), *CS Graduate Student* | [Allison Sauppé](https://cs.uwlax.edu/~asauppe/), *PhD Advisee,* University of Wisconsin–La Crosse |
