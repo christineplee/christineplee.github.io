@@ -44,11 +44,31 @@ With Jodi Forlizzi, Sara Kiesler, Carl DiSalvo, Min Kyung Lee, and Cristen Torre
 
 ## Paper Awards
 
+### 2023
+
+**HRI 2023 Best Systems Paper Award** (Top 5 in 250)  
+ACM/IEEE Human-Robot Interaction (HRI 2023)  
+Schoen, Sullivan, Zhang, Rakita, & Mutlu: Lively: Enabling Multimodal, Lifelike, and Extensible Real-time Robot Motion
+
+### 2022
+
+**Meritorious Poster Award** (Top 59 in 1394)  
+American Speech–Language–Hearing Association (ASHA 2017)  
+Clough, Tanguay, Mutlu, Turkstra, & Duff: Using Bag-of-Words and Hierarchical Clustering to Explore Differences in Emoji Perception after Traumatic Brain Injury
+
+**Best Short Paper** (Top 2 in 102)  
+ACM Interaction Design and Children (IDC '22)  
+Cagiltay, Michaelis, Sebo, & Mutlu: Exploring Children’s Preferences for Taking Care of a Social Robot
+
+**Honorable Mention** (Top 131 in 2597)  
+ACM/SigCHI Human Factors in Computing (CHI 2022)  
+Lee, Cagiltay, & Mutlu: The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots
+
 ### 2020
 
 **HRI 2020 Honorable Mention** (Top 12 in 279)  
 ACM/IEEE Human-Robot Interaction (HRI 2020)  
-Praveena, Rakita, Mutlu, & Gleicher: Supporting Perception of Weight through Motion-induced Sensory Conflicts in Robot Teleoperation\
+Praveena, Rakita, Mutlu, & Gleicher: Supporting Perception of Weight through Motion-induced Sensory Conflicts in Robot Teleoperation
 
 ### 2019
 
