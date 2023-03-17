@@ -14,7 +14,7 @@ I am the chief editor of the [HRI section of the journal Frontiers in Robotics &
 
 If you are interested in joining the People and Robots Lab, please read [this page](/joining).
 
-<strong><a href="https://drive.google.com/file/d/1AmbTG9fo2Qy8q2joLq6n7NIJiytLDs5Q/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: August 2022_
+<strong><a href="https://drive.google.com/file/d/1-XbVGrjQUkMnzS1Lc2JGiDhleg_2Tf9S/view" target="_blank">Download my CV</a></strong> — _Updated: March 2023_
 
 ## Research
 
