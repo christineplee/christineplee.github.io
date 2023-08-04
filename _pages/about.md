@@ -59,7 +59,7 @@ I work with a fantastic group of advisees who come from a diverse set of backgro
 | [Mike Hagenow](https://www.hageneaux.com/), *ME Graduate Student* | [David Porfirio](http://pages.cs.wisc.edu/~dporfirio/), *PhD Advisee,* U.S. Naval Research Laboratory |
 | [Laura Stegner](http://laurastegner.com/), *CS Graduate Student* | [Sean Andrist](https://seanandrist.com), *PhD Advisee,* Microsoft Research |
 | [Bengisu Cagiltay](https://www.linkedin.com/in/bengisucagiltay/), *CS Graduate Student* | [Joseph Michaelis](https://lsri.uic.edu/profiles/michaelis-joseph/), *PhD Advisee,* University of Illinois Chicago |
-| [Olivia Zhao](https://www.olivia-zhao.com/), *Psychology Graduate Student* | [Tomislav Pejsa](http://pages.cs.wisc.edu/~tpejsa/), *PhD Advisee,* Facebook |
+| [Olivia Zhao](https://www.olivia-zhao.com/), *Psychology Graduate Student* | [Tomislav Pejsa](http://pages.cs.wisc.edu/~tpejsa/), *PhD Advisee,* Meta |
 | [Nathan White](https://www.researchgate.net/profile/Nathan-White-18), *CS Graduate Student* | [Chien-Ming Huang](https://www.cs.jhu.edu/~cmhuang/), *PhD Advisee,* Johns Hopkins University |
 | [Christine Lee](https://scholar.google.co.kr/citations?user=-K0MmdoAAAAJ&hl=en), *CS Graduate Student* | [Daniel Szafir](https://cs.unc.edu/person/daniel-szafir/), *PhD Advisee,* University of North Carolina Chapel Hill |
 | [Amy Koike](https://amykoike.notion.site/Amy-Koike-s-Portfolio-25f2b3e0429e498183aa739b193fda01), *CS Graduate Student* | [Irene Rae](http://rene.chargingwombat.com/), *PhD Advisee,* Google, Inc. |
@@ -74,4 +74,4 @@ I work with a fantastic group of advisees who come from a diverse set of backgro
 |                                                              | [Erica Lewis](http://ericaslewis.com/), *BS Advisee,* Intel  |
 |                                                              | [Nathalie Cheng](http://www.linkedin.com/in/nathaliecheng), *BS Advisee,* Exygy |
 |                                                              | [Jonathan Mumm](http://www.linkedin.com/in/jonathanrmumm), *BS Advisee,* Atomic Labs |
-| |[Zhi Tan](http://xiangzhitan.com/), *BS Advisee,* CMU Robotics Institute|
+| |[Zhi Tan](http://xiangzhitan.com/), *BS Advisee,* Northeastern University |
