@@ -14,7 +14,7 @@ I am the chief editor of the [HRI section of the journal Frontiers in Robotics &
 
 If you are interested in joining the [People and Robots Lab](http://peopleandrobots.wisc.edu), please read [this page](/joining).
 
-<strong><a href="https://drive.google.com/file/d/1-XbVGrjQUkMnzS1Lc2JGiDhleg_2Tf9S/view" target="_blank">Download my CV</a></strong> — _Updated: July 2023_
+<strong><a href="https://drive.google.com/file/d/14DQfHyx-LFM83_qJ8XGoLvqp7Vxo3rRX/view?usp=share_link" target="_blank">Download my CV</a></strong> — _Updated: June 2023_
 
 ## Research
 
