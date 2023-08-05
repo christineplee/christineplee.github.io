@@ -1,19 +1,21 @@
 ---
-title: "CS/Psych/EdPsych-770 HCI Research Methods"
+title: "CS-839 Building Interactive Systems"
 collection: teaching
-excerpt: "<img width='400px' src='/images/hci-01-400x284.png'>"
+excerpt: "<img width='400px' src='/images/6543438.jpg'>"
 type: "Graduate Course"
-permalink: /teaching/teaching-2
+permalink: /teaching/teaching-3
 venue: "Department of Computer Sciences, University of Wisconsin-Madison"
 location: "Madison, WI"
-date: 2020-9-01
+date: 2023-1-31
 author_profile: false
 ---
 
-<img width='600px' src='/images/hci-01-980x619.png'>
+<img width='600px' src='/images/6543438.jpg'>
 
-**HCI Research Methods**, formally CS/Psych/EdPsych-770 Human-Computer Interaction, introduces graduate students in computer science, psychology, educational psychology, and other disciplines research topics, principles, and research methods in human-computer interaction (HCI), an interdisciplinary area concerned with the study of the interaction between humans and interactive computing systems. Research in HCI looks at major social, cognitive, and physical phenomena surrounding human use of computers with the goal of understanding their impact and creating guidelines for the design and evaluation of software and physical products and services in industry.
+**Building Interactive Systems** introduces graduate students in computer science to core topics, methods, and principles related to building systems that interact with people. Students learn from lectures; reading seminal and state-of-the-art papers on interactive systems; completing in-class and take-home assignments; and engaging a semester-long team project. The course covers approaches, methods, devices, and algorithms for user sensing, decision making, and system behavior, integrating methods from machine learning, computer vision, robotics, and human-computer interaction. 
 
-See the [course site](https://wisc-hci-curriculum.github.io/cs770-f21/) for the latest offering of HCI Research Methods (Fall 2021).
+The course integrates three modules: **LEARN** + **HACK**+ **INTEGRATE**: **LEARN** provides students with an overview of each topic through lecture, readings, and multimedia material prior to and during class; **HACK** enables students to gain hands-on experience with the topic through a structured group activity, starting in class and resulting in an assignment submission; and **INTEGRATE** involves student teams to bring components together to design, build, demonstrate, and evaluate an integrated interactive system.
 
-**Feature image attribution:** [macrovector @ freepik](https://www.freepik.com/free-photos-vectors/people)
+See the [course site](https://wisc-hci.github.io/cs839-s23/) for the latest (and first) offering of Building Interactive Systems (Spring 2023).
+
+**Feature image attribution:** <a href="https://www.freepik.com/free-vector/hand-drawn-flat-design-metaverse-illustration_21858355.htm">Freepik</a>
