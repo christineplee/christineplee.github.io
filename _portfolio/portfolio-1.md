@@ -32,6 +32,8 @@ Some of the tools we have built in this thread of research include:
 
 * [Authr](https://peopleandrobots.wisc.edu/wp-content/uploads/sites/1469/2020/12/Authr__A_Task_Authoring_Environment_for_Human_Robot_Teams__UIST_2020__Camera_Ready_Accessible.pdf) — a visual task authoring environment to translate human work plans into human-robot team workplans — [Paper](https://peopleandrobots.wisc.edu/wp-content/uploads/sites/1469/2020/12/Authr__A_Task_Authoring_Environment_for_Human_Robot_Teams__UIST_2020__Camera_Ready_Accessible.pdf), [Short Talk](https://www.youtube.com/watch?v=mmdvRNBR7mc), [Full Talk](https://www.youtube.com/watch?v=ZeVrv2l92pM)
 
+* [Tabula](https://pages.cs.wisc.edu/~aws/papers/hri23.pdf) — a multimodal task authoring environment that integrates speech and gesture input and program repair to construct programs from partial input — [Paper](https://pages.cs.wisc.edu/~aws/papers/hri23.pdf), [Talk (listed under Supplemental Material)](https://dl.acm.org/doi/abs/10.1145/3568162.3576991)
+
 <style>
 table, td, th, tr {
    border: none;
