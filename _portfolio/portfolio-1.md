@@ -27,19 +27,6 @@ Some of the tools we have built in this thread of research include:
 
 * [Lively](https://andrewjschoen.github.io/assets/files/HRI_2023_Schoen_Sullivan_Lively.pdf) — a programming environment to generate configurable, real-time, task-based and communicative or socially-expressive motion for collaborative and social robotics — [Paper](https://andrewjschoen.github.io/assets/files/HRI_2023_Schoen_Sullivan_Lively.pdf), [Talk (download)](https://dl.acm.org/action/downloadSupplement?doi=10.1145%2F3568162.3576982&file=HRI23-fp1285.mp4), [Short Video (download)](https://dl.acm.org/action/downloadSupplement?doi=10.1145%2F3568162.3576982&file=hrifp1285.mp4) — [*HRI 2023 Best Systems Paper Award*](https://humanrobotinteraction.org/2023/awards/)
 
-<iframe src="https://www.youtube.com/embed/3Kj5mJ0GmLk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/4mml_6Dw7kU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/bQP1GYbda5I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/Dbjtg6N4cjY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/sekox5SlDfI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe src="https://www.youtube.com/embed/fBk2MhQ6reY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
 <style>
 table, td, th, tr {
    border: none;
