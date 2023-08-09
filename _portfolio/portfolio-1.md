@@ -88,7 +88,6 @@ tr.border-bottom {
             </div>
          </td>
     </tr>
-   
 </table>
 
 This project is supported by NSF awards [1651129](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1651129) and [1925043](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1925043&HistoricalAwards=false).
