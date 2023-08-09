@@ -25,14 +25,54 @@ Some of the methods and systems we have built in this line of work include:
 
 * **Situated Live Programming** — an approach to specifying human-robot "collaborative" task plans using augmented reality and trigger-action planning — [Paper](https://arxiv.org/pdf/2108.03592), [Talk](https://www.youtube.com/watch?v=FKEwt-F3y78)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/M5O0UkPQsxE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/AhsQFJzB8WQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<style>
+table, td, th, tr {
+   border: none;
+}
+thead {
+   background-color: rgba(0, 0, 0, 0.0);
+   border-bottom: 0px;
+}
+tr.border-bottom {
+   border-bottom: 0px;
+}
+</style>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xvDwTJd8f4c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/cGh0UncVxck" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/jq9bk3LMdNo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<table>
+    <tr>
+        <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width:400px; overflow-x:hidden;">
+                <iframe src="https://www.youtube.com/embed/M5O0UkPQsxE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </td>
+        <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width:400px; overflow-x:hidden;">
+                <iframe src="https://www.youtube.com/embed/AhsQFJzB8WQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </td>
+    </tr>
+        <tr>
+        <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width:400px; overflow-x:hidden;">
+                <iframe src="https://www.youtube.com/embed/xvDwTJd8f4c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </td>
+        <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width:400px; overflow-x:hidden;">
+                <iframe src="https://www.youtube.com/embed/cGh0UncVxck" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </td>
+    </tr>
+       <tr>
+           <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width:400px; overflow-x:hidden;">
+                <iframe src="https://www.youtube.com/embed/jq9bk3LMdNo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+         </td>
+          <td class="style24" style="width: 400px">
+         </td>
+    </tr>
+</table>
 
 This work is supported by NSF award [1830242](https://nsf.gov/awardsearch/showAward?AWD_ID=1830242&HistoricalAwards=false) and a [NASA ULI](https://techport.nasa.gov/view/96115) award.
