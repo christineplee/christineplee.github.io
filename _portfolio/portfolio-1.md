@@ -77,11 +77,9 @@ tr.border-bottom {
         </td>
     </tr>
        <tr>
-        <td class="style24" style="width: 400px">
             <div id='outerdiv' style="width:400px; overflow-x:hidden;">
                 <iframe src="https://www.youtube.com/watch?v=f8dM1gbyTGw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-        </td>
     </tr>
    
 </table>
