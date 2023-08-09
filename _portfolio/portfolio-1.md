@@ -79,12 +79,12 @@ tr.border-bottom {
        <tr>
            <td class="style24" style="width: 400px">
             <div id='outerdiv' style="width:400px; overflow-x:hidden;">
-                <iframe src="[https://www.youtube.com/watch?v=f8dM1gbyTGw](https://youtu.be/sekox5SlDfI)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/watch?v=sekox5SlDfI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
          </td>
           <td class="style24" style="width: 400px">
             <div id='outerdiv' style="width:400px; overflow-x:hidden;">
-                <iframe src="[https://www.youtube.com/watch?v=f8dM1gbyTGw](https://youtu.be/sekox5SlDfI)" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/watch?v=sekox5SlDfI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
          </td>
     </tr>
