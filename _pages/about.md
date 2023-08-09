@@ -64,9 +64,9 @@ I work with a fantastic group of advisees who come from a diverse set of backgro
 | [Yaxin Hu](http://www.edayaxin.com/about), CS Graduate Student | [Shadeequa Miller](https://www.linkedin.com/in/s-dee-miller-58240710), *PhD Advisee,* Dell Corporation |
 | [Dakota Sullivan](https://peopleandrobots.wisc.edu/staff/sullivan-dakota/), *CS Graduate Student* | [Daniel Szafir](https://cs.unc.edu/person/daniel-szafir/), *PhD Advisee,* University of North Carolina Chapel Hill |
 | [Hailey Johnson](https://www.linkedin.com/in/hailey-lynn-johnson), *CS Graduate Student* | [Irene Rae](http://rene.chargingwombat.com/), *PhD Advisee,* Google, Inc. |
-|  | [Allison Sauppé](https://cs.uwlax.edu/~asauppe/), *PhD Advisee,* University of Wisconsin–La Crosse |
-| [Callie Kim](https://callie-kim.com/), *CS Graduate Student* | [Kevin Welsh](https://www.linkedin.com/in/kevin-welsh-668140bb), *MS Advisee,* Los Alamos National Labs |
-| [Yuna Hwang](https://www.linkedin.com/in/yuna-hwang-35b6b4234?trk=public_profile_samename-profile), *CS Graduate Student* | [Curt Henrichs](https://robotics.wisc.edu/staff/henrichs-curt/), *MS Advisee,* Integrated Dynamic Electron Solutions, Inc. |
+| [Callie Kim](https://callie-kim.com/), *CS Graduate Student* | [Allison Sauppé](https://cs.uwlax.edu/~asauppe/), *PhD Advisee,* University of Wisconsin–La Crosse |
+| [Yuna Hwang](https://www.linkedin.com/in/yuna-hwang-35b6b4234?trk=public_profile_samename-profile), *CS Graduate Student* | [Kevin Welsh](https://www.linkedin.com/in/kevin-welsh-668140bb), *MS Advisee,* Los Alamos National Labs |
+|  | [Curt Henrichs](https://robotics.wisc.edu/staff/henrichs-curt/), *MS Advisee,* Integrated Dynamic Electron Solutions, Inc. |
 |  | [Steven Johnson](http://pages.cs.wisc.edu/~sjj/), *MS Advisee,* Google, Inc. |
 |  | [Margaret Pearce](https://www.linkedin.com/in/margaretpearce), *MS Advisee,* Deepfield |
 |                                                              | [Christopher Bodden](https://uwnarratives.wisc.edu/bio/christopher-bodden/), *MS Advisee,* Software Engineer |
