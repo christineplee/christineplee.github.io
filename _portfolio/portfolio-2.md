@@ -23,7 +23,7 @@ Some of the methods and systems we have built in this line of work include:
 
 * **Task-level authoring** — using augmented reality and end-user programming principles, this approach enables users to provide no-code, open-ended, short-/long-horizon task instructions based on a set of task primitives – [Paper](https://www.frontiersin.org/articles/10.3389/frobt.2021.707149/full)
 
-* Situated Live Programming — an approach to specifying human-robot "collaborative" task plans using augmented reality and trigger-action planning — [Paper](https://arxiv.org/pdf/2108.03592), [Talk](https://www.youtube.com/watch?v=FKEwt-F3y78)
+* **Situated Live Programming** — an approach to specifying human-robot "collaborative" task plans using augmented reality and trigger-action planning — [Paper](https://arxiv.org/pdf/2108.03592), [Talk](https://www.youtube.com/watch?v=FKEwt-F3y78)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/M5O0UkPQsxE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
