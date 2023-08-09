@@ -12,7 +12,7 @@ I am *Sheldon B. and Marianne S. Lubar Professor* of [Computer Science](http://c
 
 I am the chief editor of the [HRI section of the journal Frontiers in Robotics & AI](https://www.frontiersin.org/journals/robotics-and-ai/sections/human-robot-interaction#). If you are an HRI researcher interested in publishing in a rigorous, open-access venue, please submit! I am also an associated editor of [Human-Computer Interaction](https://www.tandfonline.com/toc/hhci20/current) and [Foundations and Trends® in Human-Computer Interaction](https://www.nowpublishers.com/HCI). I am also the secretary-treasurer of the [HCI Consortium](http://hcic.org/).
 
-I am also the director of the [INTEGRATE](https://integrate.wisc.edu) NSF Research Traineeship program, a new interdisciplinary program designed to enrich the training of graduate student on the technical and societal facets of introducing robots into work environments. UW students from any program can apply!
+I am also the director of the [INTEGRATE](https://integrate.wisc.edu) NSF Research Traineeship program, a new interdisciplinary program designed to enrich the training of graduate student on the technical and societal facets of introducing robots into work environments. UW students from any graduate program can apply and join the [INTEGRATE Community](https://integrate.wisc.edu/seminars/)!
 
 If you are interested in joining the [People and Robots Lab](http://peopleandrobots.wisc.edu), please read [this page](/joining).
 
