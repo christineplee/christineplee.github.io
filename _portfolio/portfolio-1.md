@@ -35,7 +35,7 @@ Some of the tools we have built in this thread of research include:
 
 <iframe src="https://www.youtube.com/embed/Dbjtg6N4cjY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<iframe src="https://www.youtube.com/watch?v=sekox5SlDfI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe src="https://youtu.be/fBk2MhQ6reY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <style>
 table, td, th, tr {
@@ -83,7 +83,7 @@ tr.border-bottom {
          </td>
           <td class="style24" style="width: 400px">
             <div id='outerdiv' style="width:400px; overflow-x:hidden;">
-                <iframe src="https://www.youtube.com/watch?v=sekox5SlDfI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="https://youtu.be/fBk2MhQ6reY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
          </td>
     </tr>
