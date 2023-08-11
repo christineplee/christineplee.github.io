@@ -15,7 +15,7 @@ Here is a short talk I gave at the 2022 Furhat Conference on this topic:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/fmu4aNhYdK8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-In this work, I collaborate with [Joseph Michaelis](https://lsri.uic.edu/profiles/michaelis-joseph/), [David Shaffer](https://lsri.uic.edu/profiles/michaelis-joseph/), and [Sarah Sebo](https://sarahsebo.com).
+</ br>In this work, I collaborate with [Joseph Michaelis](https://lsri.uic.edu/profiles/michaelis-joseph/), [David Shaffer](https://lsri.uic.edu/profiles/michaelis-joseph/), and [Sarah Sebo](https://sarahsebo.com).
 
 The students who participate in this work include [Bengisu Cagiltay](https://www.linkedin.com/in/bengisucagiltay/) and [Nathan White](https://robotics.wisc.edu/staff/henrichs-curt/).
 
