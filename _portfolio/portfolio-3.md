@@ -7,7 +7,7 @@ author_profile: false
 
 <img width='600px' src='/images/Educational-Robots.png'>
 
-### Overview
+## Overview
 
 This line of work contributes to our understanding of how robotic products and services might function in real-world environments is my group’s work on **long-term interaction** with robotic social companions, focusing on family-robot interaction, conversational privacy, and ways of maintaining interaction over long periods (months).
 
@@ -17,13 +17,13 @@ Here is a short talk I gave at the 2022 Furhat Conference on this topic:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/fmu4aNhYdK8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-### Research Team
+## Research Team
 
 In this work, I collaborate with [Joseph Michaelis](https://lsri.uic.edu/profiles/michaelis-joseph/), [David Shaffer](https://lsri.uic.edu/profiles/michaelis-joseph/), and [Sarah Sebo](https://sarahsebo.com).
 
 The students who participate in this work include [Bengisu Cagiltay](https://www.linkedin.com/in/bengisucagiltay/) and [Nathan White](https://robotics.wisc.edu/staff/henrichs-curt/).
 
-### Publications & Videos
+## Publications & Videos
 
 The key publications that has resulted from this work include:
 
@@ -81,5 +81,8 @@ This work has also appeared in popular scientific news outlets, including:
     </tr>
 </table>
 
+## Funding
 
-This work is supported by NSF awards [1906854](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1906854&HistoricalAwards=false) and [1822872](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1822872).
+This work is supported by NSF awards [1906854](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1906854&HistoricalAwards=false), [1822872](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1822872), and [2247381](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2247381&HistoricalAwards=false).
+
+
