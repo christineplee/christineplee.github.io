@@ -82,4 +82,4 @@ tr.border-bottom {
 
 This work is supported by NSF award [1830242](https://nsf.gov/awardsearch/showAward?AWD_ID=1830242&HistoricalAwards=false) and a [NASA ULI](https://techport.nasa.gov/view/96115) award.
 
-![NSF logo](\images\NSF.png) ![NASA logo](\images\NASA.png)
+![NSF logo](/images/NSF.png) ![NASA logo](/images/NASA.png)
