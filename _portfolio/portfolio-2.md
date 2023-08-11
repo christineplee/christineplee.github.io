@@ -7,9 +7,13 @@ author_profile: false
 
 <img width='600px' src='/images/20180824_Robotics_112-980x608.jpg'>
 
+## Overview
+
 A key thread of my work involves designing novel interfaces for collaborative robots to facilitate their intuitive and effective use and their successful adoption to industrial settings. Collaborative robots hold tremendous promise for small-scale manufacturing and task automation, although existing interfaces for control and programming are significant bottlenecks to their effective use and widespread adoption.
 
 In this line of work, I explore new ways of enabling operators to effectively use robotic arms and engineers to form successful human-robot teams. My collaborators include [Micheal Gleicher](https://pages.cs.wisc.edu/~gleicher/), [Robert Radwin](https://directory.engr.wisc.edu/ie/Faculty/Radwin_Robert/, and [Michael Zinn](https://directory.engr.wisc.edu/me/Faculty/Zinn_Michael/). Students involved in this line of work include: [Emmanuel Senft](https://emmanuel-senft.github.io/) (now at Idiap), [Danny Rakita](https://uwnarratives.wisc.edu/bio/daniel-rakita/) (now at Yale), [Pragathi Praveena](https://www.linkedin.com/in/pragathip/), [Kevin Welsh](https://www.linkedin.com/in/kevin-welsh-668140bb) (now at LANL), and [Michael Hagenow](https://www.linkedin.com/in/hageneaux/) (now at MIT CSAIL).
+
+## Stystems & Publications
 
 Some of the methods and systems we have built in this line of work include:
 
@@ -25,6 +29,7 @@ Some of the methods and systems we have built in this line of work include:
 
 * **Situated Live Programming** — an approach to specifying human-robot "collaborative" task plans using augmented reality and trigger-action planning — [Paper](https://arxiv.org/pdf/2108.03592), [Talk](https://www.youtube.com/watch?v=FKEwt-F3y78)
 
+## Videos
 
 <style>
 table, td, th, tr {
@@ -76,3 +81,5 @@ tr.border-bottom {
 </table>
 
 This work is supported by NSF award [1830242](https://nsf.gov/awardsearch/showAward?AWD_ID=1830242&HistoricalAwards=false) and a [NASA ULI](https://techport.nasa.gov/view/96115) award.
+
+![NSF logo](\images\NSF.png) ![NASA logo](\images\NASA.png)
