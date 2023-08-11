@@ -58,13 +58,13 @@ tr.border-bottom {
 
 <table>
     <tr>
-        <td class="style24" style="width: 350px">
-            <div id='outerdiv' style="width:350px; overflow-x:hidden;">
+        <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width: 400px; overflow-x:hidden;">
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PLaIgLiq4gIuZykeHKBJFIYl4VZZ2PcZQc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
         </td>
-        <td class="style24" style="width: 350px">
-            <div id='outerdiv' style="width:350px; overflow-x:hidden;">
+        <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width: 400px; overflow-x:hidden;">
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PLaIgLiq4gIuaA60oLfWalDrM91oA75mO-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
         </td>
