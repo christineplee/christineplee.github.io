@@ -41,6 +41,37 @@ tr.border-bottom {
 | [![](../images/Educational-Robots.png)](/portfolio/portfolio-3) | [![](../images/TBI-Research.jpg)](/portfolio/portfolio-4) |
 | **[Building Social Companions](/portfolio/portfolio-3)** | **[Supporting Social Participation](/portfolio/portfolio-4)** |
 
+## Videos & Talks
+
+<style>
+table, td, th, tr {
+   border: none;
+}
+thead {
+   background-color: rgba(0, 0, 0, 0.0);
+   border-bottom: 0px;
+}
+tr.border-bottom {
+   border-bottom: 0px;
+}
+</style>
+
+<table>
+    <tr>
+        <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width:400px; overflow-x:hidden;">
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PLaIgLiq4gIuZykeHKBJFIYl4VZZ2PcZQc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </td>
+        <td class="style24" style="width: 400px">
+            <div id='outerdiv' style="width:400px; overflow-x:hidden;">
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PLaIgLiq4gIuaA60oLfWalDrM91oA75mO-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
 ## Teaching
 
 I teach undergraduate and graduate classes on human-computer interaction, user experience design, and research methods. Below are courses that I am currently teaching or have taught in the last year.
