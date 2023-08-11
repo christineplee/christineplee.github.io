@@ -23,6 +23,19 @@ This line of work involves the development of conversational, robotic, and compu
 
 ## Videos
 
+<style>
+table, td, th, tr {
+   border: none;
+}
+thead {
+   background-color: rgba(0, 0, 0, 0.0);
+   border-bottom: 0px;
+}
+tr.border-bottom {
+   border-bottom: 0px;
+}
+</style>
+
 <table>
     <tr>
         <td class="style24" style="width: 400px">
