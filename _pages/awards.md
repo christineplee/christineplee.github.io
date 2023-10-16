@@ -46,6 +46,10 @@ With Jodi Forlizzi, Sara Kiesler, Carl DiSalvo, Min Kyung Lee, and Cristen Torre
 
 ### 2023
 
+**UBICOMP 10-Year Impact Award** 
+ACM Pervasive and Ubiquitous Computing (UbiComp 2013)  
+Hoque, Courgeon, Martin, Mutlu, & Picard: MACH: My Automated Conversation coacH
+
 **HRI 2023 Best Systems Paper Award** (Top 5 in 250)  
 ACM/IEEE Human-Robot Interaction (HRI 2023)  
 Schoen, Sullivan, Zhang, Rakita, & Mutlu: Lively: Enabling Multimodal, Lifelike, and Extensible Real-time Robot Motion
