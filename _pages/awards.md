@@ -48,7 +48,7 @@ Our work has received two dozen awards/nominations, including 1 10-year impact a
 
 ### 2023
 
-**UBICOMP 10-Year Impact Award** 
+**UBICOMP 10-Year Impact Award**
 ACM Pervasive and Ubiquitous Computing (UbiComp 2013)  
 Hoque, Courgeon, Martin, Mutlu, & Picard: MACH: My Automated Conversation coacH
 
