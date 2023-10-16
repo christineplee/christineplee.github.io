@@ -44,6 +44,8 @@ With Jodi Forlizzi, Sara Kiesler, Carl DiSalvo, Min Kyung Lee, and Cristen Torre
 
 ## Paper Awards
 
+Our work has received two dozen awards/nominations, including 1 10-year impact award, 9 best paper awards, 8 honorable mentions/runners-up, 2 poster awards, and other awards. This follows the my lab's principle of "_Be the best work out there._" 
+
 ### 2023
 
 **UBICOMP 10-Year Impact Award** 
