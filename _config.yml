@@ -83,12 +83,12 @@ analytics:
 author:
   name             : "Christine P Lee"
   avatar           : "profile.png"
-  bio              : "PhD student, HCI"
+  bio              : "Ph.D. student in Computer Science at the University of Wisconsin-Madison"
   location         : "Madison, WI, USA"
   employer         :
   pubmed           : #"https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : "https://scholar.google.com/citations?user=-K0MmdoAAAAJ&hl=en&oi=ao"
-  email            : "cplee5@wisc.edu"
+  email            : "cplee5@cs.wisc.edu"
   researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
   uri              : "https://peopleandrobots.wisc.edu/staff/lee-christine/"
   bitbucket        :
