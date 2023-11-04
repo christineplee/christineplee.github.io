@@ -7,7 +7,12 @@ redirect_from:
   - /about/
   - /about.html
 ---
-My research centers around technical methods aimed at enhancing the explainability and adaptability of AI systems in real-world applications, with a strong focus on human-centered and context-aware systems. These methods primarily involve formal Programming Language (PL) and eXplainable AI techniques, applicable to a range of agents, including robots, and various contexts, such as in-home and workplace environments.
+## About Me
+Hi there! I am currently pursuing a Ph.D. student in the Computer Sciences Department at the University of Wisconsin-Madison, under the guidance of [Dr. Bilge Mutlu](http://bilgemutlu.com/). Additionally, I am part of the [People and Robots Laboratory](http://peopleandrobots.wisc.edu/). In 2022, I earned my Master's degree in Computer Sciences from the University of Wisconsin-Madison, following my Bachelor's degree in Computer Sciences from Sejong University in Seoul, South Korea in 2020.
+## Research
+My research centers around technical methods aimed at enhancing the explainability and adaptability of AI systems in real-world applications, with a strong focus on *human-centered* and *context-aware* systems. These methods primarily involve formal Programming Language (PL) and eXplainable AI techniques, applicable to a range of agents, including robots, and various contexts, such as in-home and workplace environments.
+
+<strong><a href="https://drive.google.com/file/d/1UiqNFSLWwu51J-muuP9pBq-f2y76cU4v/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: November 2023_
 
 
 
