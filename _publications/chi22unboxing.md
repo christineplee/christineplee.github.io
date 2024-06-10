@@ -4,7 +4,7 @@ collection: publications
 permalink: /publication/2022-4-27-The-Unboxing-Experience:-Exploration-and-Design-of-Initial-Interactions-Between-Children-and-Social-Robots
 excerpt:
 date: 2022-4-27
-venue: 'CHI '22: Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems'
+venue: 'CHI 22: Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems'
 paperurl: 
 citation: 'Lee, C., Cagiltay, B., Sullivan, D., & Mutlu, B. 2023. &quot;Demonstrating the Potential of Interactive Product Packaging for Enriching Human-Robot Interaction.&quot; <i>In Companion of the 2023 ACM/IEEE International Conference on Human-Robot Interaction (HRI 23)</i>. Association for Computing Machinery, New York, NY, USA, 899–901.'
 ---
