@@ -1,5 +1,5 @@
 ---
-title: "Demonstrating the Potential of Interactive Product Packaging for Enriching Human-Robot Interaction"
+title: "The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots"
 collection: publications
 permalink: /publication/2023-03-13-Demonstrating-the-Potential-of-Interactive-Product-Packaging-for-Enriching-Human-Robot-Interaction
 excerpt:
