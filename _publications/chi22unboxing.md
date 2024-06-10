@@ -1,7 +1,7 @@
 ---
 title: "The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots"
 collection: publications
-permalink: /publication/2023-03-13-Demonstrating-the-Potential-of-Interactive-Product-Packaging-for-Enriching-Human-Robot-Interaction
+permalink: /publication/2022-4-27-The-Unboxing-Experience:-Exploration-and-Design-of-Initial-Interactions-Between-Children-and-Social-Robots
 excerpt:
 date: 2023-03-13
 venue: 'HRI 23: ACM/IEEE International Conference on Human-Robot Interaction'
