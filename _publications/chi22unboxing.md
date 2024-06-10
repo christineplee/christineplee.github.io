@@ -2,7 +2,7 @@
 title: "The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots"
 collection: publications
 permalink: /publication/2022-4-27-The-Unboxing-Experience:-Exploration-and-Design-of-Initial-Interactions-Between-Children-and-Social-Robots
-excerpt:
+excerpt: '🎖️ Best Paper Honorable Mention'
 date: 2022-4-27
 venue: 'CHI 22: Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems'
 paperurl: 
