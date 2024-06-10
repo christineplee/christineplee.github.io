@@ -3,7 +3,7 @@ title: "The Unboxing Experience: Exploration and Design of Initial Interactions 
 collection: publications
 permalink: /publication/2022-4-27-The-Unboxing-Experience:-Exploration-and-Design-of-Initial-Interactions-Between-Children-and-Social-Robots
 excerpt:
-date: 2023-03-13
+date: 2022-4-27
 venue: 'HRI 23: ACM/IEEE International Conference on Human-Robot Interaction'
 paperurl: 
 citation: 'Lee, C., Cagiltay, B., Sullivan, D., & Mutlu, B. 2023. &quot;Demonstrating the Potential of Interactive Product Packaging for Enriching Human-Robot Interaction.&quot; <i>In Companion of the 2023 ACM/IEEE International Conference on Human-Robot Interaction (HRI 23)</i>. Association for Computing Machinery, New York, NY, USA, 899–901.'
