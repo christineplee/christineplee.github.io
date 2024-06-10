@@ -1,34 +1,16 @@
 ---
-title: "(CHI22) The unboxing experience: Exploration and design of initial interactions between children and social robots"
+title: "The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots"
 collection: publications
-permalink: /publications/CHI22
-excerpt: '🏅**_Best Paper Honorable Mention Award_**'
+permalink: /publication/2022-4-27-The-Unboxing-Experience:-Exploration-and-Design-of-Initial-Interactions-Between-Children-and-Social-Robots
+excerpt:'🏅**_Best Paper Honorable Mention Award_**'
 date: 2022-4-27
-venue: 'Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems'
-paperurl: 'https://doi.org/10.1145/3491102.3501955'
-citation: 'Christine P Lee, Bengisu Cagiltay, and Bilge Mutlu. 2022. The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots. In Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems (CHI 22). Association for Computing Machinery, New York, NY, USA, Article 151, 1–14.'
+venue: 'CHI '22: Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems'
+paperurl: 
+citation: Christine P Lee, Bengisu Cagiltay, and Bilge Mutlu. 2022. The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots. In Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems (CHI '22). Association for Computing Machinery, New York, NY, USA, Article 151, 1–14.'
 ---
-
-[Download paper here](/files/CHI22-Unboxing-Lee.pdf)
-
-[Watch our Paper Talk Here](https://youtu.be/1LMYwqfzD84)
-
-<iframe src="/files/CHI22-Unboxing-Lee.pdf" width="100%" height="480" allow="autoplay"></iframe>
-
-<iframe width="420" height="315" src="https://www.youtube.com/embed/1LMYwqfzD84"></iframe>
-
-## HRI 2023 Demo -- Companion Paper 
-
-At HRI2023, we demonstrated the product packaging that was the designed artifact as an outcome from our CHI 2022 publication.
-
-[Download our HRI 2023 Demo - Companion Paper](https://bengisucagiltay.github.io/files/HRI23-Unboxing-Demo.pdf)
-
-[HRI 2023 Demo - Companion Video](https://www.youtube.com/watch?v=CJCNpDZGOIM)
-
-
-<iframe src="/files/HRI23-Unboxing-Demo.pdf" width="100%" height="480" allow="autoplay"></iframe>
-<iframe width="420" height="315" src="https://www.youtube.com/embed/CJCNpDZGOIM"></iframe>
-
-
-Christine P. Lee, Bengisu Cagiltay, Dakota Sullivan, and Bilge Mutlu. 2023. Demonstrating the Potential of Interactive Product Packaging for Enriching Human-Robot Interaction. In Companion of the 2023 ACM/IEEE International Conference on Human-Robot Interaction (HRI '23). Association for Computing Machinery, New York, NY, USA, 899–901. https://doi.org/10.1145/3568294.3580038
+ 
+[Download Paper Here](https://dl.acm.org/doi/pdf/10.1145/3491102.3501955)
+ 
+**Abstract:** Social robots are increasingly introduced into children’s lives as educational and social companions, yet little is known about how these products might best be introduced to their environments. The emergence of the “unboxing” phenomenon in media suggests
+that introduction is key to technology adoption where initial impressions are made. To better understand this phenomenon toward designing a positive unboxing experience in the context of social robots for children, we conducted three field studies with families of children aged 8 to 13: (1) an exploratory free-play activity (n = 12); (2) a co-design session (n = 11) that informed the development of a prototype box and a curated unboxing experience; and (3) a user study (n = 9) that evaluated children’s experiences. Our findings suggest the unboxing experience of social robots can be improved through the design of a creative aesthetic experience that engages the child socially to guide initial interactions and foster a positive child-robot relationship.
 
