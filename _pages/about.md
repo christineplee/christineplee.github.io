@@ -13,7 +13,7 @@ Hi there! 👋 I am a fourth-year PhD student in the Department of Computer Scie
 My research focuses on Human-Robot Interaction (HRI) and Artificial Intelligence (AI) to build human-centered, adaptive, and reliable technologies that successfully integrate into real-world environments. Particularly, I am interested in combining user-centered design and formal methods (i.e., verification and synthesis) with AI tools and large-language models to develop responsible and resilient robotic technologies.
 
 
-<strong><a href="https://drive.google.com/file/d/1UiqNFSLWwu51J-muuP9pBq-f2y76cU4v/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: November 2023_
+<strong><a href="https://drive.google.com/file/d/1EPunYagsJIuspLOBdupZ7jMBXXCRrmQt/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: June 2024_
 
 
 <strong><a href="https://scholar.google.com/citations?user=koUNB_MAAAAJ&hl=en&oi=ao" target="_blank">My Google Scholar</a></strong> — _For most updated publications_
