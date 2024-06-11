@@ -1,5 +1,5 @@
 ---
-title: "Demonstrating the Potential of Interactive Product Packaging for Enriching Human-Robot Interaction"
+title: "Understanding Large-Language Model (LLM)-powered Human-Robot Interaction"
 collection: publications
 permalink: /publication/2023-03-13-Demonstrating-the-Potential-of-Interactive-Product-Packaging-for-Enriching-Human-Robot-Interaction
 excerpt:
