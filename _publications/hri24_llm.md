@@ -1,7 +1,7 @@
 ---
 title: "Understanding Large-Language Model (LLM)-powered Human-Robot Interaction"
 collection: publications
-permalink: /publication/2023-03-13-Demonstrating-the-Potential-of-Interactive-Product-Packaging-for-Enriching-Human-Robot-Interaction
+permalink: /publication/2024-03-13-Understanding-Large-Language-Model-(LLM)-powered-Human-Robot-Interaction
 excerpt:
 date: 2023-03-13
 venue: 'HRI 23: Companion of the 2023 ACM/IEEE International Conference on Human-Robot Interaction'
