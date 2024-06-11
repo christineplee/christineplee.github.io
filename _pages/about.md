@@ -14,6 +14,8 @@ My research focuses on Human-Robot Interaction (HRI) and Artificial Intelligence
 
 
 <strong><a href="https://drive.google.com/file/d/1UiqNFSLWwu51J-muuP9pBq-f2y76cU4v/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: November 2023_
+
+
 <strong><a href="https://scholar.google.com/citations?user=koUNB_MAAAAJ&hl=en&oi=ao" target="_blank">My Google Scholar</a></strong> — _For most updated publications_
 
 
