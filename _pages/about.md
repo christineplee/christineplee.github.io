@@ -8,10 +8,10 @@ redirect_from:
   - /about.html
 ---
 
-Hi there! I am currently pursuing a Ph.D. in the Computer Sciences Department at the University of Wisconsin-Madison, under the guidance of [Dr. Bilge Mutlu](http://bilgemutlu.com/). Additionally, I am part of the [People and Robots Laboratory](http://peopleandrobots.wisc.edu/). 
+Hi there! 👋 I am a fourth-year PhD student in the Department of Computer Sciences at the University of Wisconsin-Madison, gratefully guided by [Dr. Bilge Mutlu](http://bilgemutlu.com/). Additionally, I am part of the [People and Robots Laboratory](http://peopleandrobots.wisc.edu/).
 
-## Research
-My research centers around technical methods aimed at enhancing the explainability and adaptability of AI systems in real-world applications, with a strong focus on *human-centered* and *context-aware* systems. These methods primarily involve formal Programming Language (PL) and eXplainable AI techniques, applicable to a range of agents, including robots, and various contexts, such as in-home and workplace environments.
+My research focuses on Human-Robot Interaction (HRI) and Artificial Intelligence (AI) to build human-centered, adaptive, and reliable technologies that successfully integrate into real-world environments. Particularly, I am interested in combining user-centered design and formal methods (i.e., verification and synthesis) with AI tools and large-language models to develop responsible and resilient robotic technologies.
+
 
 <strong><a href="https://drive.google.com/file/d/1UiqNFSLWwu51J-muuP9pBq-f2y76cU4v/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: November 2023_
 
