@@ -3,8 +3,8 @@ title: "Understanding Large-Language Model (LLM)-powered Human-Robot Interaction
 collection: publications
 permalink: /publication/2024-03-13-Understanding-Large-Language-Model-(LLM)-powered-Human-Robot-Interaction
 excerpt:
-date: 2023-03-13
-venue: 'HRI 23: Companion of the 2023 ACM/IEEE International Conference on Human-Robot Interaction'
+date: 2024-03-13
+venue: 'HRI 24: Companion of the 2024 ACM/IEEE International Conference on Human-Robot Interaction'
 paperurl: 
 citation: 'Christine P. Lee, Bengisu Cagiltay, Dakota Sullivan, and Bilge Mutlu. 2023. Demonstrating the Potential of Interactive Product Packaging for Enriching Human-Robot Interaction. In Companion of the 2023 ACM/IEEE International Conference on Human-Robot Interaction (HRI 23). Association for Computing Machinery, New York, NY, USA, 899–901.'
 ---
