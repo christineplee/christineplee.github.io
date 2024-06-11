@@ -1,5 +1,5 @@
 ---
-title: "Understanding Large-Language Model (LLM)-powered Human-Robot Interaction"
+title: "Understanding Large-Language Model (LLM) powered Human Robot Interaction"
 collection: publications
 permalink: /publication/2024-03-13-Understanding-Large-Language-Model-(LLM)-powered-Human-Robot-Interaction
 excerpt:
