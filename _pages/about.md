@@ -10,7 +10,7 @@ redirect_from:
 
 Hi there! 👋 I am a fourth-year PhD student in the Department of Computer Sciences at the University of Wisconsin-Madison, gratefully guided by [Dr. Bilge Mutlu](http://bilgemutlu.com/). Additionally, I am part of the [People and Robots Laboratory](http://peopleandrobots.wisc.edu/).
 
-My research focuses on Human-Robot Interaction (HRI) and Artificial Intelligence (AI) to build human-centered, adaptive, and reliable technologies that successfully integrate into real-world environments. Particularly, I am interested in combining user-centered design and formal methods (i.e., verification and synthesis) with AI tools and large-language models to develop responsible and resilient robotic technologies.
+My research focuses on **Human-Robot Interaction (HRI)** and **Artificial Intelligence (AI)** to build human-centered, adaptive, and reliable technologies that successfully integrate into real-world environments. Particularly, I am interested in combining user-centered design and formal methods (i.e., verification and synthesis) with AI tools and large-language models to develop responsible and resilient robotic technologies.
 
 
 <strong><a href="https://drive.google.com/file/d/1EPunYagsJIuspLOBdupZ7jMBXXCRrmQt/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: June 2024_
