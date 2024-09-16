@@ -10,7 +10,9 @@ redirect_from:
 
 Hi there! 👋 I am a third-year PhD student in the Department of Computer Sciences at the University of Wisconsin-Madison, gratefully guided by [Dr. Bilge Mutlu](http://bilgemutlu.com/). 
 
-My research focuses on designing, developing, and deploying AI tools that preserve user control, emulate human behavior, and support transparency to facilitate **resilient** AI systems that adapt to user needs, recover from setbacks, and continuously operate effectively for end-users in everyday AI applications. These days, I aim to design AI systems that incorporate formal methods in modular approaches that add verifiability, synthesizability, and repairability to LLM output. I believe the deterministic nature of these formal methods will serve as a quality check on the probabilistic aspects of AI models, particularly LLMs, thereby enhancing their reliability and usability for end users!
+My research focuses on **designing, developing, and deploying human-centered AI systems** that preserve user control, emulate human behavior, and support transparency to facilitate **resilience**. These systems adapt to user needs, recover from setbacks, and continuously operate effectively for end-users in everyday AI applications.
+
+Currently, I aim to design AI systems that incorporate formal methods in modular approaches, adding verifiability, synthesizability, and repairability to LLM output. I believe the deterministic nature of these formal methods will serve as a quality check on the probabilistic aspects of AI models, particularly LLMs, thereby enhancing their reliability and usability for end-users.
 
 <strong><a href="https://drive.google.com/file/d/1ZeY74Pc_-y6Rwc9z8nRvd4qlCdyKsmWz/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: September 2024_
 
