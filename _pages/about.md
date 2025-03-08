@@ -14,7 +14,7 @@ My research focuses on **designing, developing, and deploying human-centered AI 
 
 Currently, I aim to design AI systems that incorporate formal methods in modular approaches, adding verifiability, synthesizability, and repairability to LLM output. I believe the deterministic nature of these formal methods will serve as a quality check on the probabilistic aspects of AI models, particularly LLMs, thereby enhancing their reliability and usability for end-users.
 
-<strong><a href="https://drive.google.com/file/d/1ZeY74Pc_-y6Rwc9z8nRvd4qlCdyKsmWz/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: September 2024_
+<strong><a href="https://drive.google.com/file/d/18mIHRJmQEAgwbHazGKXTgX1SdBtv2ol1/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: March 2025_
 
 
 <strong><a href="https://scholar.google.com/citations?user=koUNB_MAAAAJ&hl=en&oi=ao" target="_blank">My Google Scholar</a></strong> — _For most updated publications_
