@@ -8,13 +8,13 @@ redirect_from:
   - /about.html
 ---
 
-Hi there! 👋 I am a third-year PhD student in the Department of Computer Sciences at the University of Wisconsin-Madison, gratefully guided by [Dr. Bilge Mutlu](http://bilgemutlu.com/). 
+Hi there! 👋 I am a Cisco Distinguished Graduate Fellow and a third-year PhD student in the Department of Computer Sciences at the University of Wisconsin-Madison, gratefully guided by [Dr. Bilge Mutlu](http://bilgemutlu.com/). 
 
-My research focuses on **designing, developing, and deploying human-centered AI systems** that preserve user control, emulate human behavior, and support transparency to facilitate **resilience**. These systems adapt to user needs, recover from setbacks, and continuously operate effectively for end-users in everyday AI applications.
+My research intersects Human-Computer Interaction, Artificial Intelligence, and Programming Languages. I develop human-centered AI tools that support deterministic reliability and adaptive resilience, enabling seamless integration into human environments. I focus on user-facing challenges that arise when AI systems are deployed in real-world settings, such as unreliable or insufficient verification, limited adaptability, and misaligned user expectations. To address these challenges, I combine user-centered design approaches with logic-based formal methods in building AI systems. My goal is to empower users to directly verify, adapt, and repair system behavior to support sustained and effective use. My work draws on theories and methods across computer science, social science, design, and communication arts.  
 
 Currently, I aim to design AI systems that incorporate formal methods in modular approaches, adding verifiability, synthesizability, and repairability to LLM output. I believe the deterministic nature of these formal methods will serve as a quality check on the probabilistic aspects of AI models, particularly LLMs, thereby enhancing their reliability and usability for end-users.
 
-<strong><a href="https://drive.google.com/file/d/18mIHRJmQEAgwbHazGKXTgX1SdBtv2ol1/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: March 2025_
+<strong><a href="https://drive.google.com/file/d/18mIHRJmQEAgwbHazGKXTgX1SdBtv2ol1/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: April 2025_
 
 
 <strong><a href="https://scholar.google.com/citations?user=koUNB_MAAAAJ&hl=en&oi=ao" target="_blank">My Google Scholar</a></strong> — _For most updated publications_
