@@ -16,7 +16,7 @@ Currently, I aim to design AI systems that incorporate formal methods in modular
 
 My work is supported by the Cisco Distinguished Graduate Fellowship and the NSF INTEGRATE Research Training Program Fellowship. 
 
-<strong><a href="https://drive.google.com/file/d/1PpKOddTTOhhdS3CJY0oWL5sggcoQXcUe/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: April 2025_
+<strong><a href="https://drive.google.com/file/d/1OOpES7wP1aUKzKZAq5HjmdDW8VWQoi_B/view?usp=sharing" target="_blank">Download my CV</a></strong> — _Updated: April 2025_
 
 
 <strong><a href="https://scholar.google.com/citations?user=koUNB_MAAAAJ&hl=en&oi=ao" target="_blank">My Google Scholar</a></strong> — _For most updated publications_
