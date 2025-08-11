@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: PhD Student @ University of Wisconsin-Madison, Department of Computer Sciences
 
 profile:
   align: right
