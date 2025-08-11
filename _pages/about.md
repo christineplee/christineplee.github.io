@@ -2,16 +2,16 @@
 layout: about
 title: about
 permalink: /
-subtitle: PhD Student @ University of Wisconsin-Madison, Department of Computer Sciences
+subtitle: PhD Student @ [University of Wisconsin-Madison](https://www.wisc.edu/), Department of [Computer Sciences](https://www.cs.wisc.edu/)
 
 profile:
   align: right
   image: prof_pic.jpg
   image_circular: true # crops the image to make it circular
-  more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+  # more_info: >
+  #   <p>555 your office number</p>
+  #   <p>123 your address street</p>
+  #   <p>Your City, State 12345</p>
 
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
@@ -32,4 +32,4 @@ My research intersects Human-Computer Interaction, Artificial Intelligence, and 
 
 Currently, I aim to design AI systems that incorporate formal methods in modular approaches, adding verifiability, synthesizability, and repairability to LLM output. I believe the deterministic nature of these formal methods will serve as a quality check on the probabilistic aspects of AI models, particularly LLMs, thereby enhancing their reliability and usability for end-users.
 
-My work is supported by the Cisco Distinguished Graduate Fellowship and the NSF INTEGRATE Research Training Program Fellowship.
+My work is supported by the [Cisco Distinguished Graduate Fellowship](https://www.cs.wisc.edu/2025-cs-department-awards-and-thank-yous/) and the [NSF INTEGRATE Research Training Program Fellowship](https://integrate.wisc.edu/).
