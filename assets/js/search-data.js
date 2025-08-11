@@ -444,11 +444,11 @@ ninja.data = [{
           window.open("mailto:%63%70%6C%65%65%35@%77%69%73%63.%65%64%75", "_blank");
         },
       },{
-        id: 'social-github',
-        title: 'GitHub',
+        id: 'social-scholar',
+        title: 'Google Scholar',
         section: 'Socials',
         handler: () => {
-          window.open("https://github.com/christineplee", "_blank");
+          window.open("https://scholar.google.com/citations?user=koUNB_MAAAAJ", "_blank");
         },
       },{
         id: 'social-linkedin',
@@ -458,18 +458,11 @@ ninja.data = [{
           window.open("https://www.linkedin.com/in/christine-p-lee", "_blank");
         },
       },{
-        id: 'social-rss',
-        title: 'RSS Feed',
+        id: 'social-github',
+        title: 'GitHub',
         section: 'Socials',
         handler: () => {
-          window.open("/feed.xml", "_blank");
-        },
-      },{
-        id: 'social-scholar',
-        title: 'Google Scholar',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://scholar.google.com/citations?user=koUNB_MAAAAJ", "_blank");
+          window.open("https://github.com/christineplee", "_blank");
         },
       },{
         id: 'social-custom_social',
