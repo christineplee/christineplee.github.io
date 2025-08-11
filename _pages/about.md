@@ -26,10 +26,12 @@ social: false # includes social icons at the bottom of the page
 #   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
 #   limit: 3 # leave blank to include all the blog posts
 ---
-I am a third-year PhD student in the Department of Computer Sciences at the University of Wisconsin-Madison, advised by Professor [Bilge Mutlu](http://bilgemutlu.com/). 
 
-My research intersects Human-Computer Interaction, Artificial Intelligence, and Programming Languages. I develop human-centered AI tools that support deterministic reliability and adaptive resilience, enabling seamless integration into human environments. I focus on user-facing challenges that arise when AI systems are deployed in real-world settings, such as unreliable or insufficient verification, limited adaptability, and misaligned user expectations. To address these challenges, I combine user-centered design approaches with logic-based formal methods in building AI systems. My goal is to empower users to directly verify, adapt, and repair system behavior to support sustained and effective use. My work draws on theories and methods across computer science, social science, design, and communication arts.  
+Hi there! I’m a third-year Ph.D. student in Computer Sciences at the University of Wisconsin–Madison, advised by Professor [Bilge Mutlu](http://bilgemutlu.com/).
 
-Currently, I aim to design AI systems that incorporate formal methods in modular approaches, adding verifiability, synthesizability, and repairability to LLM output. I believe the deterministic nature of these formal methods will serve as a quality check on the probabilistic aspects of AI models, particularly LLMs, thereby enhancing their reliability and usability for end-users.
+I design **human-centered AI systems** that combine black box AI models (i.e., large language models (LLMs)) with *formal methods*—such as verification, synthesis, and Markov Decision Processes—to make AI outputs **verifiable, adaptable, and repairable**. My work tackles challenges users face when AI is deployed in real-world settings, including unreliable verification, limited adaptability, and misaligned expectations.
 
-My work is supported by the [Cisco Distinguished Graduate Fellowship](https://www.cs.wisc.edu/2025-cs-department-awards-and-thank-yous/) and the [NSF INTEGRATE Research Training Program Fellowship](https://integrate.wisc.edu/).
+By integrating deterministic checks, persistent constraints, and transparent reasoning into AI workflows, I aim to reduce oversight burden, make user control more expressive, and ensure AI systems adapt smoothly to changing needs. My five research pillars—**Verify, Constrain, Observe, Adapt, and Bridge**—guide this work toward AI that is reliable, transparent, and seamlessly embedded in human workflows.
+
+My research is supported by the [Cisco Distinguished Graduate Fellowship](https://www.cs.wisc.edu/2025-cs-department-awards-and-thank-yous/) and the [NSF INTEGRATE Research Training Program Fellowship](https://integrate.wisc.edu/).
+
