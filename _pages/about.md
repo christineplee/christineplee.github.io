@@ -7,7 +7,7 @@ subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
 profile:
   align: right
   image: prof_pic.jpg
-  image_circular: false # crops the image to make it circular
+  image_circular: true # crops the image to make it circular
   more_info: >
     <p>555 your office number</p>
     <p>123 your address street</p>
@@ -26,9 +26,10 @@ latest_posts:
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
+I am a third-year PhD student in the Department of Computer Sciences at the University of Wisconsin-Madison, advised by Professor [Bilge Mutlu](http://bilgemutlu.com/). 
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+My research intersects Human-Computer Interaction, Artificial Intelligence, and Programming Languages. I develop human-centered AI tools that support deterministic reliability and adaptive resilience, enabling seamless integration into human environments. I focus on user-facing challenges that arise when AI systems are deployed in real-world settings, such as unreliable or insufficient verification, limited adaptability, and misaligned user expectations. To address these challenges, I combine user-centered design approaches with logic-based formal methods in building AI systems. My goal is to empower users to directly verify, adapt, and repair system behavior to support sustained and effective use. My work draws on theories and methods across computer science, social science, design, and communication arts.  
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+Currently, I aim to design AI systems that incorporate formal methods in modular approaches, adding verifiability, synthesizability, and repairability to LLM output. I believe the deterministic nature of these formal methods will serve as a quality check on the probabilistic aspects of AI models, particularly LLMs, thereby enhancing their reliability and usability for end-users.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+My work is supported by the Cisco Distinguished Graduate Fellowship and the NSF INTEGRATE Research Training Program Fellowship.
