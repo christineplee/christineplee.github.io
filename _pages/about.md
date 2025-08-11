@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: PhD Student @ [University of Wisconsin-Madison](https://www.wisc.edu/), Department of [Computer Sciences](https://www.cs.wisc.edu/)
+subtitle: PhD Student @ University of Wisconsin-Madison, Department of Computer Sciences
 
 profile:
   align: right
