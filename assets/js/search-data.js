@@ -457,11 +457,4 @@ ninja.data = [{
         handler: () => {
           window.open("https://www.linkedin.com/in/christine-p-lee", "_blank");
         },
-      },{
-        id: 'social-github',
-        title: 'GitHub',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://github.com/christineplee", "_blank");
-        },
       },];
