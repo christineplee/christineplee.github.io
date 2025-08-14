@@ -27,7 +27,7 @@ social: false # includes social icons at the bottom of the page
 #   limit: 3 # leave blank to include all the blog posts
 ---
 
-Hi there! I’m a fourth-year Ph.D. student, advised by Professor [Bilge Mutlu](http://bilgemutlu.com/).
+Hi there! I’m a third-year Ph.D. student, advised by Professor [Bilge Mutlu](http://bilgemutlu.com/).
 
 I design **human-centered AI systems** that combine black box AI models (i.e., large language models (LLMs)) with *formal methods*—such as verification, synthesis, and Markov Decision Processes—to make AI outputs **verifiable, adaptable, and repairable**. My work tackles challenges users face when AI is deployed in real-world settings, including unreliable verification, limited adaptability, and misaligned expectations.
 
