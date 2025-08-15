@@ -29,7 +29,7 @@ social: false # includes social icons at the bottom of the page
 
 Hi there! I’m a third-year Ph.D. student, advised by Professor [Bilge Mutlu](http://bilgemutlu.com/).
 
-I design and build **human-centered AI systems** that combine black box AI models (i.e., large language models (LLMs)) with *formal methods and models*—such as verification, synthesis, and Markov Decision Processes—to make AI outputs **verifiable, adaptable, and repairable**. My work tackles challenges users face when AI is deployed in real-world settings, including unreliable verification, limited adaptability, and misaligned expectations.
+I develop **human-centered AI systems** that combine black box AI models (i.e., large language models (LLMs)) with *formal methods and models*—such as verification, synthesis, and Markov Decision Processes—to make AI outputs **verifiable, adaptable, and repairable**. My work tackles challenges users face when AI is deployed in real-world settings, including unreliable verification, limited adaptability, and misaligned expectations.
 
 By integrating deterministic checks, persistent constraints, and transparent reasoning into AI workflows, I aim to reduce oversight burden, make user control more expressive, and ensure AI systems adapt smoothly to changing needs. My five research pillars—**Verify, Constrain, Observe, Adapt, and Bridge**—guide this work toward AI that is reliable, transparent, and seamlessly embedded in human workflows.
 
