@@ -62,6 +62,7 @@ a:hover { color: var(--accent-hover); }
   flex-shrink: 0;
   object-fit: cover;
   display: block;
+  box-shadow: 0 6px 18px rgba(35, 35, 38, 0.14), 0 1px 3px rgba(35, 35, 38, 0.08);
 }
 .intro .text {
   max-width: 640px;
