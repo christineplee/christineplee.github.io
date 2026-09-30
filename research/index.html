@@ -23,6 +23,12 @@
 .mech { margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.5; display: flex; flex-direction: column; gap: 6px; }
 .mech b { font-weight: 500; }
 .proj.no-thumb { grid-template-columns: minmax(0, 1fr); }
+.pubs-list { gap: 34px; }
+.marks { display: flex; align-items: center; gap: 4px; margin: 2px 0 4px !important; }
+.marks .m { width: 18px; height: 18px; border-radius: 50%; border: 1px solid #cfc8cd; color: #b3abb1; font-size: 11px; line-height: 16px; text-align: center; font-variant-numeric: tabular-nums; }
+.marks .m.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.marks .mw { margin-left: 6px; font-size: 14px; color: var(--muted); }
+.mech li::marker { font-variant-numeric: tabular-nums; }
 @media (max-width: 760px) { .proj { grid-template-columns: minmax(0, 1fr); gap: 10px; } .proj .thumb { max-width: 360px; } }
 </style>
 </head>
@@ -47,13 +53,11 @@
 </ol>
 </header>
 <div class="pubs-list">
-<section class="year-group">
-<h2 class="year">Specify</h2>
-<div class="year-pubs">
 <article class="pub proj">
 <a class="thumb" href="/research/cip/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/cip.webp" alt="CIP demo: responses for participants with different profiles" width="640" height="400" loading="lazy"></a>
 <div class="text">
 <h3 class="title"><a href="/research/cip/">Communication Initialization Profile (CIP)</a></h3>
+<p class="marks"><span class="m on" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m" aria-hidden="true">3</span><span class="mw">Specify</span></p>
 <p class="desc">A 16-item profile that gives an LLM a starting point for how to communicate with someone before it has any history with them.</p>
 <p class="links"><a href="/research/cip/">Try the demo</a></p>
 </div>
@@ -62,19 +66,16 @@
 <a class="thumb" href="/research/promptpath/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/promptpath.webp" alt="PromptPath demo: an enhanced prompt colored by where each word came from" width="640" height="400" loading="lazy"></a>
 <div class="text">
 <h3 class="title"><a href="/research/promptpath/">PromptPath</a></h3>
+<p class="marks"><span class="m on" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Specify and revise</span></p>
 <p class="desc">Keeps a persistent profile of the user and uses it to repair short prompts, showing which words came from the prompt, the profile, or the AI.</p>
 <p class="links"><a href="/research/promptpath/">Try the demo</a></p>
 </div>
 </article>
-</div>
-</section>
-<section class="year-group">
-<h2 class="year">Check</h2>
-<div class="year-pubs">
 <article class="pub proj">
 <a class="thumb" href="/research/veriplan/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/veriplan.webp" alt="VeriPlan demo: planning attempts and the rules each one broke" width="640" height="400" loading="lazy"></a>
 <div class="text">
 <h3 class="title"><a href="/research/veriplan/">VeriPlan</a></h3>
+<p class="marks"><span class="m" aria-hidden="true">1</span><span class="m on" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Check and revise</span></p>
 <p class="desc">Checks an LLM's plan against rules the user confirms, using model checking, and sends any violations back to the user and the LLM.</p>
 <p class="links"><a href="/research/veriplan/">Try the demo</a><a href="https://doi.org/10.1145/3706598.3714113">Paper</a></p>
 </div>
@@ -83,23 +84,18 @@
 <a class="thumb" href="/research/u-define/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/udefine.webp" alt="U-Define demo: plans with hard-rule violations and soft ratings" width="640" height="400" loading="lazy"></a>
 <div class="text">
 <h3 class="title"><a href="/research/u-define/">U-Define</a></h3>
+<p class="marks"><span class="m" aria-hidden="true">1</span><span class="m on" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Check and revise</span></p>
 <p class="desc">People state their own constraints in natural language and mark each one as hard or soft. Hard rules are checked with model checking, and soft preferences are rated by an LLM judge.</p>
 <p class="links"><a href="/research/u-define/">Try the demo</a><a href="https://arxiv.org/abs/2605.02765">Paper</a></p>
 </div>
 </article>
-</div>
-</section>
-<section class="year-group">
-<h2 class="year">Revise</h2>
-<div class="year-pubs">
 <article class="pub proj no-thumb">
 <div class="text">
 <h3 class="title">REX</h3>
+<p class="marks"><span class="m" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Revise</span></p>
 <p class="desc">A household robot whose plan failed, because family members' requests conflicted or circumstances changed, repairs its plan and explains the repair.</p>
 </div>
 </article>
-</div>
-</section>
 </div>
 </main>
 </div>
