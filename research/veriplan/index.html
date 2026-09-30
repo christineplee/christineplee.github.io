@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VeriPlan demo · Christine P. Lee</title>
+<meta name="description" content="Try VeriPlan (CHI 2025), a system that checks LLM-generated plans against user-confirmed rules with model checking.">
+<link rel="canonical" href="https://christineplee.github.io/research/veriplan/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=4">
+<style>
+/* Layout: site header (Christine's site style) above a faithful replica of the VeriPlan study UI:
+   Chainlit input panel on the left, React Flow planning canvas on the right. Single light look, as in the study. */
+:root {
+  color-scheme: light;
+  /* site */
+  --site-bg: var(--paper);
+  --site-fg: var(--ink);
+  --site-muted: var(--muted);
+  --plum: var(--accent);
+  --plum-soft: #f3e9f0;
+  --rule: #e6e0e5;
+  --rule-strong: #cfc6cd;
+  --room: #f6f2f5;
+  --font-site: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  /* VeriPlan frontend-app/src/styles/PlanningPanel.css */
+  --vp-agent-bg: #E1F1FC;   --vp-agent: #8EC7F6;
+  --vp-cons-bg: #E6E6F9;    --vp-cons: #98A2D8;
+  --vp-plan-bg: #F0E1F7;    --vp-plan: #CE94D8;
+  --vp-broken-bg: #FFEBEB;  --vp-broken: #EB9596;
+  --vp-text: #1f1f1f;
+  --rf-bg: #ffffff; --rf-dot: #c9c9d1; --rf-edge: #b1b1b7; --rf-handle: #1a192b;
+  /* Chainlit 1.0 light theme */
+  --cl-bg: #fafafa; --cl-paper: #ffffff; --cl-border: #e4e4e7; --cl-muted: #71717a;
+  --cl-primary: #F80061; --cl-user: #27272a;
+  --guide-num: #29a8e0;
+  --font-cl: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-rf: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+
+
+/* ---------- demo header (site conventions: weight 500 headings) ---------- */
+.demo { display: flex; flex-direction: column; padding: 32px 0 24px 24px; }
+@media (max-width: 1100px) { .demo { padding-left: 0; } }
+.demo-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.demo-head h1 { margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.4px; line-height: 1.2; }
+.demo-head .byline { margin: 0; font-size: 15px; color: var(--site-muted); }
+.demo-head .lede { margin: 0; max-width: 68ch; }
+
+/* ---------- task ---------- */
+.task { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 16px 40px; align-items: center; background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 18px 22px; margin-bottom: 18px; }
+.task h2 { font-size: 1.15rem; font-weight: 500; margin: 0 0 6px; text-wrap: balance; }
+.task p { margin: 0; line-height: 1.55; max-width: 66ch; }
+.task .task-q { margin-top: 8px; color: var(--plum); font-weight: 500; }
+.task-fig { width: 100%; max-width: 400px; height: auto; }
+.tf-h { font-family: var(--font-site); font-size: 12.5px; font-weight: 700; fill: var(--site-fg); }
+.tf-s { font-family: var(--font-site); font-size: 11.5px; fill: var(--site-muted); }
+.tf-warn { fill: #b4232a; }
+.tf-p { font-family: var(--font-site); font-size: 11.5px; font-weight: 700; fill: var(--site-fg); }
+.tf-me { fill: #fff; }
+.tf-x { stroke: #d9534f; stroke-width: 2.5; stroke-dasharray: 4 3; }
+@media (max-width: 860px) { .task { grid-template-columns: 1fr; padding: 16px; } }
+
+/* ---------- guide strip ---------- */
+.guide { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 12px 0; margin-bottom: 14px; }
+.guide-now { flex: 1 1 420px; min-width: 0; font-size: 0.98rem; line-height: 1.45; }
+.guide-now b { color: var(--plum); font-weight: 500; }
+.guide-ctl { display: flex; gap: 10px; align-items: center; font-size: 0.9rem; }
+.guide-ctl label { display: flex; gap: 6px; align-items: center; cursor: pointer; color: var(--site-muted); }
+.guide-ctl input { accent-color: var(--plum); }
+.btn-site { font-family: var(--font-site); font-size: 0.9rem; font-weight: 600; border: 1px solid var(--plum); color: var(--plum); background: transparent; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.btn-site:hover { background: var(--plum-soft); }
+
+/* ---------- app frame ---------- */
+.app { display: flex; height: 740px; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--rf-bg); box-shadow: 0 1px 2px rgba(40,20,40,.04), 0 8px 24px rgba(40,20,40,.06); }
+.left { flex: 2 1 0; min-width: 0; background: var(--cl-bg); padding: 10px; display: flex; }
+.right { flex: 5 1 0; min-width: 0; position: relative; border-left: 1px solid var(--cl-border); }
+
+/* ---------- Chainlit panel ---------- */
+.cl { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--cl-paper); border-radius: 22px; border: 1px solid var(--cl-border); font-family: var(--font-cl); color: #18181b; overflow: hidden; position: relative; }
+.cl-head { display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--cl-border); }
+.cl-new { display: flex; align-items: center; gap: 6px; font-family: var(--font-cl); font-size: 13px; font-weight: 500; color: var(--cl-primary); background: #fff; border: 1px solid #fbb6ce; border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+.cl-new:hover { background: #fff1f5; }
+.cl-me { width: 26px; height: 26px; border-radius: 50%; background: var(--cl-primary); color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; }
+.cl-msgs { flex: 1; overflow-y: auto; padding: 14px 16px 8px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+.msg { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.55; }
+.av { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; margin-top: 1px; }
+.av.bot { background: var(--cl-primary); }
+.av.you { background: var(--cl-user); }
+.msg-body { flex: 1; min-width: 0; }
+.msg-meta { display: flex; gap: 8px; align-items: baseline; margin-bottom: 2px; }
+.msg-meta b { font-size: 14px; font-weight: 600; }
+.msg-meta time { font-size: 12px; color: var(--cl-muted); }
+.msg-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg-text .step, .msg-text .instr { white-space: normal; }
+.msg-text ol { margin: 4px 0; padding-left: 20px; white-space: normal; }
+.msg-text li { margin: 2px 0; }
+.instr { border: 1px solid var(--cl-border); border-radius: 8px; padding: 10px 12px; background: #fcfcfd; font-size: 13px; }
+.instr h4 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+.step { border: 1px solid var(--cl-border); border-radius: 6px; margin-top: 4px; font-size: 13px; }
+.step > button { width: 100%; display: flex; align-items: center; gap: 8px; background: transparent; border: 0; padding: 6px 10px; font: inherit; color: #3f3f46; cursor: pointer; text-align: left; }
+.step > button .chev { margin-left: auto; transition: transform .15s; color: var(--cl-muted); }
+.step.open > button .chev { transform: rotate(180deg); }
+.step-body { display: none; border-top: 1px solid var(--cl-border); padding: 8px 10px; max-height: 260px; overflow: auto; }
+.step.open .step-body { display: block; }
+.step-body pre { margin: 0; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; white-space: pre; }
+.step-body .plain { white-space: pre-wrap; font-size: 13px; }
+.spin { width: 12px; height: 12px; border: 2px solid #e4e4e7; border-top-color: var(--cl-primary); border-radius: 50%; animation: spin .8s linear infinite; flex: 0 0 auto; }
+.done-dot { width: 12px; height: 12px; border-radius: 50%; background: #22c55e; flex: 0 0 auto; position: relative; }
+.done-dot::after { content: ""; position: absolute; left: 4px; top: 2px; width: 3px; height: 6px; border: solid #fff; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.typing { display: inline-flex; gap: 3px; padding: 4px 0; }
+.typing i { width: 5px; height: 5px; background: #a1a1aa; border-radius: 50%; animation: blink 1s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes blink { 50% { opacity: .25; } }
+.cl-foot { padding: 8px 12px 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip { font-family: var(--font-cl); font-size: 12.5px; border: 1px solid var(--cl-border); background: #fff; color: #3f3f46; border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+.chip:hover { border-color: var(--cl-primary); color: var(--cl-primary); }
+.cl-input { display: flex; align-items: flex-end; gap: 8px; border: 1px solid var(--cl-border); border-radius: 12px; padding: 8px 8px 8px 12px; background: #fff; }
+.cl-input:focus-within { border-color: #a1a1aa; }
+.cl-input textarea { flex: 1; min-width: 0; border: 0; outline: none; resize: none; font-family: var(--font-cl); font-size: 14px; line-height: 1.45; color: #18181b; background: transparent; max-height: 120px; }
+.cl-input textarea:focus-visible { outline: none; }
+.cl-send { border: 0; background: transparent; color: var(--cl-primary); cursor: pointer; padding: 4px; border-radius: 6px; display: grid; place-items: center; }
+.cl-send:disabled { color: #d4d4d8; cursor: default; }
+.cl-send.pulse:not(:disabled) { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { background: #ffe4ee; } }
+.cl-built { text-align: center; font-size: 11.5px; color: var(--cl-muted); margin-top: 6px; }
+
+/* ---------- React Flow canvas ---------- */
+.rf { position: absolute; inset: 0; overflow: hidden; cursor: grab; touch-action: none; background-color: var(--rf-bg);
+  background-image: radial-gradient(circle, var(--rf-dot) 1px, transparent 1.2px); }
+.rf.dragging { cursor: grabbing; }
+.world { position: absolute; left: 0; top: 0; width: 1px; height: 1px; transform-origin: 0 0; }
+.world.anim { transition: transform .55s cubic-bezier(.3,.7,.2,1); }
+.edges { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
+.edges path { fill: none; stroke: var(--rf-edge); stroke-width: 1.2; }
+.edges path.anim { stroke-dasharray: 5; animation: dash .5s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -10; } }
+.rf-empty[hidden] { display: none; }
+.rf-empty { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; font-family: var(--font-rf); color: #a1a1aa; font-size: 14px; }
+.controls { position: absolute; left: 14px; bottom: 14px; display: flex; flex-direction: column; box-shadow: 0 0 2px 1px rgba(0,0,0,.08); z-index: 5; }
+.controls button { width: 28px; height: 28px; background: #fefefe; border: 0; border-bottom: 1px solid #eee; display: grid; place-items: center; cursor: pointer; color: #333; padding: 0; border-radius: 0; }
+.controls button:hover { background: #f4f4f4; }
+.controls button:last-child { border-bottom: 0; }
+.hint-zoom { position: absolute; right: 12px; bottom: 10px; font-family: var(--font-rf); font-size: 11px; color: #a1a1aa; z-index: 5; }
+
+/* nodes: same structure and colors as CustomNodes.js */
+.node { position: absolute; font-family: var(--font-rf); color: var(--vp-text); font-size: 14px; cursor: grab; }
+.node.enter { animation: pop .35s ease-out; }
+@keyframes pop { from { opacity: 0; transform: translateY(8px); } }
+.node-label { font-weight: 700; font-size: 14px; font-style: italic; white-space: nowrap; margin-bottom: 6px; }
+.node-content { position: relative; background: var(--vp-plan-bg); border: 2px solid var(--vp-plan); border-radius: 10px; padding: 10px; font-size: 14px; line-height: 1.35; cursor: default; }
+.n-agent .node-label { color: var(--vp-agent); }
+.n-agent .node-content { background: var(--vp-agent-bg); border-color: var(--vp-agent); width: 270px; }
+.n-verify .node-label, .n-cons .node-label { color: var(--vp-cons); }
+.n-verify .node-content, .n-cons .node-content { background: var(--vp-cons-bg); border-color: var(--vp-cons); width: 430px; line-height: 1.3; }
+.n-plan .node-label { color: var(--vp-plan); padding-left: 22px; }
+.n-plan .node-content { width: 380px; margin-left: 20px; padding-left: 30px; }
+.n-plan .node-content div + div { margin-top: 4px; }
+.attempt-number { position: absolute; left: 0; top: calc(50% + 12px); transform: translateY(-50%); width: 40px; height: 40px; background: var(--vp-plan-bg); border: 2px solid var(--vp-plan); border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 18px; box-shadow: 0 2px 4px rgba(0,0,0,.2); z-index: 2; }
+.n-broken .node-label { color: var(--vp-broken); }
+.n-broken .node-content { background: var(--vp-broken-bg); border-color: var(--vp-broken); width: 400px; white-space: pre-wrap; }
+.n-broken .soft { color: #8a5a5b; display: block; margin-top: 6px; font-size: 13px; }
+.handle { position: absolute; width: 7px; height: 7px; background: var(--rf-handle); border: 1px solid #fff; border-radius: 50%; z-index: 3; }
+.h-right { right: -4px; top: 50%; margin-top: -4px; }
+.h-left { left: -4px; top: 50%; margin-top: -4px; }
+.h-top { top: -4px; left: 50%; margin-left: -4px; }
+.h-bottom { bottom: -4px; left: 50%; margin-left: -4px; }
+.n-plan .h-left { left: -4px; top: calc(50% + 12px); }
+
+.rule-item { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.box { flex: 0 0 22px; width: 22px; height: 22px; border: 1.5px solid #6d7fd6; border-radius: 4px; background: #fff; display: grid; place-items: center; cursor: pointer; padding: 0; }
+.box svg { opacity: 0; }
+.box[aria-checked="true"] { background: #6d7fd6; }
+.box[aria-checked="true"] svg { opacity: 1; }
+.box:disabled { cursor: default; opacity: .75; }
+.rule-text { margin: 0; font-size: 14px; color: #374151; }
+.rule-group + .rule-group { border-top: 1px dashed #c6cbe9; padding-top: 9px; }
+.node-msg { color: #b4232a; font-size: 13px; margin: 2px 0 6px; min-height: 0; }
+.btns { display: flex; justify-content: space-evenly; margin-top: 6px; }
+.vp-btn { width: 40%; background: var(--vp-cons-bg); border: 2px solid var(--vp-cons); color: #6f7cc0; padding: 6px 12px; font-size: 14px; font-family: var(--font-rf); cursor: pointer; border-radius: 12px; }
+.vp-btn:hover:not(:disabled) { background: #d9daf5; }
+.vp-btn:disabled { cursor: default; opacity: .6; }
+.cons-rule { white-space: pre-wrap; margin: 0; font-family: inherit; }
+.slider-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 10px; }
+.slider { -webkit-appearance: none; appearance: none; width: 85%; height: 6px; background: #d3d3d3; outline: none; opacity: .8; border-radius: 3px; cursor: pointer; }
+.slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; background: var(--vp-cons); cursor: pointer; border-radius: 40%; border: 0; }
+.slider::-moz-range-thumb { width: 22px; height: 22px; background: var(--vp-cons); cursor: pointer; border-radius: 40%; border: 0; }
+.slider-row.locked { margin-bottom: 2px; }
+.slider-row.locked .slider { opacity: .4; cursor: not-allowed; }
+.slider-row.locked .slider::-webkit-slider-thumb { background: #b7b9c9; cursor: not-allowed; }
+.slider-row.locked .slider::-moz-range-thumb { background: #b7b9c9; cursor: not-allowed; }
+.slider-row.locked output { color: #8b8fa6; }
+.lock-note { margin: 0 0 10px; font-size: 12px; font-style: italic; color: #7d82a3; }
+.slider-row output { font-variant-numeric: tabular-nums; min-width: 3.2em; text-align: right; font-size: 13px; }
+
+/* guide chips, styled after the callouts in the paper's Figure 2 */
+.gchip { position: absolute; display: inline-flex; align-items: center; gap: 7px; background: #fff; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,.18); padding: 4px 9px 4px 4px; font-family: var(--font-rf); font-size: 12.5px; font-style: italic; font-weight: 600; color: #333; white-space: nowrap; z-index: 6; pointer-events: none; }
+.gchip b { font-style: normal; background: var(--guide-num); color: #fff; width: 19px; height: 19px; border-radius: 4px; display: grid; place-items: center; font-size: 12px; }
+.no-guide .gchip { display: none; }
+.cl .gchip { top: 10px; left: 12px; }
+.node .gchip { top: -8px; right: -10px; transform: translateY(-100%); }
+
+@media (max-width: 860px) {
+  .intro { grid-template-columns: 1fr; }
+  .app { flex-direction: column; height: auto; }
+  .left { height: 470px; flex: none; }
+  .right { height: 560px; flex: none; border-left: 0; border-top: 1px solid var(--cl-border); }
+  .intro h1 { font-size: 1.7rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .world.anim { transition: none; }
+  .node.enter, .spin, .typing i, .cl-send.pulse, .edges path.anim { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+<nav class="nav" aria-label="Main">
+<a class="home" href="/">Christine P. Lee</a>
+<div class="links">
+<a href="/publications/">publications</a>
+<a href="/assets/pdf/christine-lee-cv.pdf">cv</a>
+</div>
+</nav>
+<main class="demo">
+  <header class="demo-head">
+    <h1>VeriPlan</h1>
+    <p class="byline">Christine P. Lee, David Porfirio, Xinyu Jessica Wang, Kevin Chenkai Zhao, and Bilge Mutlu. CHI 2025. <a href="https://doi.org/10.1145/3706598.3714113">Paper</a></p>
+    <p class="lede">VeriPlan checks an LLM's plan against rules the user confirms, using model checking, and sends any violations back to the user and the LLM. Try it on the patient navigation task from the paper.</p>
+  </header>
+
+  <section class="task" aria-labelledby="taskTitle">
+    <div class="task-text">
+      <h2 id="taskTitle">The task: patient navigation</h2>
+      <p>You (P1) are a family counselor preparing a family therapy session. Three family members, P2, P3, and P4, are waiting with you in the waiting room (L1). Hospital safety protocols say you must escort each of them to the counseling room (L2) yourself, one person at a time. Because of ongoing tensions, P2 and P3 cannot be left alone together, and neither can P3 and P4.</p>
+      <p class="task-q">Ask the planner: in what order should you move everyone?</p>
+    </div>
+    <svg class="task-fig" viewBox="0 0 400 180" role="img" aria-labelledby="figT">
+      <title id="figT">Everyone starts in the waiting room L1 and must end in the counseling room L2. P1 escorts one person at a time. P2 and P3, and P3 and P4, cannot be left alone together.</title>
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="var(--site-muted)"/></marker></defs>
+      <rect x="6" y="26" width="164" height="140" rx="8" fill="var(--room)" stroke="var(--rule-strong)"/>
+      <rect x="230" y="26" width="164" height="140" rx="8" fill="var(--room)" stroke="var(--rule-strong)"/>
+      <text x="88" y="16" text-anchor="middle" class="tf-h">L1 waiting room</text>
+      <text x="312" y="16" text-anchor="middle" class="tf-h">L2 counseling room</text>
+      <path d="M176 96 H224" stroke="var(--site-muted)" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="200" y="86" text-anchor="middle" class="tf-s">escort</text>
+      <text x="200" y="118" text-anchor="middle" class="tf-s">1 at a time</text>
+      <line x1="36" y1="130" x2="88" y2="130" class="tf-x"/>
+      <line x1="88" y1="130" x2="140" y2="130" class="tf-x"/>
+      <circle cx="88" cy="70" r="15" fill="var(--plum)"/><text x="88" y="75" text-anchor="middle" class="tf-p tf-me">P1</text>
+      <circle cx="36" cy="130" r="13" fill="var(--site-bg)" stroke="var(--site-fg)"/><text x="36" y="135" text-anchor="middle" class="tf-p">P2</text>
+      <circle cx="88" cy="130" r="13" fill="var(--site-bg)" stroke="var(--site-fg)"/><text x="88" y="135" text-anchor="middle" class="tf-p">P3</text>
+      <circle cx="140" cy="130" r="13" fill="var(--site-bg)" stroke="var(--site-fg)"/><text x="140" y="135" text-anchor="middle" class="tf-p">P4</text>
+      <text x="88" y="161" text-anchor="middle" class="tf-s tf-warn">can't be left alone together</text>
+      <text x="312" y="100" text-anchor="middle" class="tf-s">everyone ends here</text>
+    </svg>
+  </section>
+
+  <div class="guide">
+    <p class="guide-now" id="guideNow" aria-live="polite"></p>
+    <div class="guide-ctl">
+      <label for="showGuide"><input type="checkbox" id="showGuide" checked> Figure labels</label>
+      <button class="btn-site" id="restart" type="button">Restart</button>
+    </div>
+  </div>
+
+  <div class="app" id="app">
+    <div class="left">
+      <section class="cl" aria-label="Input panel">
+        <span class="gchip"><b>1</b>Input Panel</span>
+        <div class="cl-head">
+          <button class="cl-new" id="newChat" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            New Chat
+          </button>
+          <div class="cl-me" aria-hidden="true">U</div>
+        </div>
+        <div class="cl-msgs" id="msgs"></div>
+        <div class="cl-foot">
+          <div class="chips" id="chips"></div>
+          <form class="cl-input" id="form">
+            <textarea id="input" rows="3" aria-label="Type your message here"></textarea>
+            <button class="cl-send pulse" id="send" type="submit" aria-label="Send">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10.1 15 12 3.4 13.9Z"/></svg>
+            </button>
+          </form>
+          <div class="cl-built">Built with Chainlit</div>
+        </div>
+      </section>
+    </div>
+    <div class="right">
+      <div class="rf" id="rf">
+        <div class="world" id="world"><svg class="edges" id="edges"></svg></div>
+        <div class="rf-empty" id="rfEmpty">The planning canvas fills in as you work.</div>
+      </div>
+      <div class="controls">
+        <button type="button" id="zin" aria-label="Zoom in"><svg width="12" height="12" viewBox="0 0 32 32" fill="currentColor"><path d="M32 18.3H18.3V32h-4.6V18.3H0v-4.6h13.7V0h4.6v13.7H32z"/></svg></button>
+        <button type="button" id="zout" aria-label="Zoom out"><svg width="12" height="12" viewBox="0 0 32 5" fill="currentColor"><path d="M0 0h32v4.2H0z"/></svg></button>
+        <button type="button" id="zfit" aria-label="Fit view"><svg width="12" height="12" viewBox="0 0 32 30" fill="currentColor"><path d="M3.7 11.1V3.7h7.4V0H0v11.1h3.7zM20.9 0v3.7h7.4v7.4H32V0H20.9zM28.3 26.3h-7.4V30H32V18.9h-3.7v7.4zM3.7 18.9H0V30h11.1v-3.7H3.7v-7.4z"/></svg></button>
+      </div>
+      <div class="hint-zoom">Drag to pan. Ctrl + scroll to zoom.</div>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+/* =====================================================================
+   Task and rules. Rule texts, candidate translations, broken-rule
+   messages and PRISM labels come from the VeriPlan repository
+   (llm_verification/main.py, ferryman/ferryman.py, ferryman_rules.txt).
+   ===================================================================== */
+const PROMPT = "I (P1) need to escort three family members separately from the waiting room (L1) to the counseling room (L2) one person at a time. But P2 and P3 cannot be left alone, and P3 and P4 cannot be left alone. How should I move them?";
+
+const P = ["P1", "P2", "P3", "P4"];
+const pairLabels = (n, pairs) => pairs.map((p, i) => [
+  `label "rule_${n}_${i + 1}_1" = ${p[0]};`, `label "rule_${n}_${i + 1}_2" = ${p[1]};`]).flat();
+const R3_PRISM = pairLabels(3, [2, 3, 4].flatMap(k => [
+  [`(locP1=0) & (locP${k}=0)`, `(locP1=0) & (locP${k}=1)`],
+  [`(locP1=1) & (locP${k}=1)`, `(locP1=1) & (locP${k}=0)`],
+  [`(locP1=0) & (locP${k}=1)`, `(locP1=1) & (locP${k}=0)`],
+  [`(locP1=1) & (locP${k}=0)`, `(locP1=0) & (locP${k}=1)`]]));
+const tri = g => g.map(k => `(locP${k}=V)`).join(" & ");
+const R4_PRISM = pairLabels(4, [[1,2,3],[1,2,4],[1,3,4],[1,2,3,4]].flatMap(g => [
+  [tri(g).replace(/V/g, "0"), tri(g).replace(/V/g, "1")],
+  [tri(g).replace(/V/g, "1"), tri(g).replace(/V/g, "0")]]));
+
+const same = (s, a, b) => s[a] === s[b];
+const moved = (s, t, k) => s[k] !== t[k];
+// state i is the state after step i, so the index is the step number (0 means never reached)
+const firstState = (S, bad) => { const i = S.findIndex(bad); return i < 0 ? 0 : Math.max(i, 1); };
+
+// Each candidate: text shown by the rule translator, PRISM label(s), and a checker.
+// check(states) returns the 1-based step where the property first fails, or 0 if upheld.
+const RULES = [
+  { n: 0, cands: [
+    { id: "0a", ok: true, text: "Rule 0: All four people must be at L2 by the end of the solution.",
+      broken: "Rule 0 was broken: P1, P2, P3, and P4 MUST be at L2 at the end of the solution.",
+      prism: [`label "rule_0" = (locP1=1) & (locP2=1) & (locP3=1) & (locP4=1);`], prop: `P>=1 [F "rule_0"]`,
+      check: S => S.some(s => s.every(v => v === 1)) ? 0 : S.length - 1 },
+    { id: "0b", ok: false, text: "Rule 0: At most one person should be at L2 by the end of the solution.",
+      prism: [`label "rule_0" = (locP1+locP2+locP3+locP4<=1);`], prop: `P>=1 [F G "rule_0"]`,
+      check: S => S[S.length - 1].reduce((a, b) => a + b, 0) <= 1 ? 0 : S.length - 1 } ] },
+  { n: 1, cands: [
+    { id: "1a", ok: true, text: "Rule 1: P2 and P3 cannot be at the same location without P1.",
+      broken: "Rule 1 was broken: P2 and P3 cannot be at L1 or L2 without P1 also being there.",
+      prism: [`label "rule_1" = (locP2=locP3) & (locP1!=locP2);`], prop: `P>=1 [F "rule_1"]`,
+      check: S => firstState(S, s => same(s, 1, 2) && !same(s, 0, 1)) },
+    { id: "1b", ok: false, text: "Rule 1: P2 and P3 must always be in the same location.",
+      prism: [`label "rule_1" = (locP2!=locP3);`], prop: `P>=1 [F "rule_1"]`,
+      check: S => firstState(S, s => !same(s, 1, 2)) } ] },
+  { n: 2, cands: [
+    { id: "2a", ok: true, text: "Rule 2: P3 and P4 cannot be at the same location without P1.",
+      broken: "Rule 2 was broken: P3 and P4 cannot be at L1 or L2 without P1 also being there.",
+      prism: [`label "rule_2" = (locP3=locP4) & (locP1!=locP3);`], prop: `P>=1 [F "rule_2"]`,
+      check: S => firstState(S, s => same(s, 2, 3) && !same(s, 0, 2)) },
+    { id: "2b", ok: false, text: "Rule 2: P3 and P4 can be together if P1 is elsewhere.",
+      prism: [`label "rule_2" = false;`], prop: `P>=1 [F "rule_2"]`,
+      check: () => 0 } ] },
+  { n: 3, cands: [
+    { id: "3a", ok: true, text: "Rule 3: No one can travel without P1, except P1 itself.",
+      broken: "Rule 3 was broken: P1 is the only Person that can move from L1 to L2, or from L2 to L1, alone.",
+      prism: R3_PRISM, prop: `P>=1 [F ("rule_3_i_1" & (X "rule_3_i_2"))]`,
+      check: S => { for (let i = 0; i + 1 < S.length; i++) { const s = S[i], t = S[i + 1];
+        for (const k of [1, 2, 3]) if (moved(s, t, k) && !(moved(s, t, 0) && s[0] === s[k])) return i + 1; } return 0; } },
+    { id: "3b", ok: false, text: "Rule 3: No one, including P1, can travel.",
+      prism: [0,1,2,3].flatMap(k => [`label "rule_3_${k+1}_1" = (locP${k+1}=0);`, `label "rule_3_${k+1}_2" = (locP${k+1}=1);`]),
+      prop: `P>=1 [F ("rule_3_i_1" & (X "rule_3_i_2"))]`,
+      check: S => { for (let i = 0; i + 1 < S.length; i++) if ([0,1,2,3].some(k => moved(S[i], S[i+1], k))) return i + 1; return 0; } } ] },
+  { n: 4, cands: [
+    { id: "4a", ok: true, text: "Rule 4: No more than two people can travel at once.",
+      broken: "Rule 4 was broken: P1 can be accompanied by at most one other Person when moving between Locations.",
+      prism: R4_PRISM, prop: `P>=1 [F ("rule_4_i_1" & (X "rule_4_i_2"))]`,
+      check: S => { const groups = [[0,1,2],[0,1,3],[0,2,3],[0,1,2,3]];
+        for (let i = 0; i + 1 < S.length; i++) { const s = S[i], t = S[i + 1];
+          if (groups.some(g => g.every(k => s[k] === s[g[0]] && t[k] === 1 - s[g[0]]))) return i + 1; } return 0; } },
+    { id: "4b", ok: false, text: "Rule 4: Exactly two people must travel together at all times.",
+      prism: [`label "rule_4" = (moved_count!=2);`], prop: `P>=1 [F "rule_4"]`,
+      check: S => { for (let i = 0; i + 1 < S.length; i++) if ([0,1,2,3].filter(k => moved(S[i], S[i+1], k)).length !== 2) return i + 1; return 0; } } ] },
+];
+const CAND = Object.fromEntries(RULES.flatMap(r => r.cands.map(c => [c.id, { ...c, n: r.n }])));
+const brokenText = c => c.broken || `Rule ${c.n} was broken: ${c.text.replace(/^Rule \d: /, "")}`;
+
+/* ---------- scripted LLM planning attempts ---------- */
+// A move: who travels (0-based indices) and where to (0 = L1, 1 = L2).
+const mv = (who, to) => ({ who, to });
+const PLANS = {
+  A: [mv([0,1],1), mv([0],0), mv([0,2],1), mv([0,1],0), mv([0,3],1), mv([0],0), mv([0,1],1)],
+  B: [mv([0,2],1), mv([0],0), mv([0,1],1), mv([0],0), mv([0,3],1)],
+  C: [mv([0,2],1), mv([0],0), mv([0,1,3],1)],
+  D: [mv([0,2],1), mv([0],0), mv([0,3],1), mv([0,2],0), mv([0,1],1), mv([0],0), mv([0,2],1)],
+  E: [mv([0,1,2,3],1)],
+};
+const LOC = ["L1", "L2"];
+const joinNames = a => a.length === 1 ? a[0] : a.length === 2 ? `${a[0]} and ${a[1]}` : `${a.slice(0, -1).join(", ")}, and ${a[a.length - 1]}`;
+function stepText(m) {
+  const others = m.who.filter(k => k !== 0).map(k => P[k]);
+  if (m.who.length === 4) return `P1, P2, P3, and P4 move to ${LOC[m.to]} together`;
+  if (!others.length) return `P1 returns to ${LOC[m.to]} alone`;
+  return m.to === 1 ? `P1 escorts ${joinNames(others)} to L2` : `P1 returns to L1 with ${joinNames(others)}`;
+}
+function statesOf(plan) {
+  const S = [[0, 0, 0, 0]];
+  for (const m of plan) { const s = S[S.length - 1].slice(); m.who.forEach(k => s[k] = m.to); S.push(s); }
+  return S;
+}
+function prismModule(plan) {
+  const S = statesOf(plan);
+  let out = "dtmc\n\nmodule ferryman\n\n";
+  P.forEach((_, k) => out += `    locP${k + 1}: [0..1] init 0;\n`);
+  plan.forEach((m, i) => {
+    const g = S[i].map((v, k) => `locP${k + 1}=${v}`).join(" & ");
+    const u = m.who.map(k => `(locP${k + 1}'=${m.to})`).join(" & ");
+    out += `\n    // State ${i + 1}\n    [] ${g} -> ${u};\n`;
+  });
+  return out + "\nendmodule\n";
+}
+const where = (s, loc) => P.filter((_, k) => s[k] === loc);
+
+/* ---------- state ---------- */
+let st;
+function freshState() {
+  return { stage: "idle", selected: new Set(), consRules: [], sliders: {}, slidersDirty: true,
+           enforced: new Set(), attempts: [], tried: new Set(), runs: 0, busy: false, anyValid: false, timers: [] };
+}
+
+/* ---------- DOM ---------- */
+const $ = id => document.getElementById(id);
+const msgsEl = $("msgs"), chipsEl = $("chips"), input = $("input"), sendBtn = $("send");
+const rf = $("rf"), world = $("world"), edgesSvg = $("edges");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clock = () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+const ordinal = n => { const s = ["th","st","nd","rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
+const wait = ms => new Promise(res => { const t = setTimeout(res, ms); st.timers.push(t); });
+
+function guide(html) { $("guideNow").innerHTML = html; }
+
+/* ---------- chat ---------- */
+function addMsg(author, html, opts = {}) {
+  const you = author === "You";
+  const el = document.createElement("div");
+  el.className = "msg";
+  el.innerHTML = `<div class="av ${you ? "you" : "bot"}" aria-hidden="true">${you ? "Y" : "C"}</div>
+    <div class="msg-body"><div class="msg-meta"><b>${you ? "You" : "Chatbot"}</b><time>${clock()}</time></div>
+    <div class="msg-text">${html}</div></div>`;
+  msgsEl.appendChild(el);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+  return el.querySelector(".msg-text");
+}
+function addStep(parentText, title) {
+  const el = document.createElement("div");
+  el.className = "step";
+  el.innerHTML = `<button type="button" aria-expanded="false"><span class="spin"></span><span class="st-title">Using ${esc(title)}</span>
+    <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="step-body"></div>`;
+  const btn = el.querySelector("button");
+  btn.addEventListener("click", () => { el.classList.toggle("open"); btn.setAttribute("aria-expanded", el.classList.contains("open")); });
+  parentText.appendChild(el);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+  return {
+    body: el.querySelector(".step-body"),
+    done() { el.querySelector(".spin").outerHTML = '<span class="done-dot"></span>'; el.querySelector(".st-title").textContent = `Used ${title}`; }
+  };
+}
+async function botSay(html, delay = 700) {
+  const t = addMsg("Chatbot", '<span class="typing"><i></i><i></i><i></i></span>');
+  await wait(delay);
+  t.innerHTML = html;
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+  return t;
+}
+function setChips(list) {
+  chipsEl.innerHTML = "";
+  list.forEach(q => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.textContent = q;
+    b.addEventListener("click", () => { input.value = q; submitChat(); });
+    chipsEl.appendChild(b);
+  });
+}
+
+/* ---------- canvas ---------- */
+let view = { x: 0, y: 0, s: 1 };
+const nodes = new Map();
+let edges = [];
+function applyView(animate) {
+  world.classList.toggle("anim", !!animate);
+  world.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.s})`;
+  rf.style.backgroundSize = `${20 * view.s}px ${20 * view.s}px`;
+  rf.style.backgroundPosition = `${view.x}px ${view.y}px`;
+}
+function addNode(id, x, y, cls, html, chip) {
+  const el = document.createElement("div");
+  el.className = `node enter ${cls}`;
+  el.style.left = x + "px"; el.style.top = y + "px";
+  el.innerHTML = html + (chip ? `<span class="gchip"><b>${chip[0]}</b>${chip[1]}</span>` : "");
+  world.appendChild(el);
+  const n = { id, x, y, el };
+  nodes.set(id, n);
+  makeDraggable(n);
+  $("rfEmpty").hidden = true;
+  return el;
+}
+function offsetIn(el, anc) {
+  let x = 0, y = 0;
+  while (el && el !== anc) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+  return { x, y };
+}
+function handlePos(id, side) {
+  const n = nodes.get(id); if (!n) return null;
+  const h = n.el.querySelector(".h-" + side); if (!h) return null;
+  const o = offsetIn(h, n.el);
+  return { x: n.x + o.x + h.offsetWidth / 2, y: n.y + o.y + h.offsetHeight / 2 };
+}
+const DIRS = { right: [1, 0], left: [-1, 0], top: [0, -1], bottom: [0, 1] };
+function drawEdges() {
+  edgesSvg.innerHTML = edges.map(e => {
+    const a = handlePos(e.from, e.fs), b = handlePos(e.to, e.ts);
+    if (!a || !b) return "";
+    const d = Math.max(40, Math.hypot(b.x - a.x, b.y - a.y) * 0.35);
+    const [ax, ay] = DIRS[e.fs], [bx, by] = DIRS[e.ts];
+    return `<path class="${e.anim ? "anim" : ""}" d="M${a.x},${a.y} C${a.x + ax * d},${a.y + ay * d} ${b.x + bx * d},${b.y + by * d} ${b.x},${b.y}"/>`;
+  }).join("");
+}
+function addEdge(from, fs, to, ts, anim) { const e = { from, fs, to, ts, anim }; edges.push(e); drawEdges(); return e; }
+function fitView(animate = true) {
+  if (!nodes.size) return;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  nodes.forEach(n => { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y - 40); x1 = Math.max(x1, n.x + n.el.offsetWidth + 10); y1 = Math.max(y1, n.y + n.el.offsetHeight); });
+  const W = rf.clientWidth, H = rf.clientHeight, pad = 40;
+  const s = Math.max(0.28, Math.min(1, (W - pad * 2) / (x1 - x0), (H - pad * 2) / (y1 - y0)));
+  view = { s, x: (W - (x1 - x0) * s) / 2 - x0 * s, y: (H - (y1 - y0) * s) / 2 - y0 * s };
+  applyView(animate);
+}
+let lastFocus = null;
+function focusNodes(ids, animate = true) {
+  // frame the nodes the visitor should act on or read next, at a readable scale
+  lastFocus = ids;
+  const W = rf.clientWidth, H = rf.clientHeight, narrow = W < 600;
+  const list = (narrow ? ids.slice(0, 1) : ids).map(i => nodes.get(i)).filter(Boolean);
+  if (!list.length) return;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  list.forEach(n => { x0 = Math.min(x0, n.x - 10); y0 = Math.min(y0, n.y - 44); x1 = Math.max(x1, n.x + n.el.offsetWidth + 20); y1 = Math.max(y1, n.y + n.el.offsetHeight + 10); });
+  const pad = narrow ? 12 : 40;
+  const s = Math.max(0.3, Math.min(0.95, (W - pad * 2) / (x1 - x0), (H - pad * 2) / (y1 - y0)));
+  view = { s, x: (W - (x1 - x0) * s) / 2 - x0 * s, y: Math.max(pad, (H - (y1 - y0) * s) / 2) - y0 * s };
+  applyView(animate);
+}
+function zoomAt(f, cx, cy) {
+  const s = Math.max(0.2, Math.min(2, view.s * f));
+  view.x = cx - (cx - view.x) * (s / view.s); view.y = cy - (cy - view.y) * (s / view.s); view.s = s;
+  applyView(false);
+}
+$("zin").onclick = () => { zoomAt(1.2, rf.clientWidth / 2, rf.clientHeight / 2); };
+$("zout").onclick = () => { zoomAt(1 / 1.2, rf.clientWidth / 2, rf.clientHeight / 2); };
+$("zfit").onclick = () => fitView(true);
+rf.addEventListener("wheel", e => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  e.preventDefault();
+  const r = rf.getBoundingClientRect();
+  zoomAt(Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top);
+}, { passive: false });
+const INTERACTIVE = "button, input, textarea, label, a, .slider";
+rf.addEventListener("pointerdown", e => {
+  if (e.target.closest(".node")) return;
+  const sx = e.clientX, sy = e.clientY, vx = view.x, vy = view.y;
+  rf.classList.add("dragging"); rf.setPointerCapture(e.pointerId);
+  const move = ev => { view.x = vx + ev.clientX - sx; view.y = vy + ev.clientY - sy; applyView(false); };
+  const up = () => { rf.classList.remove("dragging"); rf.removeEventListener("pointermove", move); rf.removeEventListener("pointerup", up); rf.removeEventListener("pointercancel", up); };
+  rf.addEventListener("pointermove", move); rf.addEventListener("pointerup", up); rf.addEventListener("pointercancel", up);
+});
+function makeDraggable(n) {
+  n.el.addEventListener("pointerdown", e => {
+    if (e.target.closest(INTERACTIVE)) return;
+    e.stopPropagation();
+    const sx = e.clientX, sy = e.clientY, nx = n.x, ny = n.y;
+    n.el.setPointerCapture(e.pointerId);
+    const move = ev => { n.x = nx + (ev.clientX - sx) / view.s; n.y = ny + (ev.clientY - sy) / view.s; n.el.style.left = n.x + "px"; n.el.style.top = n.y + "px"; drawEdges(); };
+    const up = () => { n.el.removeEventListener("pointermove", move); n.el.removeEventListener("pointerup", up); };
+    n.el.addEventListener("pointermove", move); n.el.addEventListener("pointerup", up);
+  });
+}
+
+/* ---------- layout (world coordinates, mirroring Figure 2) ---------- */
+const POS = { agent: [40, 40], verify: [-520, -30], cons: [-40, 330], planX: 560, brokenX: 1060, planY0: -60, planDY: 290 };
+
+/* ---------- stage 1: user request ---------- */
+function submitChat(e) {
+  if (e) e.preventDefault();
+  const text = input.value.trim();
+  if (!text || st.busy) return;
+  input.value = ""; sendBtn.classList.remove("pulse");
+  addMsg("You", esc(text));
+  if (st.stage === "idle") return startTask(text);
+  answer(text);
+}
+$("form").addEventListener("submit", submitChat);
+input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitChat(); } });
+
+async function startTask(text) {
+  const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (norm(text) !== norm(PROMPT)) {
+    await botSay("This demo runs one planning task from the study: the patient navigation task. I put its request back in the message box. Send it to begin.");
+    input.value = PROMPT; sendBtn.classList.add("pulse");
+    return;
+  }
+  st.stage = "translating"; st.busy = true;
+  addNode("agent", ...POS.agent, "n-agent", `<div class="node-label">LLM Agent</div>
+    <div class="node-content"><p style="margin:0">User Request: ${esc(text)}</p><span class="handle h-bottom"></span><span class="handle h-right"></span></div>`,
+    ["2", "User Prompt for Planning Task"]);
+  requestAnimationFrame(() => focusNodes(["agent"]));
+  guide("<b>Rule translator.</b> VeriPlan is extracting the rules a correct plan must follow and translating them into formal properties for the model checker.");
+  const t = await botSay("Activated the planning task.", 600);
+  const step = addStep(t, "Rule Translator");
+  await wait(2200);
+  step.body.innerHTML = `<pre>${esc(RULES.map(r => r.cands.map(c => c.prism.slice(0, 2).join("\n") + (c.prism.length > 2 ? `\n... (${c.prism.length} labels)` : "")).join("\n")).join("\n\n"))}</pre>`;
+  step.done();
+  showVerify();
+  await botSay("I translated your request into the rules below. Please check the version of each rule that matches what you meant, then press Submit.", 500);
+  st.busy = false; st.stage = "verify";
+  guide("<b>Check the translations.</b> Each rule is shown back in plain language, and some versions are mistranslations. Check the version of each rule that matches the request, then press Submit.");
+}
+
+/* ---------- stage 2: constraint verification (rule translator) ---------- */
+const CHECK_SVG = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>`;
+function showVerify() {
+  const groups = RULES.map(r => `<div class="rule-group">${r.cands.map(c => `
+    <div class="rule-item"><button type="button" class="box" role="checkbox" aria-checked="false" data-c="${c.id}" aria-label="${esc(c.text)}">${CHECK_SVG}</button>
+    <p class="rule-text">${esc(c.text)}</p></div>`).join("")}</div>`).join("");
+  const el = addNode("verify", ...POS.verify, "n-verify", `<div class="node-label">Constraint Verification</div>
+    <div class="node-content">${groups}<p class="node-msg" id="verifyMsg" hidden></p>
+    <div class="btns"><button type="button" class="vp-btn" id="verifySubmit">Submit</button></div><span class="handle h-right"></span></div>`,
+    ["3", "Rule Translator"]);
+  el.querySelectorAll(".box").forEach(b => b.addEventListener("click", () => {
+    if (st.stage !== "verify") return;
+    const on = b.getAttribute("aria-checked") !== "true";
+    b.setAttribute("aria-checked", on);
+    if (on) b.closest(".rule-group").querySelectorAll(".box").forEach(o => { if (o !== b) { o.setAttribute("aria-checked", "false"); st.selected.delete(o.dataset.c); } });
+    on ? st.selected.add(b.dataset.c) : st.selected.delete(b.dataset.c);
+  }));
+  el.querySelector("#verifySubmit").addEventListener("click", submitVerify);
+  requestAnimationFrame(() => focusNodes(["verify", "agent"]));
+}
+function submitVerify() {
+  if (st.stage !== "verify") return;
+  const missing = RULES.filter(r => !r.cands.some(c => st.selected.has(c.id))).map(r => r.n);
+  const m = $("verifyMsg");
+  if (missing.length) { m.hidden = false; m.textContent = `Select a version of Rule ${joinNames(missing.map(String))}.`; return; }
+  m.hidden = true;
+  st.stage = "sliders";
+  const btn = $("verifySubmit"); btn.textContent = "Submitted!"; btn.disabled = true;
+  document.querySelectorAll("#world .box").forEach(b => b.disabled = true);
+  st.consRules = RULES.flatMap(r => r.cands.filter(c => st.selected.has(c.id)).map(c => CAND[c.id]));
+  st.consRules.forEach(c => { if (c.n > 0) st.sliders[c.id] = 100; });
+  showConstraints();
+  addEdge("verify", "right", "cons", "left");
+  addEdge("cons", "top", "agent", "bottom");
+  guide("<b>Flexibility sliders.</b> Set how strictly each rule is enforced. At 100% a rule is hard. Below 100%, the rule is sampled for each run and may be relaxed. Press Submit to start planning.");
+  botSay("Rules confirmed. You can now set the strictness of each rule with the flexibility sliders.", 500);
+}
+
+/* ---------- stage 3: constraints + flexibility sliders ---------- */
+function showConstraints() {
+  const rows = st.consRules.map(c => `<div><pre class="cons-rule">${esc(c.text)}</pre>${c.n > 0 ? `
+    <div class="slider-row"><input type="range" class="slider" min="0" max="100" value="100" id="sl-${c.id}" data-c="${c.id}" aria-label="Strictness of ${esc(c.text)}">
+    <output for="sl-${c.id}" id="out-${c.id}">100%</output></div>` : `
+    <div class="slider-row locked"><input type="range" class="slider" min="0" max="100" value="100" disabled id="sl-${c.id}" aria-label="Strictness of ${esc(c.text)}, fixed at 100%">
+    <output for="sl-${c.id}">100%</output></div><p class="lock-note">Goal of the task, always enforced</p>`}</div>`).join("");
+  const el = addNode("cons", ...POS.cons, "n-cons", `<div class="node-label">Constraints</div>
+    <div class="node-content">${rows}<div class="btns"><button type="button" class="vp-btn" id="consSubmit">Submit</button>
+    <button type="button" class="vp-btn" id="consReset">Reset</button></div>
+    <span class="handle h-left"></span><span class="handle h-top"></span></div>`, ["4", "Flexibility Sliders"]);
+  el.querySelectorAll(".slider").forEach(s => s.addEventListener("input", () => {
+    st.sliders[s.dataset.c] = +s.value; $("out-" + s.dataset.c).textContent = s.value + "%";
+    markDirty();
+  }));
+  el.querySelector("#consSubmit").addEventListener("click", submitSliders);
+  el.querySelector("#consReset").addEventListener("click", () => {
+    el.querySelectorAll(".slider").forEach(s => { s.value = 100; st.sliders[s.dataset.c] = 100; $("out-" + s.dataset.c).textContent = "100%"; });
+    markDirty();
+  });
+  requestAnimationFrame(() => { drawEdges(); focusNodes(["cons", "verify"]); });
+}
+function markDirty() { st.slidersDirty = true; const b = $("consSubmit"); if (b && !st.busy) { b.textContent = "Submit"; b.disabled = false; } }
+
+async function submitSliders() {
+  if (st.busy || st.stage === "verify" || !st.slidersDirty) return;
+  st.slidersDirty = false; st.busy = true; st.stage = "running";
+  const b = $("consSubmit"); b.textContent = "Submitted!"; b.disabled = true;
+  setChips([]);
+  // same sampling as regenerate_ferryman_task(): each rule is kept with probability = slider / 100
+  st.enforced = new Set(st.consRules.filter(c => c.n === 0 || Math.random() * 100 < st.sliders[c.id]).map(c => c.id));
+  let content = "Modified the rules! Current rules considered by agent:\n\n";
+  st.consRules.filter(c => c.n > 0).forEach(c => content += `With probability ${(st.sliders[c.id] / 100).toFixed(1)} -- ${c.text}\n`);
+  await botSay(esc(content), 500);
+  st.runs++;
+  await runAttempts();
+}
+
+/* ---------- stage 4-6: planning attempts and model checking ---------- */
+function choosePlan() {
+  const has = n => st.consRules.some(c => c.n === n && st.enforced.has(c.id));
+  if (!has(3) && !has(4) && !st.tried.has("E")) return "E";
+  if (!has(4) && !st.tried.has("C")) return "C";
+  for (const k of ["A", "B", "D"]) if (!st.tried.has(k)) return k;
+  return "D";
+}
+function verify(planKey) {
+  const S = statesOf(PLANS[planKey]);
+  const results = st.consRules.map(c => ({ c, enforced: st.enforced.has(c.id), failAt: c.check(S) }));
+  const valid = results.every(r => !r.enforced || !r.failAt);
+  return { S, results, valid };
+}
+async function runAttempts() {
+  const perRun = 3;
+  for (let i = 0; i < perRun; i++) {
+    const k = st.attempts.length, num = k + 1;
+    const key = choosePlan(); st.tried.add(key);
+    const plan = PLANS[key];
+    guide(`<b>Planning attempt ${num}.</b> The LLM proposes a plan. The model checker then translates it into a PRISM model and checks every state against the rules for this run.`);
+    await botSay(`Starting the ${ordinal(num)} solution attempt...`, 400);
+    const holder = addMsg("Chatbot", "");
+    const s1 = addStep(holder, `Starting my magic for the ${ordinal(num)} time...`);
+    const planId = "plan" + k, y = POS.planY0 + k * POS.planDY;
+    const pending = addEdge("agent", "right", planId, "left", true);
+    await wait(2300);
+    addNode(planId, POS.planX, y, "n-plan", `<div class="node-label">Verified Planning Attempts</div>
+      <div class="attempt-number">${num}</div>
+      <div class="node-content">${plan.map((m, j) => `<div>${j + 1}. ${esc(stepText(m))}</div>`).join("")}</div>
+      <span class="handle h-left"></span><span class="handle h-right" style="right:-4px;top:calc(50% + 12px)"></span>`,
+      k === 0 ? ["5", "LLM Planning Attempt"] : null);
+    pending.anim = false;
+    requestAnimationFrame(() => { drawEdges(); focusNodes([planId]); });
+    s1.body.innerHTML = `<div class="plain">Here is an escorting plan adhering to your constraints:\n\n### Summary:\n${esc(plan.map((m, j) => `${j + 1}. ${stepText(m)}`).join("\n"))}</div>`;
+    s1.done();
+
+    const s2 = addStep(holder, "Model Checker");
+    await wait(1300);
+    const res = verify(key);
+    const labels = st.consRules.filter(c => st.enforced.has(c.id)).flatMap(c => c.prism);
+    const out = res.results.filter(r => r.enforced).map(r => `Rule ${r.c.n} upheld: ${r.failAt ? "False" : "True"}`).join("\n") + `\nValid Solution: ${res.valid ? "True" : "False"}`;
+    s2.body.innerHTML = `<pre>${esc(prismModule(plan))}\n${esc(labels.join("\n"))}\n\n// storm: model checking\n${esc(out)}</pre>`;
+    s2.done();
+
+    let fb = res.results.filter(r => r.enforced && r.failAt).map(r => brokenText(r.c)).join("\n");
+    const soft = res.results.filter(r => !r.enforced && r.failAt);
+    if (res.valid) fb = `This is attempt ${num}. This solution is valid.`;
+    const softHtml = soft.map(r => `<span class="soft">${esc(brokenText(r.c))} This rule was relaxed for this run, so the plan still counts as valid.</span>`).join("");
+    const bId = "broken" + k;
+    addNode(bId, POS.brokenX, y + 26, "n-broken", `<div class="node-label">Broken Constraints</div>
+      <div class="node-content">${esc(fb)}${softHtml}<span class="handle h-left"></span></div>`,
+      k === 0 ? ["6", "Planning Feedback from Model Checker"] : null);
+    addEdge(planId, "right", bId, "left");
+    requestAnimationFrame(() => { drawEdges(); focusNodes([planId, bId]); });
+    st.attempts.push({ key, num, ...res, soft });
+    await botSay(esc(fb + (soft.length ? "\n\n" + soft.map(r => brokenText(r.c) + " (relaxed this run)").join("\n") : "")), 500);
+    if (res.valid) { st.anyValid = true; break; }
+    await wait(500);
+  }
+  st.busy = false; st.stage = "done";
+  const last = st.attempts[st.attempts.length - 1];
+  const wrong = st.consRules.filter(c => !c.ok);
+  requestAnimationFrame(() => focusNodes(last.valid ? ["plan" + (st.attempts.length - 1), "broken" + (st.attempts.length - 1)] : ["cons"]));
+  if (last.valid) {
+    guide(`<b>Valid plan found in attempt ${last.num}.</b> Ask the planner about its plan in the chat. To see flexibility at work, lower Rule 4 to 50% and press Submit: the planner may take a shortcut that escorts two people at once.`);
+    await botSay("Planning complete. You can ask me about the plan, or change the constraints and press Submit to run again.", 500);
+  } else {
+    guide(wrong.length
+      ? `<b>No valid plan after 3 attempts.</b> One of the rules you confirmed was a mistranslation (${esc(wrong.map(c => "Rule " + c.n).join(", "))}), so the checker is enforcing something you did not ask for. Press New Chat to translate the rules again.`
+      : `<b>No valid plan after 3 attempts.</b> In the study, participants often relaxed a rule here. Try lowering Rule 4 to 50% (P1 may escort two people at once), or submit again as is.`);
+    await botSay("I could not find a valid solution within 3 attempts. You can adjust the strictness of the rules with the flexibility sliders and press Submit to try again, or start a New Chat to revise the rules in the rule translator.", 500);
+  }
+  st.slidersDirty = true;
+  const b = $("consSubmit"); if (b) { b.textContent = "Submit"; b.disabled = false; }
+  setChips(["What was your logic in generating the plan?", `Why did attempt ${st.attempts.findIndex(a => !a.valid) + 1 || 1} fail?`, "Which rules are you following?"]);
+}
+
+/* ---------- questions after a run (scripted from the actual run state) ---------- */
+function explainPlan(a) {
+  const lines = PLANS[a.key].map((m, j) => {
+    const s = a.S[j + 1];
+    const l1 = where(s, 0), l2 = where(s, 1);
+    const part = loc => loc.length ? joinNames(loc) : "no one";
+    return `<li><b>${esc(stepText(m))}.</b> Afterward, ${part(l1)} ${l1.length === 1 ? "is" : "are"} at L1 and ${part(l2)} ${l2.length === 1 ? "is" : "are"} at L2.</li>`;
+  }).join("");
+  return `The logic in generating the plan was to move all four people from L1 to L2 while keeping P1 with any pair that cannot be left alone. Here's the reasoning behind attempt ${a.num}, step by step:<ol>${lines}</ol>`;
+}
+function explainFail(a) {
+  if (a.valid) return `Attempt ${a.num} did not fail. The model checker found no violations of the rules enforced in that run.`;
+  const parts = a.results.filter(r => r.enforced && r.failAt).map(r => {
+    const m = PLANS[a.key][r.failAt - 1], s = a.S[r.failAt];
+    return `Rule ${r.c.n} failed at step ${r.failAt} (${esc(stepText(m))}). After that step, L1 has ${esc(joinNames(where(s, 0)) || "no one")} and L2 has ${esc(joinNames(where(s, 1)) || "no one")}. ${esc(brokenText(r.c).replace(/^Rule \d was broken: /, "The rule says: "))}`;
+  });
+  return `In attempt ${a.num}, the model checker found:\n\n${parts.join("\n\n")}`;
+}
+async function answer(q) {
+  const t = q.toLowerCase();
+  if (!st.attempts.length) { await botSay("Once a plan has been generated, you can ask me about it here."); return; }
+  const m = t.match(/attempt\s*(\d+)/);
+  const pick = m ? st.attempts[+m[1] - 1] : null;
+  if (/why|fail|broke|wrong|violat/.test(t)) {
+    const a = pick || st.attempts.find(x => !x.valid) || st.attempts[st.attempts.length - 1];
+    await botSay(explainFail(a), 900);
+  } else if (/logic|reason|how did|explain|plan/.test(t)) {
+    const a = pick || st.attempts[st.attempts.length - 1];
+    await botSay(explainPlan(a), 1100);
+  } else if (/rule|constraint|follow/.test(t)) {
+    const list = st.consRules.map(c => `${esc(c.text)} (${c.n === 0 ? "always enforced" : `${st.sliders[c.id]}% strict, ${st.enforced.has(c.id) ? "enforced" : "relaxed"} in the last run`})`).join("\n");
+    await botSay(`These are the rules for the last run:\n\n${list}`, 700);
+  } else {
+    await botSay("In this demo I can explain the plans and the rules. Try one of the suggested questions above the message box.", 600);
+  }
+}
+
+/* ---------- reset ---------- */
+function reset() {
+  if (st) st.timers.forEach(clearTimeout);
+  st = freshState();
+  nodes.forEach(n => n.el.remove()); nodes.clear(); edges = []; drawEdges(); lastFocus = null;
+  $("rfEmpty").hidden = false;
+  msgsEl.innerHTML = ""; setChips([]);
+  view = { x: rf.clientWidth / 2 - 200, y: 80, s: 1 }; applyView(false);
+  const t = addMsg("Chatbot", "");
+  t.innerHTML = `<div class="instr"><h4>UW-Madison People and Robots Lab, Human-Centered Artificial Intelligence Research</h4>Hello! I am an LLM Agent who will do my best to solve any problem you give me. Describe your planning task and its constraints below.</div>`;
+  input.value = PROMPT; sendBtn.classList.add("pulse");
+  guide("<b>Start with a request.</b> The message box holds the planning request from the paper's patient navigation task. Send it to begin.");
+}
+$("newChat").addEventListener("click", reset);
+$("restart").addEventListener("click", reset);
+$("showGuide").addEventListener("change", e => $("app").classList.toggle("no-guide", !e.target.checked));
+window.addEventListener("resize", () => { if (nodes.size && lastFocus) focusNodes(lastFocus, false); });
+reset();
+
+})();
+</script>
+</body>
+</html>
