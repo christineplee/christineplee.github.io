@@ -15,7 +15,7 @@
    in view only while that thread is on screen; entries run down the right. Alternate layouts (b, c) for comparison. */
 .rs { display: flex; flex-direction: column; padding: 48px 0 40px 24px; }
 @media (max-width: 1100px) { .rs { padding-left: 0; } }
-.rs-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; margin-bottom: 8px; }
+.rs-head { border-bottom: 1px solid var(--ink); padding-bottom: 14px; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; margin-bottom: 8px; }
 .rs-head h1 { margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.4px; line-height: 1.2; }
 .toc { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 15px; }
 .toc a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--rule); }
@@ -66,7 +66,7 @@
 /* C: main thread first and large; the two supporting threads side by side and compact. */
 .rs[data-layout="c"] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; }
 .rs[data-layout="c"] .rs-head, .rs[data-layout="c"] #mechanisms { grid-column: 1 / -1; }
-.rs[data-layout="c"] #mechanisms { display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 56px; align-items: start; }
+.rs[data-layout="c"] #mechanisms { border-top: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 56px; align-items: start; }
 .rs[data-layout="c"] #mechanisms .th { position: sticky; top: 24px; }
 .rs[data-layout="c"] #foundations .proj, .rs[data-layout="c"] #embodied .proj { grid-template-columns: minmax(0, 1fr); }
 .rs[data-layout="c"] #foundations .th h2, .rs[data-layout="c"] #embodied .th h2 { font-size: 22px; }
@@ -79,6 +79,31 @@
   .th p { max-width: 62ch; }
 }
 @media (max-width: 760px) { .proj { grid-template-columns: minmax(0, 1fr); gap: 10px; } .proj .thumb { max-width: 360px; } }
+
+/* quieter treatment */
+.pub .title a, .list a { text-decoration: none; }
+.pub .title a:hover, .list a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.pub .desc { color: var(--muted); font-size: 15px; }
+.pub .links { gap: 14px; font-size: 14px; }
+.pub .links a { color: var(--muted); text-decoration: none; }
+.pub .links a:hover { color: var(--accent); text-decoration: underline; }
+.proj .thumb { border-color: transparent; background: #fff; }
+.proj .thumb img { filter: grayscale(1); opacity: .7; transition: filter .25s, opacity .25s; }
+.proj:hover .thumb img, .proj .thumb:focus-visible img { filter: none; opacity: 1; }
+.marks .m { width: 16px; height: 16px; line-height: 14px; font-size: 10px; border-color: #ddd6db; color: #c4bcc2; }
+.marks .mw { font-size: 13px; }
+.entries { gap: 26px; }
+.th p { color: var(--muted); }
+.th .mech, .th .mech li { color: var(--ink); }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.list li { display: flex; flex-direction: column; gap: 1px; line-height: 1.45; }
+.list li a, .list li > span:first-child { color: var(--ink); font-size: 15.5px; }
+.list .meta { font-size: 13.5px; color: var(--muted); }
+.list .award { color: var(--accent); }
+.rs[data-layout="c"] #foundations .th h2, .rs[data-layout="c"] #embodied .th h2 { font-size: 20px; margin-bottom: 4px; }
+.rs[data-layout="c"] #foundations .th, .rs[data-layout="c"] #embodied .th { margin-bottom: 18px; }
+.rs[data-layout="c"] #foundations, .rs[data-layout="c"] #embodied { border-top-color: var(--rule); }
+@media (hover: none) { .proj .thumb img { filter: none; opacity: 1; } }
 </style>
 </head>
 <body>
@@ -92,8 +117,7 @@
 </div>
 </nav>
 <main class="rs" data-layout="c">
-<header class="rs-head"><h1>Research</h1>
-<nav class="toc" aria-label="Research threads"><a href="#mechanisms">Specify, check, and revise</a><a href="#foundations">Foundations for people and AI to communicate</a><a href="#embodied">Toward embodied agents</a></nav></header>
+<header class="rs-head"><h1>Research</h1></header>
 <section class="thread" id="mechanisms" aria-labelledby="mechanisms-t">
 <header class="th">
 <h2 id="mechanisms-t">Specify, check, and revise</h2>
@@ -103,7 +127,7 @@
 <li><b>Check</b> the agent's choices against it</li>
 <li><b>Revise</b> it as things change</li>
 </ol>
-<p class="aside">Each system here has a demo you can try in the browser.</p>
+<p class="aside">Each system has a demo you can try.</p>
 </header>
 <div class="entries">
 <article class="pub proj">
@@ -111,7 +135,7 @@
 <div class="text">
 <h3 class="title"><a href="/research/cip/">Communication Initialization Profile (CIP)</a></h3>
 <p class="marks"><span class="m on" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m" aria-hidden="true">3</span><span class="mw">Specify</span></p>
-<p class="desc">A 16-item profile that gives an LLM a starting point for how to communicate with someone before it has any history with them.</p>
+<p class="desc">A 16-item profile that tells an LLM how to communicate with someone it has never met.</p>
 <p class="links"><a href="/research/cip/">Try the demo</a></p>
 </div>
 </article>
@@ -120,7 +144,7 @@
 <div class="text">
 <h3 class="title"><a href="/research/promptpath/">PromptPath</a></h3>
 <p class="marks"><span class="m on" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Specify and revise</span></p>
-<p class="desc">Keeps a persistent profile of the user and uses it to repair short prompts, showing which words came from the prompt, the profile, or the AI.</p>
+<p class="desc">Fills in short prompts from a persistent profile and shows where each detail came from.</p>
 <p class="links"><a href="/research/promptpath/">Try the demo</a></p>
 </div>
 </article>
@@ -129,7 +153,7 @@
 <div class="text">
 <h3 class="title"><a href="/research/veriplan/">VeriPlan</a></h3>
 <p class="marks"><span class="m" aria-hidden="true">1</span><span class="m on" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Check and revise</span></p>
-<p class="desc">Checks an LLM's plan against rules the user confirms, using model checking, and sends any violations back to the user and the LLM.</p>
+<p class="desc">Checks an LLM's plans against the user's rules with model checking.</p>
 <p class="links"><a href="/research/veriplan/">Try the demo</a><a href="https://doi.org/10.1145/3706598.3714113">Paper</a></p>
 </div>
 </article>
@@ -138,7 +162,7 @@
 <div class="text">
 <h3 class="title"><a href="/research/u-define/">U-Define</a></h3>
 <p class="marks"><span class="m" aria-hidden="true">1</span><span class="m on" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Check and revise</span></p>
-<p class="desc">People state their own constraints in natural language and mark each one as hard or soft. Hard rules are checked with model checking, and soft preferences are rated by an LLM judge.</p>
+<p class="desc">Lets people mark each constraint as a hard rule or a soft preference, and checks each the right way.</p>
 <p class="links"><a href="/research/u-define/">Try the demo</a><a href="https://arxiv.org/abs/2605.02765">Paper</a></p>
 </div>
 </article>
@@ -146,9 +170,7 @@
 <div class="text">
 <h3 class="title"><a href="https://doi.org/10.1145/3706599.3719853">MAP: Multi-user Personalization with Collaborative LLM-powered Agents</a></h3>
 <p class="marks"><span class="m on" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m" aria-hidden="true">3</span><span class="mw">Specify</span></p>
-<p class="desc">Collaborative LLM-powered agents that personalize for several people at once and resolve conflicting preferences among household members.</p>
-<p class="authors"><span class="me">C. P. Lee</span>*, J. Choi*, and B. Mutlu</p>
-<p class="venue">CHI 2025 Extended Abstracts</p>
+<p class="venue">CHI 2025 Extended Abstracts, co-first author with J. Choi</p>
 </div>
 </article>
 </div>
@@ -156,92 +178,27 @@
 <section class="thread" id="foundations" aria-labelledby="foundations-t">
 <header class="th">
 <h2 id="foundations-t">Foundations for people and AI to communicate</h2>
-<p>I have long been interested in how people and AI systems communicate: designing the foundation for it, and understanding how AI plays out in real settings.</p>
+<p>How people and AI systems communicate, and how AI plays out in real settings.</p>
 </header>
-<div class="entries">
-<article class="pub proj no-thumb">
-<div class="text">
-<h3 class="title"><a href="https://doi.org/10.1145/3643834.3661576">The AI-DEC: A Card-based Design Method for User-centered AI Explanations</a></h3>
-<p class="desc">A card-based design method that helps people co-design explanations of AI systems around their own needs.</p>
-<p class="authors"><span class="me">C. P. Lee</span>, M. K. Lee*, and B. Mutlu*</p>
-<p class="venue">DIS 2024</p>
-</div>
-</article>
-<article class="pub proj no-thumb">
-<div class="text">
-<h3 class="title">From Tool to Agent: How Worker Needs Reorganize Across the Agentic Roles of Workplace AI</h3>
-<p class="desc">How workers' needs change as workplace AI takes on more agentic roles, and how authority and accountability can come apart.</p>
-<p class="authors"><span class="me">C. P. Lee</span>, M. K. Lee*, and B. Mutlu*</p>
-<p class="venue">HAI 2026, to appear</p>
-</div>
-</article>
-<article class="pub proj no-thumb">
-<div class="text">
-<h3 class="title"><a href="https://doi.org/10.1145/3706598.3713718">Bridging Generations using AI-Supported Co-Creative Activities</a></h3>
-<p class="desc">Co-creative activities supported by AI that bring grandparents and grandchildren together.</p>
-<p class="authors">C. Y. Kim, A. J. Sato, N. T. White, H.-R. Ho, <span class="me">C. P. Lee</span>, Y. Hwang, and B. Mutlu</p>
-<p class="venue">CHI 2025, <span class="award">Honorable Mention</span></p>
-</div>
-</article>
-<article class="pub proj no-thumb">
-<div class="text">
-<h3 class="title"><a href="https://arxiv.org/abs/2605.06257">LearnMate2: Design and Evaluation of an LLM-powered Personalized and Adaptive Support System for Online Learning</a></h3>
-<p class="desc">An LLM-powered system that gives online learners personalized plans and adaptive support.</p>
-<p class="authors">X. J. Wang, <span class="me">C. P. Lee</span>, and B. Mutlu</p>
-<p class="venue">DIS 2026</p>
-</div>
-</article>
-</div>
+<ul class="list">
+<li><a href="https://doi.org/10.1145/3643834.3661576">The AI-DEC: A Card-based Design Method for User-centered AI Explanations</a><span class="meta">DIS 2024</span></li>
+<li><span>From Tool to Agent: How Worker Needs Reorganize Across the Agentic Roles of Workplace AI</span><span class="meta">HAI 2026, to appear</span></li>
+<li><a href="https://doi.org/10.1145/3706598.3713718">Bridging Generations using AI-Supported Co-Creative Activities</a><span class="meta">CHI 2025, <span class="award">Honorable Mention</span>, led by C. Y. Kim</span></li>
+<li><a href="https://arxiv.org/abs/2605.06257">LearnMate2: An LLM-powered Personalized and Adaptive Support System for Online Learning</a><span class="meta">DIS 2026, led by X. J. Wang</span></li>
+</ul>
 </section>
 <section class="thread" id="embodied" aria-labelledby="embodied-t">
 <header class="th">
 <h2 id="embodied-t">Toward embodied agents</h2>
-<p>My goal is to extend these mechanisms to embodied AI, as agents move into homes and shared spaces.</p>
+<p>Extending these mechanisms to agents that move into homes and shared spaces.</p>
 </header>
-<div class="entries">
-<article class="pub proj no-thumb">
-<div class="text">
-<h3 class="title"><a href="https://doi.org/10.1145/3643834.3661559">REX: Designing User-centered Repair and Explanations to Address Robot Failures</a></h3>
-<p class="marks"><span class="m" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Revise</span></p>
-<p class="desc">A household robot whose plan failed, because family members' requests conflicted or circumstances changed, repairs its plan and explains the repair.</p>
-<p class="authors"><span class="me">C. P. Lee</span>, P. Praveena, and B. Mutlu</p>
-<p class="venue">DIS 2024</p>
-</div>
-</article>
-<article class="pub proj no-thumb">
-<div class="text">
-<h3 class="title"><a href="https://doi.org/10.1145/3610977.3634966">Understanding Large-Language Model (LLM)-powered Human-Robot Interaction</a></h3>
-<p class="desc">The same LLM as a robot, a voice agent, and a text agent: people favored the robot for connection and deliberation, but its fluent speech raised expectations it could not meet.</p>
-<p class="authors">C. Y. Kim*, <span class="me">C. P. Lee</span>*, and B. Mutlu</p>
-<p class="venue">HRI 2024</p>
-</div>
-</article>
-<article class="pub proj">
-<a class="thumb" href="https://doi.org/10.1145/3491102.3501955" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/unboxing.webp" alt="Two children watching a small robot beside its lit-up packaging" width="640" height="400" loading="lazy"></a>
-<div class="text">
-<h3 class="title"><a href="https://doi.org/10.1145/3491102.3501955">The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots</a></h3>
-<p class="desc">How children's first interactions with a social robot unfold, and how turning its packaging into a character shaped their expectations.</p>
-<p class="authors"><span class="me">C. P. Lee</span>, B. Cagiltay, and B. Mutlu</p>
-<p class="venue">CHI 2022, <span class="award">Honorable Mention</span> <a href="https://doi.org/10.1145/3568294.3580038">HRI 2023 demo</a></p>
-</div>
-</article>
-<article class="pub proj no-thumb">
-<div class="text">
-<h3 class="title"><a href="https://doi.org/10.1145/3757279.3785557">Speaking with Screens: Design Space and Guidelines for Informational Robot Screens</a></h3>
-<p class="desc">A design space and guidelines for the screens robots use to share information.</p>
-<p class="authors">Y. Kim, <span class="me">C. P. Lee</span>, and B. Mutlu</p>
-<p class="venue">HRI 2026</p>
-</div>
-</article>
-<article class="pub proj no-thumb">
-<div class="text">
-<h3 class="title"><a href="https://www.emerald.com/ftrob/issue/13/3">Formal Methods in Robot End-User Development: Progress, Gaps, and Opportunities</a></h3>
-<p class="desc">A review of how formal methods can help end users program robots, with the gaps that remain.</p>
-<p class="authors">Y. Hwang, <span class="me">C. P. Lee</span>, D. Porfirio, L. M. Hiatt, and B. Mutlu</p>
-<p class="venue">Foundations and Trends in Robotics, 2026</p>
-</div>
-</article>
-</div>
+<ul class="list">
+<li><a href="https://doi.org/10.1145/3643834.3661559">REX: Designing User-centered Repair and Explanations to Address Robot Failures</a><span class="meta">DIS 2024</span></li>
+<li><a href="https://doi.org/10.1145/3610977.3634966">Understanding LLM-powered Human-Robot Interaction</a><span class="meta">HRI 2024, co-first author with C. Y. Kim</span></li>
+<li><a href="https://doi.org/10.1145/3491102.3501955">The Unboxing Experience: Initial Interactions Between Children and Social Robots</a><span class="meta">CHI 2022, <span class="award">Honorable Mention</span></span></li>
+<li><a href="https://doi.org/10.1145/3757279.3785557">Speaking with Screens: Design Space and Guidelines for Informational Robot Screens</a><span class="meta">HRI 2026, led by Y. Kim</span></li>
+<li><a href="https://www.emerald.com/ftrob/issue/13/3">Formal Methods in Robot End-User Development: Progress, Gaps, and Opportunities</a><span class="meta">Foundations and Trends in Robotics, 2026, led by Y. Hwang</span></li>
+</ul>
 </section>
 </main>
 </div>
