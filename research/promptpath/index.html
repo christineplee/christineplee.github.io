@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PromptPath demo · Christine P. Lee</title>
+<meta name="description" content="Try PromptPath, a system that builds a persistent profile of the user and uses it to repair prompts with an MDP-based search.">
+<link rel="canonical" href="https://christineplee.github.io/research/promptpath/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=4">
+<style>
+/* Layout: site header, task panel, guide strip, then a copy of the PromptPath study app
+   (Tailwind UI: blue nav bar, white cards on gray-50) with a profile chat screen and a prompt enhancement screen. */
+:root {
+  --site-muted: var(--muted);
+  --plum: var(--accent);
+  --plum-soft: #f3e9f0;
+  /* Tailwind palette used by the PromptPath frontend */
+  --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db; --gray-400: #9ca3af; --gray-500: #6b7280; --gray-600: #4b5563; --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+  --blue-50: #eff6ff; --blue-100: #dbeafe; --blue-200: #bfdbfe; --blue-400: #60a5fa; --blue-500: #3b82f6; --blue-600: #2563eb; --blue-700: #1d4ed8; --blue-800: #1e40af; --blue-900: #1e3a8a;
+  --red-50: #fef2f2; --red-200: #fecaca; --red-400: #f87171; --red-500: #ef4444; --red-800: #991b1b;
+  --green-50: #f0fdf4; --green-100: #dcfce7; --green-200: #bbf7d0; --green-300: #86efac; --green-400: #4ade80; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d; --green-800: #166534;
+  --purple-50: #faf5ff; --purple-100: #f3e8ff; --purple-800: #6b21a8;
+  --yellow-50: #fefce8; --yellow-300: #fde047; --yellow-500: #eab308; --yellow-700: #a16207; --yellow-800: #854d0e;
+  --orange-50: #fff7ed; --orange-200: #fed7aa; --orange-300: #fdba74; --orange-500: #f97316; --orange-600: #ea580c; --orange-700: #c2410c; --orange-800: #9a3412;
+  --font-app: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* ---------- page (site conventions) ---------- */
+.demo { display: flex; flex-direction: column; padding: 32px 0 24px 24px; }
+@media (max-width: 1100px) { .demo { padding-left: 0; } }
+.demo-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.demo-head h1 { margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.4px; line-height: 1.2; }
+.demo-head .byline, .demo-head .disclose { margin: 0; font-size: 15px; color: var(--site-muted); }
+.demo-head .lede { margin: 0; max-width: 68ch; }
+.demo-head .disclose { max-width: 72ch; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+.task { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: 16px 40px; align-items: center; background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 18px 22px; margin-bottom: 18px; }
+.task h2 { font-size: 1.15rem; font-weight: 500; margin: 0 0 6px; }
+.task p { margin: 0; line-height: 1.55; max-width: 66ch; }
+.task .task-q { margin-top: 8px; color: var(--plum); font-weight: 500; }
+.kinds { display: flex; flex-direction: column; gap: 10px; }
+.kind { border-left: 4px solid var(--red-400); padding: 4px 0 4px 12px; font-size: 15px; line-height: 1.45; }
+.kind.b { border-left-color: var(--blue-500); }
+.kind b { font-weight: 500; display: block; }
+.kind span { color: var(--site-muted); }
+.guide { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 12px 0; margin-bottom: 14px; }
+.guide-now { flex: 1 1 420px; min-width: 0; margin: 0; line-height: 1.45; }
+.guide-now b { color: var(--plum); font-weight: 500; }
+.btn-site { font-family: inherit; font-size: 15px; font-weight: 500; border: 1px solid var(--plum); color: var(--plum); background: transparent; border-radius: 6px; padding: 5px 12px; cursor: pointer; }
+.btn-site:hover { background: var(--plum-soft); }
+@media (max-width: 860px) { .task { grid-template-columns: 1fr; padding: 16px; } }
+
+/* ---------- PromptPath app (Tailwind values) ---------- */
+.pp { position: relative; font-family: var(--font-app); color: var(--gray-800); background: var(--gray-50); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+.pp * { box-sizing: border-box; }
+.pp button { font-family: inherit; cursor: pointer; }
+.pp button:disabled { opacity: .5; cursor: not-allowed; }
+.pp-nav { background: var(--blue-600); color: #fff; padding: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,.1); }
+.pp-nav-in { max-width: 1152px; margin: 0 auto; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.pp-nav b { font-size: 20px; font-weight: 700; }
+.pp-tabs { display: flex; gap: 16px; flex-wrap: wrap; }
+.pp-tab { display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 4px; border: 0; background: transparent; color: var(--blue-100); font-size: 16px; }
+.pp-tab:hover { background: var(--blue-700); }
+.pp-tab[aria-current="page"] { background: var(--blue-800); color: #fff; }
+.pp-main { max-width: 1152px; margin: 0 auto; padding: 24px; }
+.card { background: #fff; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1); padding: 24px; }
+.stack { display: flex; flex-direction: column; gap: 24px; }
+.h1 { font-size: 24px; font-weight: 700; margin: 0; color: var(--gray-800); }
+.h1.lg { font-size: 30px; }
+.muted { color: var(--gray-600); margin: 4px 0 0; }
+.btn { border: 0; color: #fff; border-radius: 8px; padding: 8px 24px; font-size: 16px; font-weight: 500; transition: background .15s; }
+.btn.sm { padding: 4px 12px; font-size: 14px; border-radius: 4px; font-weight: 400; }
+.btn.lg { padding: 12px 32px; font-size: 18px; }
+.btn.blue { background: var(--blue-600); } .btn.blue:hover:not(:disabled) { background: var(--blue-700); }
+.btn.blue5 { background: var(--blue-500); } .btn.blue5:hover:not(:disabled) { background: var(--blue-600); }
+.btn.green { background: var(--green-600); } .btn.green:hover:not(:disabled) { background: var(--green-700); }
+.btn.orange { background: var(--orange-500); } .btn.orange:hover:not(:disabled) { background: var(--orange-600); }
+.btn.gray { background: var(--gray-500); } .btn.gray:hover:not(:disabled) { background: var(--gray-600); }
+.btn.red { background: var(--red-500); }
+.pill { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 14px; font-weight: 500; }
+.pill.blue { background: var(--blue-100); color: var(--blue-800); }
+.pill.purple { background: var(--purple-100); color: var(--purple-800); }
+
+/* chat */
+.chat-card { padding: 0; display: flex; flex-direction: column; }
+.chat-head { border-bottom: 1px solid var(--gray-200); padding: 24px; }
+.chat-status { padding: 12px 24px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.chat-status .left { display: flex; gap: 16px; }
+.chat-status .count { font-size: 14px; color: var(--gray-600); }
+.msgs { height: 340px; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.bubble-row { display: flex; }
+.bubble-row.user { justify-content: flex-end; }
+.bubble { max-width: 28rem; padding: 8px 16px; border-radius: 8px; background: var(--gray-200); color: var(--gray-800); }
+.bubble-row.user .bubble { background: var(--blue-500); color: #fff; }
+.thinking { display: flex; align-items: center; gap: 8px; }
+.spin-sm { width: 16px; height: 16px; border-radius: 50%; border-bottom: 2px solid var(--gray-600); animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.chat-input { border-top: 1px solid var(--gray-200); padding: 24px; }
+.replies { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.replies p { margin: 0; font-size: 13px; color: var(--gray-500); }
+.reply { text-align: left; background: #fff; border: 1px dashed var(--blue-400); color: var(--gray-700); border-radius: 8px; padding: 8px 12px; font-size: 15px; }
+.reply:hover, .reply[aria-pressed="true"] { background: var(--blue-50); border-style: solid; }
+.row { display: flex; gap: 16px; }
+.field { flex: 1; min-width: 0; border: 1px solid var(--gray-300); border-radius: 8px; padding: 8px 16px; font: inherit; font-size: 16px; color: var(--gray-800); }
+.field:focus { outline: none; box-shadow: 0 0 0 2px var(--blue-500); }
+.prog-row { display: flex; justify-content: space-between; margin: 16px 0 8px; font-size: 14px; }
+.prog-row b { font-weight: 500; color: var(--gray-700); }
+.prog-row span { color: var(--gray-600); }
+.bar { width: 100%; height: 10px; background: var(--gray-200); border-radius: 999px; overflow: hidden; }
+.bar > div { height: 100%; background: var(--blue-600); border-radius: 999px; transition: width .3s; }
+.center-col { display: flex; flex-direction: column; align-items: center; margin-top: 24px; gap: 8px; }
+.center-col p { margin: 0; font-size: 14px; color: var(--gray-500); }
+.ok-note { color: var(--green-600) !important; font-weight: 500; }
+.done { padding: 48px 24px; text-align: center; }
+.done .big { font-size: 60px; line-height: 1; margin-bottom: 16px; }
+.done .summary { background: var(--green-50); border: 1px solid var(--green-200); border-radius: 8px; padding: 16px; margin: 0 auto 24px; max-width: 520px; font-size: 14px; color: var(--green-800); }
+
+/* repair page */
+.head-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
+.status-box { background: var(--green-50); border: 1px solid var(--green-200); border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+.status-box h3 { margin: 0; font-size: 16px; font-weight: 600; color: var(--green-800); }
+.status-box p { margin: 0; font-size: 14px; color: var(--green-600); }
+.input-box { border: 2px solid var(--blue-200); border-radius: 8px; padding: 24px; }
+.input-box label, .lbl { display: block; font-size: 18px; font-weight: 500; color: var(--gray-800); margin-bottom: 12px; }
+.ta { width: 100%; border: 2px solid var(--gray-300); border-radius: 8px; padding: 12px 16px; font: inherit; font-size: 18px; resize: none; color: var(--gray-800); }
+.ta:focus { outline: none; border-color: var(--blue-500); }
+.ta.sm { font-size: 16px; }
+.ta.orange { border-color: var(--orange-300); }
+.between { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; gap: 12px; flex-wrap: wrap; }
+.small { font-size: 14px; color: var(--gray-600); }
+.fb-box { background: var(--orange-50); border: 2px solid var(--orange-200); border-radius: 8px; padding: 24px; }
+.fb-box h3 { margin: 0 0 12px; font-size: 20px; font-weight: 600; color: var(--orange-800); }
+.fb-box .working { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.fb-box .working p { margin: 0; }
+.fb-box .working .q { font-weight: 500; background: var(--gray-50); padding: 12px; border-radius: 4px; margin-top: 8px; }
+.fb-box .lab { font-size: 14px; font-weight: 500; color: var(--gray-700); margin-bottom: 8px; display: block; }
+.fb-sugs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.fb-sugs button { border: 1px dashed var(--orange-300); background: #fff; color: var(--orange-800); border-radius: 999px; padding: 4px 12px; font-size: 14px; }
+.fb-sugs button:hover { background: var(--orange-50); border-style: solid; }
+.gap-row { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+.res-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+.res-head h2 { margin: 0; font-size: 20px; font-weight: 600; }
+.res-head span { font-size: 14px; color: var(--gray-500); }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-bottom: 24px; }
+.h3 { font-size: 16px; font-weight: 600; color: var(--gray-800); margin: 0 0 12px; }
+.quote { padding: 16px; border-radius: 0 8px 8px 0; border-left: 4px solid; }
+.quote p { margin: 0; font-weight: 500; }
+.quote.red { background: var(--red-50); border-color: var(--red-400); }
+.quote.gray { background: var(--gray-50); border-color: var(--gray-400); }
+.quote.gray p { font-weight: 400; color: var(--gray-700); }
+.quote.green { background: var(--green-50); border-color: var(--green-400); }
+.pills { display: flex; gap: 16px; flex-wrap: wrap; }
+.coll { border: 1px solid var(--blue-200); border-radius: 8px; margin-top: 24px; }
+.coll > button { width: 100%; background: var(--blue-100); color: var(--blue-800); border: 0; border-radius: 8px 8px 0 0; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 500; text-align: left; }
+.coll > button:hover { background: var(--blue-200); }
+.coll > button .arrow { transition: transform .2s; font-size: 18px; }
+.coll.open > button .arrow { transform: rotate(180deg); }
+.coll > .body { display: none; border-top: 1px solid var(--gray-200); }
+.coll.open > .body { display: block; }
+.empty { text-align: center; padding: 48px; color: var(--gray-500); font-size: 18px; }
+
+/* LLM output section */
+.llm { margin-top: 24px; }
+.llm h2 { font-size: 20px; font-weight: 600; margin: 0 0 16px; }
+.llm .box { border: 2px solid var(--blue-200); border-radius: 8px; padding: 24px; }
+.llm .out { margin-top: 24px; background: var(--gray-50); border: 2px solid var(--gray-200); border-radius: 8px; padding: 24px; }
+.llm .out .txt { background: #fff; border: 1px solid var(--gray-300); border-radius: 8px; padding: 16px; font-size: 15px; }
+.llm .out .txt p { margin: 0 0 10px; } .llm .out .txt ul { margin: 0 0 10px; padding-left: 20px; } .llm .out .txt li { margin: 4px 0; }
+
+/* MDP explanation */
+.mdp { background: var(--blue-50); border: 1px solid var(--blue-200); border-radius: 8px; padding: 16px; margin: 16px; }
+.mdp h3 { font-size: 18px; font-weight: 700; color: var(--blue-900); margin: 0 0 16px; }
+.mdp .inner { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 24px; }
+.overview { background: linear-gradient(90deg, var(--blue-50), var(--purple-50)); padding: 16px; border-radius: 8px; border: 1px solid var(--gray-200); font-size: 14px; color: var(--gray-700); }
+.overview h4, .mdp h4 { font-weight: 700; color: var(--gray-800); margin: 0 0 12px; font-size: 16px; }
+.overview p { margin: 0 0 8px; }
+.parent { border: 2px solid var(--gray-300); background: var(--gray-50); border-radius: 8px; padding: 16px; }
+.parent.win { border-color: var(--green-500); background: var(--green-50); }
+.parent + .parent { margin-top: 24px; }
+.parent h5 { font-size: 18px; font-weight: 700; margin: 0 0 8px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.badge-win { background: var(--green-500); color: #fff; padding: 4px 12px; border-radius: 999px; font-size: 14px; font-weight: 600; }
+.italic-box { background: #fff; padding: 12px; border-radius: 4px; border: 1px solid var(--gray-200); font-style: italic; color: var(--gray-800); margin-bottom: 8px; }
+.tag-sm { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+.tag-sm.blue { background: var(--blue-100); color: var(--blue-800); }
+.tag-sm.purple { background: var(--purple-100); color: var(--purple-800); font-weight: 700; }
+.children { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+.children h6 { margin: 0; font-size: 16px; font-weight: 500; color: var(--gray-700); }
+.child { border: 1px solid var(--gray-200); background: #fff; border-radius: 8px; padding: 12px; }
+.child.win { border-color: var(--green-400); background: var(--green-50); }
+.child .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; flex-wrap: wrap; font-size: 14px; font-weight: 700; }
+.child .top .w { color: var(--green-600); margin-left: 8px; }
+.child .p { font-size: 14px; background: var(--gray-50); padding: 8px; border-radius: 4px; font-style: italic; margin-bottom: 8px; }
+.child .fbk { font-size: 12px; color: var(--gray-600); margin-bottom: 8px; }
+.child .calc { font-size: 12px; background: var(--yellow-50); border: 1px solid var(--yellow-300); border-radius: 4px; padding: 8px; font-variant-numeric: tabular-nums; }
+.why { background: var(--green-50); border: 2px solid var(--green-300); border-radius: 8px; padding: 16px; }
+.why h4 { color: var(--green-800); margin: 0 0 8px; }
+.why p { margin: 0; color: var(--green-700); font-size: 14px; }
+
+/* source analysis */
+.src { padding: 24px; }
+.src h3 { font-size: 18px; font-weight: 600; color: var(--gray-900); margin: 0 0 16px; }
+.legend { margin-bottom: 24px; padding: 16px; background: var(--gray-50); border-radius: 8px; }
+.legend h4 { font-size: 14px; font-weight: 500; color: var(--gray-700); margin: 0 0 8px; }
+.legend .items { display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; }
+.legend .items div { display: flex; align-items: center; gap: 8px; }
+.w-o { background: var(--blue-200); color: var(--blue-800); padding: 0 4px; border-radius: 4px; }
+.w-r { background: var(--red-200); color: var(--red-800); padding: 0 4px; border-radius: 4px; }
+.w-n { background: var(--green-200); color: var(--green-800); padding: 0 4px; border-radius: 4px; }
+.legend .w-o, .legend .w-r, .legend .w-n { padding: 4px 8px; }
+.src .sub { font-size: 14px; font-weight: 500; color: var(--gray-700); margin: 0 0 8px; }
+.src .q { padding: 12px; border-radius: 8px; border-left: 4px solid; margin-bottom: 24px; line-height: 1.8; }
+.src .q.o { background: var(--blue-50); border-color: var(--blue-400); }
+.src .q.e { background: var(--gray-50); border-color: var(--green-400); }
+.prof { border: 1px solid var(--gray-200); border-radius: 8px; padding: 16px; background: var(--gray-50); margin-bottom: 12px; }
+.prof h5 { font-size: 14px; font-weight: 600; margin: 0 0 12px; }
+.prof .in { background: #fff; border-radius: 8px; padding: 12px; }
+.prof .k { font-size: 12px; font-weight: 500; color: var(--gray-600); }
+.chips { margin: 4px 0 8px; }
+.chips span { display: inline-block; font-size: 12px; padding: 4px 8px; border-radius: 4px; margin: 0 4px 4px 0; }
+.chips.p span { background: var(--blue-100); color: var(--blue-800); }
+.chips.n span { background: var(--green-100); color: var(--green-800); }
+.chips.g span { background: var(--purple-100); color: var(--purple-800); }
+
+/* overlay + modal (scoped to the app box) */
+.overlay { position: absolute; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 20; padding: 16px; }
+.overlay[hidden], .modal[hidden] { display: none; }
+.ov-card { background: #fff; border-radius: 8px; padding: 32px; max-width: 420px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,.25); text-align: center; }
+.ov-spin { border: 2px solid var(--blue-500); border-top-color: transparent; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+.ov-card h3 { font-size: 18px; font-weight: 700; margin: 0 0 16px; }
+.ov-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
+.ov-row span:first-child { color: var(--gray-500); font-weight: 500; }
+.ov-row span:last-child { color: var(--blue-800); font-weight: 700; }
+.ov-bar { height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+.ov-bar > div { height: 100%; background: linear-gradient(90deg, #3b82f6, #1d4ed8); border-radius: 4px; transition: width .4s cubic-bezier(.4,0,.2,1); }
+.ov-msg { background: var(--gray-50); padding: 12px; border-radius: 6px; text-align: left; font-size: 14px; color: var(--gray-700); margin-bottom: 12px; min-height: 44px; }
+.ov-foot { font-size: 12px; color: var(--gray-400); }
+.modal { position: absolute; inset: 0; background: rgba(0,0,0,.5); z-index: 25; display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; }
+.modal-card { background: #fff; border-radius: 8px; max-width: 640px; width: 100%; max-height: 80%; overflow: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,.25); }
+.modal-card header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--gray-200); position: sticky; top: 0; background: #fff; }
+.modal-card header h3 { margin: 0; font-size: 20px; font-weight: 700; }
+.modal-card header button { border: 0; background: transparent; font-size: 22px; color: var(--gray-500); }
+.modal-card .mb { padding: 16px 24px; }
+
+@media (max-width: 760px) {
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+  .pp-main { padding: 12px; }
+  .card { padding: 16px; }
+  .msgs { height: 300px; padding: 16px; }
+  .chat-head, .chat-input { padding: 16px; }
+  .row { flex-direction: column; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .spin-sm, .ov-spin { animation: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+<nav class="nav" aria-label="Main">
+<a class="home" href="/">Christine P. Lee</a>
+<div class="links">
+<a href="/publications/">publications</a>
+<a href="/assets/pdf/christine-lee-cv.pdf">cv</a>
+</div>
+</nav>
+<main class="demo">
+  <header class="demo-head">
+    <h1>PromptPath</h1>
+    <p class="byline">Christine P. Lee, Evan Pan, David Porfirio, and Bilge Mutlu. Under review.</p>
+    <p class="lede">PromptPath keeps a persistent profile of the user and brings it into the prompts they write. It rewrites a prompt by searching over candidate repairs, simulating how the user would react to each one. Try it by building a short profile and asking for trip ideas.</p>
+    <p class="disclose">The LLM's responses are scripted for this demo, and the UCB1 search and source analysis run live in your browser.</p>
+  </header>
+
+  <section class="task" aria-labelledby="taskTitle">
+    <div>
+      <h2 id="taskTitle">The task: a short travel prompt</h2>
+      <p>Short prompts leave out what the model needs to know about you. PromptPath first learns about you through a chat and saves what it learns as a profile. When you write a prompt later, it uses that profile to repair the prompt before it goes to the LLM.</p>
+      <p class="task-q">Answer three questions, then ask: "I want to go somewhere warm and interesting in October, not too crowded."</p>
+    </div>
+    <div class="kinds">
+      <div class="kind"><b>Profile</b><span>Preferences, needs, and goals from the chat, saved and reused for every later prompt.</span></div>
+      <div class="kind b"><b>Prompt repair</b><span>Candidate rewrites are scored by simulating your feedback, and a UCB1 search picks the best one.</span></div>
+    </div>
+  </section>
+
+  <div class="guide">
+    <p class="guide-now" id="guideNow" aria-live="polite"></p>
+    <button class="btn-site" id="restart" type="button">Restart</button>
+  </div>
+
+  <div class="pp" id="pp">
+    <nav class="pp-nav"><div class="pp-nav-in">
+      <b>PromptPath</b>
+      <div class="pp-tabs">
+        <button type="button" class="pp-tab" id="tabChat" aria-current="page"><span aria-hidden="true">💬</span><span>Profile Chat</span></button>
+        <button type="button" class="pp-tab" id="tabRepair"><span aria-hidden="true">✨</span><span>Prompt Enhancement</span></button>
+      </div>
+    </div></nav>
+    <div class="pp-main">
+      <section id="chatView"></section>
+      <section id="repairView" hidden></section>
+    </div>
+    <div class="overlay" id="overlay" hidden>
+      <div class="ov-card" role="status">
+        <div class="ov-spin"></div>
+        <h3>Prompt Enhancement in Progress</h3>
+        <div class="ov-row"><span id="ovStep">INITIALIZING</span><span id="ovPct">0%</span></div>
+        <div class="ov-bar"><div id="ovBar" style="width:0%"></div></div>
+        <div class="ov-msg" id="ovMsg">Analyzing and optimizing your prompt...</div>
+        <div class="ov-foot">This may take 2-3 minutes depending on complexity</div>
+      </div>
+    </div>
+    <div class="modal" id="modal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <header><h3 id="modalTitle">📊 Your Profile Data</h3><button type="button" id="modalClose" aria-label="Close">×</button></header>
+        <div class="mb" id="modalBody"></div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+(() => {
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const guide = html => { $("guideNow").innerHTML = html; };
+let st;
+const wait = ms => new Promise(res => { const t = setTimeout(res, ms); st.timers.push(t); });
+
+/* =====================================================================
+   Profile chat (scripted assistant turns; the visitor picks each reply).
+   Each reply becomes a profile entry with the same fields the backend
+   extracts (Name, Location, Preferences, Needs, Goals).
+   ===================================================================== */
+const OPENER = "Hi there! Before we start improving your prompts, I'd like to get to know you a bit better. What do you usually enjoy most when you travel?";
+const TURNS = [
+  { key: "P", options: [
+      { id: "food", text: "I plan trips around food. Local markets and small family-run restaurants are my favorite part.", items: ["local markets", "small family-run restaurants"], clause: "local markets and small family-run restaurants" },
+      { id: "outdoors", text: "I like being outdoors. Coastal hikes and swimming are what I look forward to most.", items: ["coastal hikes", "swimming"], clause: "coastal hikes and swimming" }],
+    field: "Preferences", next: "That's great to know! Who do you usually travel with, and is there anything you need to plan around?" },
+  { key: "N", options: [
+      { id: "toddler", text: "Usually with my partner and our 2-year-old, so we need short travel days and nap time.", items: ["short travel days", "nap time for a 2-year-old"], clause: "short travel days and nap time for a 2-year-old" },
+      { id: "solo", text: "Mostly solo on a tight budget, so I look for affordable stays near public transit.", items: ["affordable stays", "near public transit"], clause: "affordable stays near public transit" }],
+    field: "Needs", next: "Thanks, that helps. What do you hope to get out of your trips this year?" },
+  { key: "G", options: [
+      { id: "rest", text: "I want to actually rest this time and keep the schedule light.", items: ["rest", "light schedule"], clause: "a light schedule with time to rest" },
+      { id: "spanish", text: "I want to practice my Spanish and meet locals.", items: ["practicing Spanish", "meeting locals"], clause: "chances for practicing Spanish and meeting locals" }],
+    field: "Goals", next: "Thank you! I've saved what you shared to your profile. You can review it with View Profile Data, then complete your profile to continue." },
+];
+const PROMPT = "I want to go somewhere warm and interesting in October, not too crowded.";
+
+/* =====================================================================
+   Scripted LLM outputs for the MDP search. Candidate rewrites (LLM 1),
+   simulated feedback with rewards, and child repairs are templates filled
+   from the visitor's profile. The search over them is ported from
+   backend/src/agent_2.py (evaluate_action_ucb_depth_2).
+   ===================================================================== */
+function initialSet(pr) {
+  const P = pr.P.clause, N = pr.N.clause, G = pr.G.clause;
+  const a1 = `Suggest one warm, interesting destination for October that is not too crowded, with ${P}. Plan around ${N}, and keep ${G} in mind.`;
+  const a2 = `Recommend three warm destinations for October that avoid peak crowds. For each, explain how it fits someone who enjoys ${P} and needs ${N}.`;
+  const a3 = `Suggest a warm and interesting place to visit in October that is less crowded, and explain what makes it worth visiting.`;
+  return [
+    { id: "a1", prompt: a1, feedback: [
+        ["This fits what I like. Can you also say roughly how many days to stay?", 0.78],
+        ["Good, but I'd want to know how to get there.", 0.70],
+        ["It covers what matters to me, but it reads like a checklist.", 0.62]],
+      children: [
+        [a1 + " Suggest how many days to stay.", 0.86],
+        [a1 + " Include how to get there and how long the trip takes.", 0.80],
+        [`Suggest one warm, less crowded destination for October. It should offer ${P}, work with ${N}, and allow ${G}.`, 0.77]] },
+    { id: "a2", prompt: a2, feedback: [
+        ["Three options is helpful, but I'd still have to pick one myself.", 0.66],
+        ["I like the comparison. Add when each place is least crowded.", 0.74],
+        ["This covers my interests but not what I want from the trip.", 0.58]],
+      children: [
+        [`Recommend the single best warm destination for October that avoids peak crowds, and explain how it fits someone who enjoys ${P} and needs ${N}.`, 0.79],
+        [a2 + " Note the weeks in October when each is least crowded.", 0.76],
+        [a2 + ` Also consider ${G}.`, 0.81]] },
+    { id: "a3", prompt: a3, feedback: [
+        ["This could be for anyone. It doesn't know what I like.", 0.31],
+        ["Too vague. Interesting in what way?", 0.28],
+        ["I'd have to add all my details again.", 0.35]],
+      children: [
+        [a3 + " Include the kinds of activities available.", 0.42],
+        [a3 + " Describe the main activities and atmosphere.", 0.40],
+        [a3 + " Ask me follow-up questions if needed.", 0.38]] },
+  ];
+}
+const FEEDBACK_PRESETS = [
+  { k: "food", text: "Can you include a local food experience?", clause: "Include one local food experience, such as a cooking class or a market tour." },
+  { k: "slow", text: "This sounds too fast-paced, slow it down.", clause: "Keep the pace slow, with no more than one main activity per day." },
+  { k: "structure", text: "Add more structure to the schedule.", clause: "Organize the answer as a day-by-day schedule." },
+];
+function feedbackClause(text) {
+  const t = text.toLowerCase();
+  if (/food|eat|restaurant|cook|market/.test(t)) return FEEDBACK_PRESETS[0].clause;
+  if (/slow|pace|relax|fast|rush|calm/.test(t)) return FEEDBACK_PRESETS[1].clause;
+  if (/struct|schedule|day-by-day|itinerary|plan/.test(t)) return FEEDBACK_PRESETS[2].clause;
+  const s = text.trim().replace(/\s+/g, " ");
+  return "Also, " + s.charAt(0).toLowerCase() + s.slice(1) + (/[.?!]$/.test(s) ? "" : ".");
+}
+function feedbackSet(prev, text) {
+  const C = feedbackClause(text);
+  const b1 = `${prev} ${C}`;
+  const b2 = `${C} ${prev}`;
+  const b3 = `${prev} ${C} Explain briefly why each suggestion fits me.`;
+  return [
+    { id: "a1", prompt: b1, feedback: [["That's the change I asked for.", 0.80], ["Good. Keep the rest the same.", 0.76], ["Fine, though it's getting long.", 0.64]],
+      children: [[b1 + " Keep the answer concise.", 0.84], [b1 + " Mention anything I should book ahead.", 0.79], [b1.replace(/ Plan around /, " Please plan around "), 0.70]] },
+    { id: "a2", prompt: b2, feedback: [["It leads with my request, which is clear.", 0.72], ["The order feels a little odd.", 0.60], ["This works.", 0.70]],
+      children: [[b2 + " Keep the answer concise.", 0.74], [prev + " " + C, 0.71], [b2 + " Mention anything I should book ahead.", 0.73]] },
+    { id: "a3", prompt: b3, feedback: [["I like knowing why each suggestion fits.", 0.78], ["The explanation might be too much.", 0.62], ["Good balance.", 0.74]],
+      children: [[b3 + " Keep each explanation to one sentence.", 0.83], [b1, 0.76], [b3 + " Keep the answer concise.", 0.78]] },
+  ];
+}
+
+/* ---------- UCB1 depth-2 search (port of evaluate_action_ucb_depth_2) ---------- */
+function ucb1Select(q, visits, total, c) {
+  let best = -Infinity, bestId = null;
+  for (const id of Object.keys(q)) {
+    const n = visits[id];
+    if (n === 0) return id;
+    const score = q[id] + c * Math.sqrt(Math.log(total) / n);
+    if (score > best) { best = score; bestId = id; }
+  }
+  return bestId;
+}
+function searchUCB(actions, { gamma = 0.9, d1Budget = 9, d2Budget = 9, c = 1.0 } = {}) {
+  const log = [];
+  const byId = Object.fromEntries(actions.map(a => [a.id, a]));
+  const d1q = {}, d1v = {}, d1s = {}, d1fb = {}, nextFb = {};
+  actions.forEach(a => { d1q[a.id] = 0; d1v[a.id] = 0; d1s[a.id] = 0; d1fb[a.id] = []; nextFb[a.id] = 0; });
+  let d1t = 0;
+  for (let i = 0; i < d1Budget; i++) {
+    const id = ucb1Select(d1q, d1v, Math.max(d1t, 1), c);
+    const a = byId[id];
+    const k = nextFb[id]++ % a.feedback.length;              // simulate_single_feedback (scripted)
+    const [fb, r] = a.feedback[k];                             // calculate_reward (scripted)
+    d1v[id]++; d1t++; d1s[id] += r; d1q[id] = d1s[id] / d1v[id];
+    d1fb[id].push({ fb, r, k });
+    log.push({ phase: 1, id, fb, r, q: d1q[id] });
+  }
+  const d2q = {}, d2v = {}, d2s = {}, d2idx = {};
+  actions.forEach(a => { if (d1v[a.id] > 0) { d2q[a.id] = 0; d2v[a.id] = 0; d2s[a.id] = 0; d2idx[a.id] = 0; } });
+  let d2t = 0, bestTotal = -Infinity, bestChild = null;
+  const children = [];
+  for (let i = 0; i < d2Budget; i++) {
+    const id = ucb1Select(d2q, d2v, Math.max(d2t, 1), c);
+    const a = byId[id], parentQ = d1q[id], fbList = d1fb[id];
+    const f = fbList[d2idx[id]++ % fbList.length];
+    const [childPrompt, childReward] = a.children[f.k];       // simulate_repair + child feedback + reward (scripted)
+    const totalQ = (1 - gamma) * parentQ + gamma * childReward;
+    const child = { action_id: `${id}.d2.${d2v[id] + 1}`, parent: id, prompt: childPrompt, parent_feedback: f.fb, parentQ, childReward, totalQ,
+      calculation: `total_q = (1 - ${gamma}) × ${parentQ.toFixed(3)} + ${gamma} × ${childReward.toFixed(3)} = ${totalQ.toFixed(3)}` };
+    children.push(child);
+    d2v[id]++; d2t++; d2s[id] += totalQ; d2q[id] = d2s[id] / d2v[id];
+    log.push({ phase: 2, id, child: child.action_id, fb: f.fb, r: childReward, q: totalQ });
+    if (totalQ > bestTotal) { bestTotal = totalQ; bestChild = child; }
+  }
+  if (bestChild) bestChild.is_winner = true;
+  const parents = actions.map(a => {
+    // the scripted repairs are deterministic, so repeated expansions of the same feedback give the same child: show it once with a count
+    const kids = [];
+    children.filter(ch => ch.parent === a.id).forEach(ch => {
+      const same = kids.find(k => k.prompt === ch.prompt);
+      if (same) { same.times++; if (ch.is_winner) same.is_winner = true; } else kids.push({ ...ch, times: 1 });
+    });
+    const winnerKid = kids.find(k => k.is_winner);
+    return { id: a.id, prompt: a.prompt, parentQ: d1q[a.id], visits: d1v[a.id], feedbacks: d1fb[a.id], children: kids,
+      winner_total_q: kids.length ? Math.max(...kids.map(k => k.totalQ)) : 0, winner_child_id: winnerKid ? winnerKid.action_id : null };
+  });
+  return { repaired: bestChild ? bestChild.prompt : actions[0].prompt, q: bestTotal, parents, log, transitions: children.length };
+}
+
+/* ---------- source analysis (port of analyze_prompt_sources, agent_1.py) ---------- */
+const WORD = /\b\w+\b/g;
+function analyzeSources(original, repaired, entries) {
+  const origWords = new Set((original.toLowerCase().match(WORD) || []));
+  const ragWords = new Set(), ragPhrases = [];
+  entries.forEach(e => Object.values(e).forEach(v => {
+    const vals = Array.isArray(v) ? v : (v ? [v] : []);
+    vals.forEach(item => {
+      const ws = String(item).toLowerCase().match(WORD) || [];
+      ws.forEach(w => ragWords.add(w));
+      if (ws.length > 1) ragPhrases.push(String(item).toLowerCase());
+    });
+  }));
+  const sources = [];
+  let m; const re = /\b\w+\b/g;
+  while ((m = re.exec(repaired))) {
+    const w = m[0].toLowerCase();
+    sources.push({ word: m[0], start: m.index, end: m.index + m[0].length, source: origWords.has(w) ? "original" : ragWords.has(w) ? "rag" : "new" });
+  }
+  const low = repaired.toLowerCase();
+  ragPhrases.forEach(ph => {
+    const s = low.indexOf(ph);
+    if (s < 0) return;
+    const e = s + ph.length;
+    sources.forEach(x => { if (x.start >= s && x.end <= e) x.source = "rag"; });
+  });
+  return sources;
+}
+function highlight(text, sources) {
+  let out = "", last = 0;
+  const cls = { original: "w-o", rag: "w-r", new: "w-n" };
+  sources.forEach(s => {
+    if (s.start > last) out += esc(text.slice(last, s.start));
+    out += `<span class="${cls[s.source]}" title="Source: ${s.source}">${esc(s.word)}</span>`;
+    last = s.end;
+  });
+  return out + esc(text.slice(last));
+}
+
+/* ---------- scripted LLM output for "Test Your Enhanced Prompt" ---------- */
+function llmOutput(pr) {
+  const dest = { "food-rest": "Puglia, Italy", "food-spanish": "Valencia, Spain", "outdoors-rest": "Madeira, Portugal", "outdoors-spanish": "Tenerife, Canary Islands" }[pr.P.id + "-" + pr.G.id];
+  const why = {
+    food: "Mornings at the covered market and long lunches at small family-run restaurants are easy to build a day around.",
+    outdoors: "Coastal hiking trails and calm swimming spots are close together, so you can do both without long drives.",
+    toddler: "Pick one base and keep day trips under an hour so you can plan around naps and short travel days.",
+    solo: "Stay near the main bus or tram lines. Guesthouses and hostels keep costs low outside the summer season.",
+    rest: "Keep one activity per day and leave afternoons open.",
+    spanish: "Cooking classes, market stalls, and language exchange evenings are good places to practice Spanish and meet locals.",
+  };
+  return `<p><strong>${esc(dest)}</strong> is a good fit for October. Daytime temperatures are usually warm, and the summer crowds have thinned out.</p>
+    <p>Why it fits you:</p>
+    <ul><li>${esc(why[pr.P.id])}</li><li>${esc(why[pr.N.id])}</li><li>${esc(why[pr.G.id])}</li></ul>
+    <p>Would you like a day-by-day plan next?</p>`;
+}
+
+/* =====================================================================
+   UI
+   ===================================================================== */
+const clockNow = () => new Date().toLocaleString();
+function profile() { return { P: st.choices.P, N: st.choices.N, G: st.choices.G }; }
+function entries() { return st.entries; }
+
+/* ---------- chat screen ---------- */
+function renderChat() {
+  const v = $("chatView");
+  const done = st.turn >= TURNS.length;
+  const convs = Math.floor((st.messages.length - 1) / 2);
+  v.innerHTML = `<div class="card chat-card">
+    <div class="chat-head"><h1 class="h1">Profile Building Chat</h1><p class="muted">Tell us about your preferences to personalize your experience</p></div>
+    <div class="chat-status">
+      <div class="left"><button type="button" class="btn blue5 sm" id="viewProfile">📊 View Profile Data (${st.entries.length})</button>
+      <button type="button" class="btn red sm" id="resetAll">🗑️ Reset All</button></div>
+      <div class="count">Messages: ${st.messages.length} | Profile Entries: ${st.entries.length}</div>
+    </div>
+    ${st.submitted ? `<div class="done"><div class="big" aria-hidden="true">✅</div><h2 class="h1">Profile Complete!</h2>
+      <p class="muted" style="margin:16px 0 24px">Your preferences have been saved and will be used to personalize your prompt improvements.</p>
+      <div class="summary"><strong>Profile Summary:</strong> ${st.entries.length} entries across Preferences, Needs, and Goals</div>
+      <button type="button" class="btn blue lg" id="goRepair">Continue to Prompt Improvement →</button></div>` : `
+    <div class="msgs" id="msgs">${st.messages.map(m => `<div class="bubble-row ${m.role}"><div class="bubble">${esc(m.content)}</div></div>`).join("")}
+      ${st.thinking ? `<div class="bubble-row"><div class="bubble thinking"><span class="spin-sm"></span><span>Thinking...</span></div></div>` : ""}</div>
+    <div class="chat-input">
+      ${!done && !st.thinking ? `<div class="replies"><p>Choose a reply (in the study, participants typed freely):</p>${TURNS[st.turn].options.map(o => `<button type="button" class="reply" data-o="${o.id}" aria-pressed="${st.draft === o.id}">${esc(o.text)}</button>`).join("")}</div>` : ""}
+      <div class="row"><input class="field" id="chatInput" readonly placeholder="Share your preferences, needs, or goals..." value="${st.draft ? esc(TURNS[st.turn].options.find(o => o.id === st.draft).text) : ""}" aria-label="Message">
+      <button type="button" class="btn blue5" id="send" ${st.draft && !st.thinking ? "" : "disabled"}>Send</button></div>
+      <div class="prog-row"><b>Conversation Progress</b><span>${convs} / ${TURNS.length} conversations</span></div>
+      <div class="bar"><div style="width:${Math.min(convs / TURNS.length * 100, 100)}%"></div></div>
+      ${done ? `<p class="small ok-note" style="margin:6px 0 0">✅ ${TURNS.length} conversations completed! You can continue to the next step.</p>` : ""}
+      <div class="center-col"><button type="button" class="btn green lg" id="completeProfile" ${done && !st.thinking ? "" : "disabled"}>Complete Profile &amp; Continue →</button>
+      ${done ? "" : `<p>Have at least ${TURNS.length} conversations to continue (the study required 20)</p>`}</div>
+    </div>`}
+  </div>`;
+  const msgs = $("msgs"); if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  $("viewProfile").onclick = openProfile;
+  $("resetAll").onclick = () => { if (!st.busy) resetChat(); };
+  v.querySelectorAll(".reply").forEach(b => b.onclick = () => { st.draft = b.dataset.o; renderChat(); });
+  if ($("send")) $("send").onclick = sendReply;
+  if ($("completeProfile")) $("completeProfile").onclick = () => {
+    st.submitted = true; renderChat();
+    guide("<b>Profile saved.</b> Press Continue to Prompt Improvement.");
+  };
+  if ($("goRepair")) $("goRepair").onclick = () => showTab("repair");
+}
+async function sendReply() {
+  if (!st.draft || st.thinking) return;
+  const t = TURNS[st.turn], o = t.options.find(x => x.id === st.draft);
+  st.messages.push({ role: "user", content: o.text });
+  st.choices[t.key] = o;
+  st.entries.push({ Name: "", Location: "", Preferences: t.field === "Preferences" ? o.items : [], Needs: t.field === "Needs" ? o.items : [], Goals: t.field === "Goals" ? o.items : [] });
+  st.draft = null; st.thinking = true; renderChat();
+  await wait(1100);
+  st.thinking = false; st.messages.push({ role: "assistant", content: t.next }); st.turn++;
+  renderChat();
+  if (st.turn >= TURNS.length) guide("<b>Profile built.</b> Open View Profile Data to see what was extracted, then press Complete Profile &amp; Continue.");
+  else guide(`<b>Build your profile.</b> Pick a reply and press Send. ${st.turn} of ${TURNS.length} answered.`);
+}
+function resetChat() {
+  st.messages = [{ role: "assistant", content: OPENER }]; st.turn = 0; st.entries = []; st.choices = {}; st.draft = null; st.submitted = false;
+  st.results = []; st.feedbackMode = false; st.llm = null;
+  renderChat(); renderRepair();
+  guide("<b>Build your profile.</b> PromptPath first learns about you through a chat and saves what it learns as a profile. Pick a reply and press Send.");
+}
+function openProfile() {
+  $("modalBody").innerHTML = st.entries.length ? st.entries.map((e, i) => `<div class="prof"><h5>Entry ${i + 1}</h5><div class="in">
+      ${["Preferences", "Needs", "Goals"].map((k, j) => e[k].length ? `<div class="k">${k} (${e[k].length}):</div><div class="chips ${"png"[j]}">${e[k].map(x => `<span>${esc(x)}</span>`).join("")}</div>` : "").join("")}
+    </div></div>`).join("") : `<p class="muted">No profile entries yet. Send a message in the chat to start building your profile.</p>`;
+  $("modal").hidden = false; $("modalClose").focus();
+}
+$("modalClose").onclick = () => { $("modal").hidden = true; };
+$("modal").addEventListener("click", e => { if (e.target.id === "modal") $("modal").hidden = true; });
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("modal").hidden = true; });
+
+/* ---------- repair screen ---------- */
+function coll(title, inner, open) {
+  return `<div class="coll ${open ? "open" : ""}"><button type="button" aria-expanded="${!!open}"><span>${title}</span><span class="arrow" aria-hidden="true">▼</span></button><div class="body">${inner}</div></div>`;
+}
+function mdpHtml(r) {
+  const s = r.search;
+  const parents = [...s.parents].filter(p => p.children.length).sort((a, b) => b.winner_total_q - a.winner_total_q);
+  return `<div class="mdp"><h3>🧠 Prompt Enhancement Process &amp; Results</h3><div class="inner">
+    <div class="overview"><h4>How We Select the Best Candidate:</h4>
+      <p><strong>1. Suggest Candidates for Prompt Improvements:</strong> We generate ${s.parents.length} different ways to improve your prompt.</p>
+      <p><strong>2. Imagine Your Feedback:</strong> For each suggestion, we predict several possible reactions you might have.</p>
+      <p><strong>3. Estimate Likelihood:</strong> We guess how likely each of these reactions might be.</p>
+      <p><strong>4. Rate Outcomes:</strong> We score each predicted reaction based on how helpful or positive it would be for you.</p>
+      <p><strong>5. Combine Scores:</strong> We combine these likelihoods and scores to measure overall usefulness. This is called the <em>Q-value</em>.</p>
+      <p style="margin:0"><strong>6. Choose the Best:</strong> Finally, based on the Q-value, we select the suggestion we believe you'll find most helpful overall.</p></div>
+    <div><h4>Complete Analysis for Selecting the Best Candidate</h4>
+      ${parents.map((p, i) => `<div class="parent ${p.winner_child_id ? "win" : ""}">
+        <h5>Parent Prompt #${i + 1}${p.winner_child_id ? `<span class="badge-win">🏆 WINNING PATH (total_q = ${p.winner_total_q.toFixed(3)})</span>` : ""}</h5>
+        <div class="italic-box">"${esc(p.prompt)}"</div>
+        <span class="tag-sm blue">Parent Q-Value: ${p.parentQ.toFixed(3)} (${p.visits} simulated reactions)</span>
+        <div class="children"><h6>Child Actions (from parent feedbacks → total_q values):</h6>
+          ${[...p.children].sort((a, b) => b.totalQ - a.totalQ).map(c => `<div class="child ${c.is_winner ? "win" : ""}">
+            <div class="top"><span>${esc(c.action_id)}${c.times > 1 ? ` (expanded ${c.times}×)` : ""}${c.is_winner ? `<span class="w">🏆 WINNER</span>` : ""}</span><span class="tag-sm purple">total_q = ${c.totalQ.toFixed(3)}</span></div>
+            <div class="fbk">Simulated feedback: "${esc(c.parent_feedback)}"</div>
+            <div class="p">"${esc(c.prompt)}"</div>
+            <div class="calc"><strong>Depth-2 Calculation:</strong> ${esc(c.calculation)}</div></div>`).join("")}
+        </div></div>`).join("")}
+    </div>
+    <div class="why"><h4>🏆 Why This Candidate Won:</h4><p>The selected prompt achieved the highest Q-value of <strong>${s.q.toFixed(3)}</strong>, meaning it has the best expected performance across all simulated user feedback scenarios. This represents the optimal balance between response probability and reward quality.</p></div>
+  </div></div>`;
+}
+function srcHtml(r) {
+  const e = st.entries;
+  return `<div class="src"><h3>🔍 Prompt Enhancement Visualization</h3>
+    <div class="legend"><h4>Legend:</h4><div class="items">
+      <div><span class="w-o">word</span><span>From your original prompt</span></div>
+      <div><span class="w-r">word</span><span>From your created profile</span></div>
+      <div><span class="w-n">word</span><span>AI generated</span></div></div></div>
+    <p class="sub">Original Prompt:</p><div class="q o">${esc(r.input)}</div>
+    <p class="sub">Enhanced Prompt:</p><div class="q e">${highlight(r.search.repaired, analyzeSources(r.input, r.search.repaired, e))}</div>
+    <p class="sub">Context Used from Your Saved Profile:</p>
+    ${e.slice(0, 3).map((x, i) => `<div class="prof"><h5>User Profile ${i + 1}</h5><div class="in">
+      ${["Preferences", "Needs", "Goals"].map((k, j) => x[k].length ? `<div class="k">${k} (${x[k].length}):</div><div class="chips ${"png"[j]}">${x[k].map(y => `<span>${esc(y)}</span>`).join("")}</div>` : "").join("")}</div></div>`).join("")}
+  </div>`;
+}
+function renderRepair() {
+  const v = $("repairView");
+  const hasProfile = st.submitted;
+  const sel = st.feedbackMode ? st.results[st.feedbackIdx] : null;
+  v.innerHTML = `<div class="stack">
+    <div class="card">
+      <div class="head-row"><h1 class="h1 lg">Prompt Enhancement</h1></div>
+      <div class="status-box"><h3>Session Active</h3><p>Total enhancements completed: <strong>${st.results.length}</strong></p></div>
+      ${!hasProfile ? `<div class="input-box"><p style="margin:0">Complete your profile in the Profile Chat first, so PromptPath has context to use.</p>
+        <div style="margin-top:16px"><button type="button" class="btn blue" id="backChat">Go to Profile Chat</button></div></div>` :
+      !st.feedbackMode ? `<div class="input-box"><label for="promptInput">📝 Enter your prompt:</label>
+        <textarea class="ta" id="promptInput" rows="3">${esc(st.draftPrompt)}</textarea>
+        <div class="between"><span class="small" id="charCount">Character count: ${st.draftPrompt.length}</span>
+        <button type="button" class="btn blue lg" id="improve" ${st.draftPrompt.trim() ? "" : "disabled"}>✨ Improve Prompt</button></div>
+        <p class="small" id="promptNote" hidden style="margin:10px 0 0;color:var(--red-800)"></p></div>` :
+      `<div class="fb-box"><h3>💬 Feedback Mode - Improve Further</h3>
+        <div class="working"><p class="small">Currently working on:</p><p class="q">"${esc(sel.search.repaired)}"</p></div>
+        <label class="lab" for="fbInput">What would you like to improve or change?</label>
+        <div class="fb-sugs">${FEEDBACK_PRESETS.map(f => `<button type="button" data-k="${f.k}">${esc(f.text)}</button>`).join("")}</div>
+        <textarea class="ta sm orange" id="fbInput" rows="3" placeholder="Example: Can you include a local food experience?"></textarea>
+        <div class="gap-row"><button type="button" class="btn green" id="fbSubmit">✅ Submit Feedback</button><button type="button" class="btn gray" id="fbCancel">❌ Cancel</button></div></div>`}
+    </div>
+    ${st.results.length ? st.results.map((r, i) => `<div class="card">
+      <div class="res-head"><h2>${r.feedback ? "Feedback-Based Improvement" : "Initial Improvement"}</h2><span>${esc(r.time)}</span></div>
+      <div class="grid2">
+        <div><h3 class="h3">📝 ${r.feedback ? "Your Feedback" : "Original Prompt"}</h3><div class="quote red"><p>${esc(r.feedback || r.input)}</p></div>
+          ${r.feedback ? `<h3 class="h3" style="margin-top:16px">📄 Original Prompt</h3><div class="quote gray"><p>${esc(r.original)}</p></div>` : ""}</div>
+        <div><h3 class="h3">✨ Enhanced Prompt</h3><div class="quote green"><p>${esc(r.search.repaired)}</p></div>
+          <div class="between"><div class="pills"><span class="pill blue">Quality Score: ${r.search.q.toFixed(3)}</span><span class="pill purple">${r.search.transitions} Optimization Steps</span></div>
+          ${st.feedbackMode ? "" : `<button type="button" class="btn orange sm" data-fb="${i}" style="padding:8px 16px;border-radius:8px;font-weight:500">💬 Give Feedback</button>`}</div></div>
+      </div>
+      ${i === 0 ? `<div class="llm"><h2>🤖 Test Your Enhanced Prompt</h2><p class="small" style="margin:0 0 16px">Send the enhanced prompt to the LLM and see what it returns.</p>
+        <div class="box"><label class="lbl" for="llmIn">Prompt to send:</label><textarea class="ta sm" id="llmIn" rows="4">${esc(r.search.repaired)}</textarea>
+        <div class="between"><span class="small">Character count: ${r.search.repaired.length}</span><button type="button" class="btn blue" id="llmGo" ${st.llmBusy ? "disabled" : ""}>${st.llmBusy ? "🔄 Generating..." : "🚀 Generate Output"}</button></div></div>
+        ${st.llm ? `<div class="out"><div class="between" style="margin:0 0 12px"><span class="lbl" style="margin:0">🤖 LLM Output</span><span class="small">Generated using enhanced prompt</span></div><div class="txt">${st.llm}</div></div>` : ""}</div>` : ""}
+      ${coll("🧠 Prompt Enhancement Process &amp; Results", mdpHtml(r), false)}
+      ${coll("🔍 Prompt Source Analysis", srcHtml(r), i === 0 && st.openSource)}
+    </div>`).join("") : `<div class="card empty">No enhancements yet. Enter a prompt above to get started! 🚀</div>`}
+  </div>`;
+  if ($("backChat")) $("backChat").onclick = () => showTab("chat");
+  const pi = $("promptInput");
+  if (pi) pi.oninput = () => { st.draftPrompt = pi.value; $("charCount").textContent = "Character count: " + pi.value.length; $("improve").disabled = !pi.value.trim(); };
+  if ($("improve")) $("improve").onclick = improve;
+  v.querySelectorAll("[data-fb]").forEach(b => b.onclick = () => { st.feedbackMode = true; st.feedbackIdx = +b.dataset.fb; renderRepair(); v.scrollIntoView({ block: "start", behavior: "smooth" });
+    guide("<b>Feedback loop.</b> Pick a suggestion or write your own, then press Submit Feedback. PromptPath runs the search again from the current prompt."); });
+  v.querySelectorAll(".fb-sugs button").forEach(b => b.onclick = () => { $("fbInput").value = FEEDBACK_PRESETS.find(f => f.k === b.dataset.k).text; });
+  if ($("fbSubmit")) $("fbSubmit").onclick = submitFeedback;
+  if ($("fbCancel")) $("fbCancel").onclick = () => { st.feedbackMode = false; renderRepair(); };
+  v.querySelectorAll(".coll > button").forEach(b => b.onclick = () => { const c = b.parentElement; c.classList.toggle("open"); b.setAttribute("aria-expanded", c.classList.contains("open")); });
+  if ($("llmGo")) $("llmGo").onclick = async () => {
+    st.llmBusy = true; renderRepair();
+    await wait(1600);
+    st.llmBusy = false; st.llm = llmOutput(profile()); renderRepair();
+  };
+}
+
+/* ---------- running the search with the progress overlay ---------- */
+async function runWithOverlay(actions) {
+  const res = searchUCB(actions);
+  const ov = $("overlay"), set = (step, pct, msg) => { $("ovStep").textContent = step.replace(/_/g, " ").toUpperCase(); $("ovPct").textContent = Math.round(pct) + "%"; $("ovBar").style.width = pct + "%"; $("ovMsg").textContent = msg; };
+  ov.hidden = false;
+  $("pp").scrollIntoView({ block: "start", behavior: "smooth" });
+  const steps = [
+    ["starting", 2, "Starting prompt enhancement..."],
+    ["rag_setup", 7, `Retrieving your profile (${st.entries.length} entries)...`],
+    ["profile_extraction", 12, "Extracting preferences, needs, and goals relevant to this prompt..."],
+    ["generating_prompts", 20, "Generating candidate prompt improvements..."],
+    ["actions_created", 35, `Created ${actions.length} candidate actions.`],
+  ];
+  for (const [s, p, m] of steps) { set(s, p, m); await wait(550); }
+  const d1 = res.log.filter(x => x.phase === 1), d2 = res.log.filter(x => x.phase === 2);
+  for (let i = 0; i < d1.length; i++) { const x = d1[i]; set("parent_feedback_simulation", 40 + (i + 1) / d1.length * 25, `UCB1 round ${i + 1}/${d1.length}: simulated feedback for ${x.id} (reward ${x.r.toFixed(2)}), running Q = ${x.q.toFixed(3)}`); await wait(260); }
+  for (let i = 0; i < d2.length; i++) { const x = d2[i]; set("child_reward_calculation", 65 + (i + 1) / d2.length * 25, `Depth-2 expansion ${i + 1}/${d2.length}: repaired ${x.id} into ${x.child}, total_q = ${x.q.toFixed(3)}`); await wait(260); }
+  set("final_selection", 95, `Selecting the best prompt (Q = ${res.q.toFixed(3)})...`); await wait(500);
+  set("complete", 100, "Complete!"); await wait(500);
+  ov.hidden = true;
+  return res;
+}
+async function improve() {
+  if (st.busy) return;
+  const text = st.draftPrompt.trim();
+  const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (norm(text) !== norm(PROMPT)) {
+    const n = $("promptNote"); n.hidden = false;
+    n.textContent = "This demo runs one prompt from the study's travel examples. The original prompt has been restored.";
+    st.draftPrompt = PROMPT; $("promptInput").value = PROMPT; $("charCount").textContent = "Character count: " + PROMPT.length;
+    return;
+  }
+  st.busy = true; $("improve").disabled = true;
+  guide("<b>Searching for the best rewrite.</b> PromptPath drafts candidate rewrites, simulates how you might react to each, and uses UCB1 to spend more simulations on promising candidates.");
+  const search = await runWithOverlay(initialSet(profile()));
+  st.results.unshift({ input: text, search, time: clockNow() });
+  st.llm = null; st.busy = false; st.openSource = true;
+  renderRepair();
+  guide("<b>Compare the prompts.</b> The source analysis shows which words came from your prompt (blue), your profile (red), or the AI (green). Open the enhancement process to see how the winner was chosen, press Generate Output to test it, or press Give Feedback to refine it.");
+}
+async function submitFeedback() {
+  if (st.busy) return;
+  const text = $("fbInput").value.trim();
+  if (!text) { $("fbInput").focus(); return; }
+  const sel = st.results[st.feedbackIdx];
+  st.busy = true;
+  guide("<b>Searching again.</b> Your feedback, the original prompt, and the previous best prompt go into a new round of the search.");
+  const search = await runWithOverlay(feedbackSet(sel.search.repaired, text));
+  st.results.unshift({ input: text, feedback: text, original: sel.original || sel.input, search, time: clockNow() });
+  st.feedbackMode = false; st.llm = null; st.busy = false; st.openSource = false;
+  renderRepair();
+  $("repairView").scrollIntoView({ block: "start", behavior: "smooth" });
+  guide("<b>Feedback-based improvement.</b> The new prompt keeps your earlier context and adds the change you asked for. Give feedback again, or test the prompt with Generate Output.");
+}
+
+/* ---------- tabs + reset ---------- */
+function showTab(t) {
+  $("chatView").hidden = t !== "chat"; $("repairView").hidden = t !== "repair";
+  $("tabChat").setAttribute("aria-current", t === "chat" ? "page" : "false");
+  $("tabRepair").setAttribute("aria-current", t === "repair" ? "page" : "false");
+  if (t === "repair") {
+    renderRepair();
+    if (st.submitted && !st.results.length) guide("<b>Improve a prompt.</b> The prompt box holds a short travel prompt. Press Improve Prompt to see how PromptPath rewrites it with your profile.");
+  } else renderChat();
+}
+$("tabChat").onclick = () => { if (!st.busy) showTab("chat"); };
+$("tabRepair").onclick = () => { if (!st.busy) showTab("repair"); };
+function reset() {
+  if (st) st.timers.forEach(clearTimeout);
+  st = { timers: [], busy: false, thinking: false, draftPrompt: PROMPT, feedbackIdx: 0 };
+  $("overlay").hidden = true; $("modal").hidden = true;
+  resetChat(); showTab("chat");
+}
+$("restart").onclick = reset;
+reset();
+})();
+</script>
+</body>
+</html>
