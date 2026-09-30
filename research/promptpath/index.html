@@ -92,6 +92,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .chat-status .count { font-size: 14px; color: var(--gray-600); }
 .msgs { height: 340px; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
 .bubble-row { display: flex; }
+.day-div { display: flex; align-items: center; gap: 12px; color: var(--gray-400); font-size: 12px; }
+.day-div::before, .day-div::after { content: ""; flex: 1; border-top: 1px solid var(--gray-200); }
+.demo-note { margin: 0 0 4px; font-size: 13px; color: var(--gray-500); font-style: italic; }
 .bubble-row.user { justify-content: flex-end; }
 .bubble { max-width: 28rem; padding: 8px 16px; border-radius: 8px; background: var(--gray-200); color: var(--gray-800); }
 .bubble-row.user .bubble { background: var(--blue-500); color: #fff; }
@@ -268,15 +271,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   <header class="demo-head">
     <h1>PromptPath</h1>
     <p class="byline">Christine P. Lee, Evan Pan, David Porfirio, and Bilge Mutlu. Under review.</p>
-    <p class="lede">PromptPath keeps a persistent profile of the user and brings it into the prompts they write. It rewrites a prompt by searching over candidate repairs, simulating how the user would react to each one. Try it by building a short profile and asking for trip ideas.</p>
+    <p class="lede">PromptPath keeps a persistent profile of the user and brings it into the prompts they write. It rewrites a prompt by searching over candidate repairs, simulating how the user would react to each one. Try it by telling it about a family, then asking it to write an email.</p>
     <p class="disclose">The LLM's responses are scripted for this demo, and the UCB1 search and source analysis run live in your browser.</p>
   </header>
 
   <section class="task" aria-labelledby="taskTitle">
     <div>
-      <h2 id="taskTitle">The task: a short travel prompt</h2>
-      <p>Short prompts leave out what the model needs to know about you. PromptPath first learns about you through a chat and saves what it learns as a profile. When you write a prompt later, it uses that profile to repair the prompt before it goes to the LLM.</p>
-      <p class="task-q">Answer three questions, then ask: "I want to go somewhere warm and interesting in October, not too crowded."</p>
+      <h2 id="taskTitle">The task: an email to a teacher</h2>
+      <p>You are Maya's parent. Over several weeks, you have told PromptPath about Maya's math, her teacher, your routine at home, and how you like to write to teachers. Now you type a short request. It leaves out almost everything the LLM would need, and PromptPath uses your profile to fill it in.</p>
+      <p class="task-q">Send three messages, then ask: "Email Maya's teacher about her math."</p>
     </div>
     <div class="kinds">
       <div class="kind"><b>Profile</b><span>Preferences, needs, and goals from the chat, saved and reused for every later prompt.</span></div>
@@ -332,25 +335,44 @@ const wait = ms => new Promise(res => { const t = setTimeout(res, ms); st.timers
 
 /* =====================================================================
    Profile chat (scripted assistant turns; the visitor picks each reply).
-   Each reply becomes a profile entry with the same fields the backend
-   extracts (Name, Location, Preferences, Needs, Goals).
+   In real use a profile builds up over days and weeks of conversation;
+   here three dated messages stand in for that history. Each reply becomes
+   a profile entry with the fields the backend extracts (extract_user_dict:
+   Name, Location, Preferences, Needs, Goals, Habits, Opinions, OtherContext).
    ===================================================================== */
-const OPENER = "Hi there! Before we start improving your prompts, I'd like to get to know you a bit better. What do you usually enjoy most when you travel?";
+const FIELDS = ["Preferences", "Needs", "Goals", "Habits", "Opinions", "OtherContext"];
+const OPENER = "Hi! I can help with writing and planning for your family. What's on your mind as the school year starts?";
 const TURNS = [
-  { key: "P", options: [
-      { id: "food", text: "I plan trips around food. Local markets and small family-run restaurants are my favorite part.", items: ["local markets", "small family-run restaurants"], clause: "local markets and small family-run restaurants" },
-      { id: "outdoors", text: "I like being outdoors. Coastal hikes and swimming are what I look forward to most.", items: ["coastal hikes", "swimming"], clause: "coastal hikes and swimming" }],
-    field: "Preferences", next: "That's great to know! Who do you usually travel with, and is there anything you need to plan around?" },
-  { key: "N", options: [
-      { id: "toddler", text: "Usually with my partner and our 2-year-old, so we need short travel days and nap time.", items: ["short travel days", "nap time for a 2-year-old"], clause: "short travel days and nap time for a 2-year-old" },
-      { id: "solo", text: "Mostly solo on a tight budget, so I look for affordable stays near public transit.", items: ["affordable stays", "near public transit"], clause: "affordable stays near public transit" }],
-    field: "Needs", next: "Thanks, that helps. What do you hope to get out of your trips this year?" },
-  { key: "G", options: [
-      { id: "rest", text: "I want to actually rest this time and keep the schedule light.", items: ["rest", "light schedule"], clause: "a light schedule with time to rest" },
-      { id: "spanish", text: "I want to practice my Spanish and meet locals.", items: ["practicing Spanish", "meeting locals"], clause: "chances for practicing Spanish and meeting locals" }],
-    field: "Goals", next: "Thank you! I've saved what you shared to your profile. You can review it with View Profile Data, then complete your profile to continue." },
+  { key: "T1", date: "Tue, Sep 8", options: [
+      { id: "fractions", text: "Maya just started 3rd grade. Her teacher is Ms. Rivera, but she's on maternity leave until the end of September. Maya is struggling with fractions, so we set up weekly check-ins with her teacher until she catches up.",
+        entry: { Needs: ["help Maya with fractions", "weekly check-ins with her teacher"], OtherContext: ["Maya is in 3rd grade", "Maya's teacher is Ms. Rivera", "Ms. Rivera is on maternity leave until the end of September"] },
+        subj: "fractions", cadence: "for our weekly check-in", subject: "Weekly check-in on Maya and fractions", intro: "For our weekly check-in:" },
+      { id: "multiplication", text: "Maya just started 3rd grade. Her teacher is Ms. Rivera, but she's on maternity leave until the end of September. Maya keeps mixing up her multiplication facts, and the school sends a progress update every two weeks.",
+        entry: { Needs: ["help Maya with multiplication facts"], OtherContext: ["Maya is in 3rd grade", "Maya's teacher is Ms. Rivera", "Ms. Rivera is on maternity leave until the end of September", "progress update every two weeks"] },
+        subj: "multiplication facts", cadence: "before the next progress update", subject: "Maya and multiplication facts", intro: "Ahead of the next progress update:" }],
+    next: "Thanks for telling me. I'll keep that in mind. How is practice going at home?" },
+  { key: "T2", date: "Sat, Sep 19", options: [
+      { id: "nightly", text: "We do 15 minutes of practice each night after dinner. I want to build her confidence, not turn math into a fight. Her little brother Leo has soccer Saturday mornings, so weekends are busy.",
+        entry: { Habits: ["15 minutes of practice each night"], Goals: ["build Maya's confidence in math"], OtherContext: ["Leo has soccer Saturday mornings"] },
+        home: "15 minutes of practice each night", ask: "Ask what we should focus on to build Maya's confidence in math",
+        homeLine: s => `we have kept up 15 minutes of ${s} practice each night.`, askLine: "Is there anything specific we should focus on next to build her confidence?" },
+      { id: "flashcards", text: "We practice with flash cards on weekends, but she gets frustrated fast. I think she needs extra help at school. Her little brother Leo has soccer Saturday mornings, so weekends are busy.",
+        entry: { Habits: ["flash cards on weekends"], Goals: ["extra help at school"], OtherContext: ["Leo has soccer Saturday mornings"] },
+        home: "flash cards on weekends", ask: "Ask whether Maya can get extra help at school",
+        homeLine: () => "we practice with flash cards on weekends, but she gets frustrated quickly.", askLine: "Could Maya get some extra help at school, even once a week?" }],
+    next: "Got it. Anything new this week? And how do you like to reach her teacher?" },
+  { key: "T3", date: "Sat, Sep 26", options: [
+      { id: "warm", text: "Good news: Maya did better on last week's quiz! Ms. Rivera is back from leave now. When I write to teachers I keep emails short and warm, since I want to partner with them, not just complain. I'm free Tuesdays and Thursdays after 4pm.",
+        entry: { Preferences: ["short, warm emails", "free Tuesdays and Thursdays after 4pm"], Opinions: ["partner with teachers, not just complain"], OtherContext: ["Maya did better on last week's quiz", "Ms. Rivera is back from leave"] },
+        tone: "short, warm", quiz: "Maya did better on last week's quiz", stance: "keep the tone collaborative so we partner with her", avail: "Tuesdays or Thursdays after 4pm",
+        quizLine: "Maya was proud of her better quiz score last week, and", availLine: "I am happy to meet Tuesday or Thursday after 4pm if that would help.", sign: "Warmly," },
+      { id: "detailed", text: "Maya's quiz score dropped again last week, and I'm getting worried. Ms. Rivera is back from leave now. I'd rather lay out the details so the teacher has the full picture. I can talk Monday or Wednesday mornings.",
+        entry: { Preferences: ["detailed emails with specifics", "Monday or Wednesday mornings"], Opinions: ["the teacher should have the full picture"], OtherContext: ["Maya's quiz score dropped last week", "Ms. Rivera is back from leave"] },
+        tone: "detailed", quiz: "Maya's quiz score dropped last week", stance: "include the details so she has the full picture", avail: "Monday or Wednesday mornings",
+        quizLine: "Maya's quiz score dropped again last week, and we are worried she is falling behind. At home,", availLine: "I can talk Monday or Wednesday mornings if a call is easier.", sign: "Thank you," }],
+    next: "Thank you! I've saved what you shared to your profile. You can review it with View Profile Data, then complete your profile to continue." },
 ];
-const PROMPT = "I want to go somewhere warm and interesting in October, not too crowded.";
+const PROMPT = "Email Maya's teacher about her math.";
 
 /* =====================================================================
    Scripted LLM outputs for the MDP search. Candidate rewrites (LLM 1),
@@ -359,47 +381,48 @@ const PROMPT = "I want to go somewhere warm and interesting in October, not too 
    backend/src/agent_2.py (evaluate_action_ucb_depth_2).
    ===================================================================== */
 function initialSet(pr) {
-  const P = pr.P.clause, N = pr.N.clause, G = pr.G.clause;
-  const a1 = `Suggest one warm, interesting destination for October that is not too crowded, with ${P}. Plan around ${N}, and keep ${G} in mind.`;
-  const a2 = `Recommend three warm destinations for October that avoid peak crowds. For each, explain how it fits someone who enjoys ${P} and needs ${N}.`;
-  const a3 = `Suggest a warm and interesting place to visit in October that is less crowded, and explain what makes it worth visiting.`;
+  const a = pr.T1, b = pr.T2, c = pr.T3;
+  const a1 = `Write a ${c.tone} email to Ms. Rivera, Maya's 3rd grade teacher, ${a.cadence} on Maya's ${a.subj}. Welcome her back from maternity leave, mention that ${c.quiz}, and say that we are doing ${b.home}. ${b.ask}, and ${c.stance}. Offer to meet ${c.avail}.`;
+  const a2 = `Write an email to Ms. Rivera about Maya's ${a.subj}. Mention that ${c.quiz}, and ask how we can help at home.`;
+  const a3 = `Write a polite email to Maya's teacher asking how Maya is doing in math and how we can support her at home.`;
+  const shortLine = c.id === "warm" ? " Keep it under 120 words." : " Keep it to one screen.";
   return [
     { id: "a1", prompt: a1, feedback: [
-        ["This fits what I like. Can you also say roughly how many days to stay?", 0.78],
-        ["Good, but I'd want to know how to get there.", 0.70],
-        ["It covers what matters to me, but it reads like a checklist.", 0.62]],
+        ["This is the email I'd want to send.", 0.80],
+        ["Good, but put the main question first so it's easy to answer.", 0.74],
+        ["It covers everything, but it might be long for a first email after her leave.", 0.66]],
       children: [
-        [a1 + " Suggest how many days to stay.", 0.86],
-        [a1 + " Include how to get there and how long the trip takes.", 0.80],
-        [`Suggest one warm, less crowded destination for October. It should offer ${P}, work with ${N}, and allow ${G}.`, 0.77]] },
+        [a1 + " Sign it from Maya's mom.", 0.86],
+        [a1 + " Put the main question in the first two sentences.", 0.82],
+        [a1 + shortLine, 0.78]] },
     { id: "a2", prompt: a2, feedback: [
-        ["Three options is helpful, but I'd still have to pick one myself.", 0.66],
-        ["I like the comparison. Add when each place is least crowded.", 0.74],
-        ["This covers my interests but not what I want from the trip.", 0.58]],
+        ["It leaves out that she just came back from leave.", 0.58],
+        ["Good start, but I want to suggest times to meet.", 0.62],
+        ["It doesn't mention what we do at home.", 0.55]],
       children: [
-        [`Recommend the single best warm destination for October that avoids peak crowds, and explain how it fits someone who enjoys ${P} and needs ${N}.`, 0.79],
-        [a2 + " Note the weeks in October when each is least crowded.", 0.76],
-        [a2 + ` Also consider ${G}.`, 0.81]] },
+        [a2.replace("Write an email to Ms. Rivera", "Write an email to Ms. Rivera, welcoming her back from maternity leave,"), 0.72],
+        [a2 + ` Offer to meet ${c.avail}.`, 0.74],
+        [a2 + ` Mention that we are doing ${b.home}.`, 0.70]] },
     { id: "a3", prompt: a3, feedback: [
-        ["This could be for anyone. It doesn't know what I like.", 0.31],
-        ["Too vague. Interesting in what way?", 0.28],
-        ["I'd have to add all my details again.", 0.35]],
+        ["This could go to any teacher. She has a name.", 0.30],
+        ["It doesn't say what Maya is struggling with.", 0.27],
+        ["I'd have to rewrite most of it.", 0.33]],
       children: [
-        [a3 + " Include the kinds of activities available.", 0.42],
-        [a3 + " Describe the main activities and atmosphere.", 0.40],
-        [a3 + " Ask me follow-up questions if needed.", 0.38]] },
+        [a3.replace("Maya's teacher", "Ms. Rivera"), 0.40],
+        [a3 + ` Mention that she is struggling with ${a.subj}.`, 0.42],
+        [a3 + " Keep it short.", 0.36]] },
   ];
 }
 const FEEDBACK_PRESETS = [
-  { k: "food", text: "Can you include a local food experience?", clause: "Include one local food experience, such as a cooking class or a market tour." },
-  { k: "slow", text: "This sounds too fast-paced, slow it down.", clause: "Keep the pace slow, with no more than one main activity per day." },
-  { k: "structure", text: "Add more structure to the schedule.", clause: "Organize the answer as a day-by-day schedule." },
+  { k: "thanks", text: "Also thank her for the worksheets she sent home.", clause: "Thank her for the practice worksheets she sent home." },
+  { k: "casual", text: "Make it sound less formal.", clause: "Use a relaxed, friendly tone, like a note between people who know each other." },
+  { k: "call", text: "Ask for a quick call instead of a meeting.", clause: "Ask for a quick phone call instead of an in-person meeting." },
 ];
 function feedbackClause(text) {
   const t = text.toLowerCase();
-  if (/food|eat|restaurant|cook|market/.test(t)) return FEEDBACK_PRESETS[0].clause;
-  if (/slow|pace|relax|fast|rush|calm/.test(t)) return FEEDBACK_PRESETS[1].clause;
-  if (/struct|schedule|day-by-day|itinerary|plan/.test(t)) return FEEDBACK_PRESETS[2].clause;
+  if (/thank|worksheet/.test(t)) return FEEDBACK_PRESETS[0].clause;
+  if (/formal|casual|friendly|relax|stiff/.test(t)) return FEEDBACK_PRESETS[1].clause;
+  if (/call|phone/.test(t)) return FEEDBACK_PRESETS[2].clause;
   const s = text.trim().replace(/\s+/g, " ");
   return "Also, " + s.charAt(0).toLowerCase() + s.slice(1) + (/[.?!]$/.test(s) ? "" : ".");
 }
@@ -407,14 +430,14 @@ function feedbackSet(prev, text) {
   const C = feedbackClause(text);
   const b1 = `${prev} ${C}`;
   const b2 = `${C} ${prev}`;
-  const b3 = `${prev} ${C} Explain briefly why each suggestion fits me.`;
+  const b3 = `${prev} ${C} Keep everything else the same.`;
   return [
-    { id: "a1", prompt: b1, feedback: [["That's the change I asked for.", 0.80], ["Good. Keep the rest the same.", 0.76], ["Fine, though it's getting long.", 0.64]],
-      children: [[b1 + " Keep the answer concise.", 0.84], [b1 + " Mention anything I should book ahead.", 0.79], [b1.replace(/ Plan around /, " Please plan around "), 0.70]] },
+    { id: "a1", prompt: b1, feedback: [["That's the change I asked for.", 0.80], ["Good. The rest still sounds like me.", 0.76], ["Fine, though it's getting long.", 0.64]],
+      children: [[b1 + " Keep it concise.", 0.84], [b1 + " Sign it from Maya's mom.", 0.79], [b1 + " Use short paragraphs.", 0.72]] },
     { id: "a2", prompt: b2, feedback: [["It leads with my request, which is clear.", 0.72], ["The order feels a little odd.", 0.60], ["This works.", 0.70]],
-      children: [[b2 + " Keep the answer concise.", 0.74], [prev + " " + C, 0.71], [b2 + " Mention anything I should book ahead.", 0.73]] },
-    { id: "a3", prompt: b3, feedback: [["I like knowing why each suggestion fits.", 0.78], ["The explanation might be too much.", 0.62], ["Good balance.", 0.74]],
-      children: [[b3 + " Keep each explanation to one sentence.", 0.83], [b1, 0.76], [b3 + " Keep the answer concise.", 0.78]] },
+      children: [[b2 + " Keep it concise.", 0.74], [prev + " " + C, 0.71], [b2 + " Use short paragraphs.", 0.73]] },
+    { id: "a3", prompt: b3, feedback: [["Good, it only changes what I asked.", 0.78], ["The last line is unnecessary.", 0.62], ["Good balance.", 0.74]],
+      children: [[b3 + " Keep it concise.", 0.83], [b1, 0.76], [b3 + " Sign it from Maya's mom.", 0.78]] },
   ];
 }
 
@@ -516,56 +539,60 @@ function highlight(text, sources) {
 }
 
 /* ---------- scripted LLM output for "Test Your Enhanced Prompt" ---------- */
-function llmOutput(pr) {
-  const dest = { "food-rest": "Puglia, Italy", "food-spanish": "Valencia, Spain", "outdoors-rest": "Madeira, Portugal", "outdoors-spanish": "Tenerife, Canary Islands" }[pr.P.id + "-" + pr.G.id];
-  const why = {
-    food: "Mornings at the covered market and long lunches at small family-run restaurants are easy to build a day around.",
-    outdoors: "Coastal hiking trails and calm swimming spots are close together, so you can do both without long drives.",
-    toddler: "Pick one base and keep day trips under an hour so you can plan around naps and short travel days.",
-    solo: "Stay near the main bus or tram lines. Guesthouses and hostels keep costs low outside the summer season.",
-    rest: "Keep one activity per day and leave afternoons open.",
-    spanish: "Cooking classes, market stalls, and language exchange evenings are good places to practice Spanish and meet locals.",
-  };
-  return `<p><strong>${esc(dest)}</strong> is a good fit for October. Daytime temperatures are usually warm, and the summer crowds have thinned out.</p>
-    <p>Why it fits you:</p>
-    <ul><li>${esc(why[pr.P.id])}</li><li>${esc(why[pr.N.id])}</li><li>${esc(why[pr.G.id])}</li></ul>
-    <p>Would you like a day-by-day plan next?</p>`;
+function llmOutput(pr, feedbacks) {
+  const a = pr.T1, b = pr.T2, c = pr.T3;
+  const f = (feedbacks || []).join(" ").toLowerCase();
+  const thanks = /thank|worksheet/.test(f) ? " Thank you also for the practice worksheets you sent home. They have been a big help." : "";
+  const casual = /formal|casual|friendly|relax|stiff/.test(f);
+  const call = /call|phone/.test(f);
+  const hi = casual ? "Hi Ms. Rivera!" : "Hi Ms. Rivera,";
+  const welcome = casual ? "Welcome back, and congrats on the new baby! It's so nice to have you back with the class." : "Welcome back, and congratulations on your new baby! We are so glad you are back with the class.";
+  const body = `${a.intro} ${c.quizLine} ${b.homeLine(a.subj)}${thanks} ${b.askLine}`;
+  const detail = c.id === "detailed" ? `<p>Here is what we have noticed at home: she understands the idea when we work through it together, but she freezes when she has to do problems on her own.</p>` : "";
+  const avail = call ? (c.id === "warm" ? "Would a quick phone call work? I am free Tuesday or Thursday after 4pm." : "Would a quick phone call work? I can talk Monday or Wednesday mornings.") : c.availLine;
+  return `<p style="color:var(--gray-500);font-size:14px">Subject: ${esc(a.subject)}</p>
+    <p>${esc(hi)}</p><p>${esc(welcome)}</p><p>${esc(body)}</p>${detail}<p>${esc(avail)}</p>
+    <p>${esc(c.sign)}<br>Maya's mom</p>`;
 }
 
 /* =====================================================================
    UI
    ===================================================================== */
 const clockNow = () => new Date().toLocaleString();
-function profile() { return { P: st.choices.P, N: st.choices.N, G: st.choices.G }; }
+function fieldChips(e) {
+  const cls = { Preferences: "p", Needs: "n", Goals: "g", Habits: "p", Opinions: "g", OtherContext: "n" };
+  return FIELDS.map(k => (e[k] || []).length ? `<div class="k">${k} (${e[k].length}):</div><div class="chips ${cls[k]}">${e[k].map(x => `<span>${esc(x)}</span>`).join("")}</div>` : "").join("");
+}
+function profile() { return { T1: st.choices.T1, T2: st.choices.T2, T3: st.choices.T3 }; }
 function entries() { return st.entries; }
 
 /* ---------- chat screen ---------- */
 function renderChat() {
   const v = $("chatView");
   const done = st.turn >= TURNS.length;
-  const convs = Math.floor((st.messages.length - 1) / 2);
+  const convs = st.turn;
   v.innerHTML = `<div class="card chat-card">
     <div class="chat-head"><h1 class="h1">Profile Building Chat</h1><p class="muted">Tell us about your preferences to personalize your experience</p></div>
     <div class="chat-status">
       <div class="left"><button type="button" class="btn blue5 sm" id="viewProfile">📊 View Profile Data (${st.entries.length})</button>
       <button type="button" class="btn red sm" id="resetAll">🗑️ Reset All</button></div>
-      <div class="count">Messages: ${st.messages.length} | Profile Entries: ${st.entries.length}</div>
+      <div class="count">Messages: ${st.messages.filter(m => !m.date).length} | Profile Entries: ${st.entries.length}</div>
     </div>
     ${st.submitted ? `<div class="done"><div class="big" aria-hidden="true">✅</div><h2 class="h1">Profile Complete!</h2>
       <p class="muted" style="margin:16px 0 24px">Your preferences have been saved and will be used to personalize your prompt improvements.</p>
-      <div class="summary"><strong>Profile Summary:</strong> ${st.entries.length} entries across Preferences, Needs, and Goals</div>
+      <div class="summary"><strong>Profile Summary:</strong> ${st.entries.length} entries saved to your profile</div>
       <button type="button" class="btn blue lg" id="goRepair">Continue to Prompt Improvement →</button></div>` : `
-    <div class="msgs" id="msgs">${st.messages.map(m => `<div class="bubble-row ${m.role}"><div class="bubble">${esc(m.content)}</div></div>`).join("")}
+    <div class="msgs" id="msgs">${st.messages.map(m => m.date ? `<div class="day-div"><span>${esc(m.date)}</span></div>` : `<div class="bubble-row ${m.role}"><div class="bubble">${esc(m.content)}</div></div>`).join("")}
       ${st.thinking ? `<div class="bubble-row"><div class="bubble thinking"><span class="spin-sm"></span><span>Thinking...</span></div></div>` : ""}</div>
     <div class="chat-input">
-      ${!done && !st.thinking ? `<div class="replies"><p>Choose a reply (in the study, participants typed freely):</p>${TURNS[st.turn].options.map(o => `<button type="button" class="reply" data-o="${o.id}" aria-pressed="${st.draft === o.id}">${esc(o.text)}</button>`).join("")}</div>` : ""}
+      ${!done && !st.thinking ? `<div class="replies"><p>${esc(TURNS[st.turn].date)}: choose a reply (in real use, people type freely):</p>${TURNS[st.turn].options.map(o => `<button type="button" class="reply" data-o="${o.id}" aria-pressed="${st.draft === o.id}">${esc(o.text)}</button>`).join("")}</div>` : ""}
       <div class="row"><input class="field" id="chatInput" readonly placeholder="Share your preferences, needs, or goals..." value="${st.draft ? esc(TURNS[st.turn].options.find(o => o.id === st.draft).text) : ""}" aria-label="Message">
       <button type="button" class="btn blue5" id="send" ${st.draft && !st.thinking ? "" : "disabled"}>Send</button></div>
-      <div class="prog-row"><b>Conversation Progress</b><span>${convs} / ${TURNS.length} conversations</span></div>
+      <p class="demo-note">In real use, a profile builds up over days and weeks of conversation. This demo uses three short exchanges for demonstration.</p><div class="prog-row"><b>Conversation Progress</b><span>${convs} / ${TURNS.length} conversations</span></div>
       <div class="bar"><div style="width:${Math.min(convs / TURNS.length * 100, 100)}%"></div></div>
       ${done ? `<p class="small ok-note" style="margin:6px 0 0">✅ ${TURNS.length} conversations completed! You can continue to the next step.</p>` : ""}
       <div class="center-col"><button type="button" class="btn green lg" id="completeProfile" ${done && !st.thinking ? "" : "disabled"}>Complete Profile &amp; Continue →</button>
-      ${done ? "" : `<p>Have at least ${TURNS.length} conversations to continue (the study required 20)</p>`}</div>
+      ${done ? "" : `<p>Have at least ${TURNS.length} conversations to continue</p>`}</div>
     </div>`}
   </div>`;
   const msgs = $("msgs"); if (msgs) msgs.scrollTop = msgs.scrollHeight;
@@ -582,25 +609,26 @@ function renderChat() {
 async function sendReply() {
   if (!st.draft || st.thinking) return;
   const t = TURNS[st.turn], o = t.options.find(x => x.id === st.draft);
+  if (st.turn > 0) st.messages.push({ date: t.date });
   st.messages.push({ role: "user", content: o.text });
   st.choices[t.key] = o;
-  st.entries.push({ Name: "", Location: "", Preferences: t.field === "Preferences" ? o.items : [], Needs: t.field === "Needs" ? o.items : [], Goals: t.field === "Goals" ? o.items : [] });
+  st.entries.push({ Name: "", Location: "", ...Object.fromEntries(FIELDS.map(k => [k, o.entry[k] || []])) });
   st.draft = null; st.thinking = true; renderChat();
   await wait(1100);
   st.thinking = false; st.messages.push({ role: "assistant", content: t.next }); st.turn++;
   renderChat();
   if (st.turn >= TURNS.length) guide("<b>Profile built.</b> Open View Profile Data to see what was extracted, then press Complete Profile &amp; Continue.");
-  else guide(`<b>Build your profile.</b> Pick a reply and press Send. ${st.turn} of ${TURNS.length} answered.`);
+  else guide(`<b>Build your profile.</b> The next message is from ${TURNS[st.turn].date}. Pick a reply and press Send. ${st.turn} of ${TURNS.length} sent.`);
 }
 function resetChat() {
-  st.messages = [{ role: "assistant", content: OPENER }]; st.turn = 0; st.entries = []; st.choices = {}; st.draft = null; st.submitted = false;
+  st.messages = [{ date: TURNS[0].date }, { role: "assistant", content: OPENER }]; st.turn = 0; st.entries = []; st.choices = {}; st.draft = null; st.submitted = false;
   st.results = []; st.feedbackMode = false; st.llm = null;
   renderChat(); renderRepair();
-  guide("<b>Build your profile.</b> PromptPath first learns about you through a chat and saves what it learns as a profile. Pick a reply and press Send.");
+  guide("<b>Build your profile.</b> You are Maya's parent. PromptPath learns about your family through chat and saves what it learns as a profile. Pick a reply and press Send. In real use this happens over days and weeks; here, three dated messages stand in for that history.");
 }
 function openProfile() {
   $("modalBody").innerHTML = st.entries.length ? st.entries.map((e, i) => `<div class="prof"><h5>Entry ${i + 1}</h5><div class="in">
-      ${["Preferences", "Needs", "Goals"].map((k, j) => e[k].length ? `<div class="k">${k} (${e[k].length}):</div><div class="chips ${"png"[j]}">${e[k].map(x => `<span>${esc(x)}</span>`).join("")}</div>` : "").join("")}
+      ${fieldChips(e)}
     </div></div>`).join("") : `<p class="muted">No profile entries yet. Send a message in the chat to start building your profile.</p>`;
   $("modal").hidden = false; $("modalClose").focus();
 }
@@ -650,7 +678,7 @@ function srcHtml(r) {
     <p class="sub">Enhanced Prompt:</p><div class="q e">${highlight(r.search.repaired, analyzeSources(r.input, r.search.repaired, e))}</div>
     <p class="sub">Context Used from Your Saved Profile:</p>
     ${e.slice(0, 3).map((x, i) => `<div class="prof"><h5>User Profile ${i + 1}</h5><div class="in">
-      ${["Preferences", "Needs", "Goals"].map((k, j) => x[k].length ? `<div class="k">${k} (${x[k].length}):</div><div class="chips ${"png"[j]}">${x[k].map(y => `<span>${esc(y)}</span>`).join("")}</div>` : "").join("")}</div></div>`).join("")}
+      ${fieldChips(x)}</div></div>`).join("")}
   </div>`;
 }
 function renderRepair() {
@@ -705,7 +733,7 @@ function renderRepair() {
   if ($("llmGo")) $("llmGo").onclick = async () => {
     st.llmBusy = true; renderRepair();
     await wait(1600);
-    st.llmBusy = false; st.llm = llmOutput(profile()); renderRepair();
+    st.llmBusy = false; st.llm = llmOutput(profile(), st.results.map(r => r.feedback).filter(Boolean)); renderRepair();
   };
 }
 
@@ -737,7 +765,7 @@ async function improve() {
   const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g, "");
   if (norm(text) !== norm(PROMPT)) {
     const n = $("promptNote"); n.hidden = false;
-    n.textContent = "This demo runs one prompt from the study's travel examples. The original prompt has been restored.";
+    n.textContent = "This demo runs one request. The original request has been restored.";
     st.draftPrompt = PROMPT; $("promptInput").value = PROMPT; $("charCount").textContent = "Character count: " + PROMPT.length;
     return;
   }
@@ -771,7 +799,7 @@ function showTab(t) {
   $("tabRepair").setAttribute("aria-current", t === "repair" ? "page" : "false");
   if (t === "repair") {
     renderRepair();
-    if (st.submitted && !st.results.length) guide("<b>Improve a prompt.</b> The prompt box holds a short travel prompt. Press Improve Prompt to see how PromptPath rewrites it with your profile.");
+    if (st.submitted && !st.results.length) guide("<b>Improve a prompt.</b> The prompt box holds a short request: &ldquo;Email Maya's teacher about her math.&rdquo; Press Improve Prompt to see how PromptPath fills in what it leaves out.");
   } else renderChat();
 }
 $("tabChat").onclick = () => { if (!st.busy) showTab("chat"); };
