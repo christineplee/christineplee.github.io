@@ -83,12 +83,12 @@
 /* Each thread is a panel: a tinted header band carries the thread's title and framing, papers sit on white below it. */
 .rs[data-layout="c"] { row-gap: 28px; column-gap: 28px; }
 .rs[data-layout="c"] .thread { border: 1px solid var(--rule); border-radius: 12px; background: #fff; padding: 0; overflow: hidden; }
-.rs[data-layout="c"] .th { background-color: #f8f8f7; background-image: radial-gradient(circle, #d9d6d2 1px, transparent 1.3px); background-size: 14px 14px; background-position: 7px 7px; padding: 24px 28px 22px; border-bottom: 1px solid #e6e5e3; margin: 0; position: static; }
+.rs[data-layout="c"] .th { background-color: #fcfbfc; background-image: radial-gradient(circle, #d6c4d1 1px, transparent 1.3px); background-size: 14px 14px; background-position: 7px 7px; padding: 24px 28px 22px; border-bottom: 1px solid #eee6ec; margin: 0; position: static; }
 .rs[data-layout="c"] .th h2 { font-size: 24px; margin-bottom: 8px; }
 .rs[data-layout="c"] .th p { max-width: 60ch; }
 .rs[data-layout="c"] .entries { padding: 26px 28px 30px; }
 .rs[data-layout="c"] #mechanisms { grid-template-columns: 320px minmax(0, 1fr); column-gap: 0; align-items: stretch; }
-.rs[data-layout="c"] #mechanisms .th { border-bottom: 0; border-right: 1px solid #e6e5e3; padding: 28px; }
+.rs[data-layout="c"] #mechanisms .th { border-bottom: 0; border-right: 1px solid #eee6ec; padding: 28px; }
 .rs[data-layout="c"] #mechanisms .th > * { position: sticky; }
 .rs[data-layout="c"] #mechanisms .entries { padding: 28px 32px 32px; }
 .rs[data-layout="c"] #foundations .th h2, .rs[data-layout="c"] #embodied .th h2 { font-size: 21px; }
@@ -96,9 +96,31 @@
 .rs-head { margin-bottom: 20px; }
 @media (max-width: 900px) {
   .rs[data-layout="c"] .thread { margin-bottom: 24px; }
-  .rs[data-layout="c"] #mechanisms .th { border-right: 0; border-bottom: 1px solid #e6e5e3; }
+  .rs[data-layout="c"] #mechanisms .th { border-right: 0; border-bottom: 1px solid #eee6ec; }
   .rs[data-layout="c"] .th, .rs[data-layout="c"] .entries, .rs[data-layout="c"] #mechanisms .th, .rs[data-layout="c"] #mechanisms .entries { padding-left: 18px; padding-right: 18px; }
 }
+
+/* main thread: header across the top (title | intro and mechanisms), demos in two columns below */
+.rs[data-layout="c"] #mechanisms { display: block; }
+.rs[data-layout="c"] #mechanisms .th { position: static; margin: 0; border-right: 0; border-bottom: 1px solid #eee6ec; display: grid; grid-template-columns: 260px minmax(0, 1fr) minmax(0, 300px); column-gap: 36px; align-items: start; padding: 26px 28px; }
+.rs[data-layout="c"] #mechanisms .th h2 { margin: 0; }
+.rs[data-layout="c"] #mechanisms .th p { margin: 0; }
+.rs[data-layout="c"] #mechanisms .th .mech { margin: 0; }
+.rs[data-layout="c"] #mechanisms .th .aside { grid-column: 2 / -1; margin-top: 12px; }
+.rs[data-layout="c"] #mechanisms .entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 40px; }
+.rs[data-layout="c"] #mechanisms .entries .proj { grid-template-columns: 160px minmax(0, 1fr); gap: 16px; }
+.rs[data-layout="c"] #mechanisms .entries .proj.no-thumb { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 1100px) {
+  .rs[data-layout="c"] #mechanisms .th { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); row-gap: 12px; }
+  .rs[data-layout="c"] #mechanisms .th h2 { grid-column: 1 / -1; }
+  .rs[data-layout="c"] #mechanisms .th .aside { grid-column: 1 / -1; }
+}
+@media (max-width: 900px) {
+  .rs[data-layout="c"] #mechanisms .th, .rs[data-layout="c"] #mechanisms .entries { display: block; }
+  .rs[data-layout="c"] #mechanisms .th .mech { margin-top: 10px; }
+  .rs[data-layout="c"] #mechanisms .entries .proj { margin-bottom: 26px; }
+}
+@media (max-width: 760px) { .rs[data-layout="c"] #mechanisms .entries .proj { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
