@@ -14,6 +14,13 @@
 /* Same two-column layout as the Publications page: page title and intro on the left, groups on the right. */
 .pubs-head .intro-text { font-size: 15px; color: var(--ink); line-height: 1.6; }
 .pub .desc { color: var(--ink); }
+.proj { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 20px; align-items: start; }
+.proj .thumb { display: block; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; line-height: 0; }
+.proj .thumb img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
+.proj .thumb:hover { border-color: var(--accent); }
+.proj .text { display: flex; flex-direction: column; gap: 3px; }
+.year-pubs { gap: 30px; }
+@media (max-width: 760px) { .proj { grid-template-columns: minmax(0, 1fr); gap: 10px; } .proj .thumb { max-width: 360px; } }
 </style>
 </head>
 <body>
@@ -29,42 +36,54 @@
 <main class="pubs-page">
 <header class="pubs-head">
 <h1>Research</h1>
-<p class="intro-text">I study the <em>gulf of delegation</em>: how people can express what matters to them, assess whether an agent's work reflects their intentions, and shape how it acts and adapts without directing every step.</p>
+<p class="intro-text">AI systems increasingly make choices on a person's behalf that the person never spelled out. My approach is to make what the person wants explicit, as rules, a profile, or saved context, so the AI works within it and the person can check and change it.</p>
 <p>Each system below has a demo you can try in the browser.</p>
 </header>
 <div class="pubs-list">
 <section class="year-group">
 <h2 class="year">Specify</h2>
 <div class="year-pubs">
-<article class="pub">
+<article class="pub proj">
+<a class="thumb" href="/research/u-define/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/udefine.webp" alt="U-Define demo: plans with hard-rule violations and soft ratings" width="640" height="400" loading="lazy"></a>
+<div class="text">
 <h3 class="title"><a href="/research/u-define/">U-Define</a></h3>
 <p class="desc">People state their own constraints in natural language and mark each one as hard or soft. Hard rules are checked with model checking, and soft preferences are rated by an LLM judge.</p>
 <p class="links"><a href="/research/u-define/">Try the demo</a><a href="https://arxiv.org/abs/2605.02765">Paper</a></p>
+</div>
 </article>
-<article class="pub">
+<article class="pub proj">
+<a class="thumb" href="/research/cip/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/cip.webp" alt="CIP demo: responses for participants with different profiles" width="640" height="400" loading="lazy"></a>
+<div class="text">
 <h3 class="title"><a href="/research/cip/">Communication Initialization Profile (CIP)</a></h3>
 <p class="desc">A 16-item profile that gives an LLM a starting point for how to communicate with someone before it has any history with them.</p>
 <p class="links"><a href="/research/cip/">Try the demo</a></p>
+</div>
 </article>
 </div>
 </section>
 <section class="year-group">
 <h2 class="year">Check</h2>
 <div class="year-pubs">
-<article class="pub">
+<article class="pub proj">
+<a class="thumb" href="/research/veriplan/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/veriplan.webp" alt="VeriPlan demo: planning attempts and the rules each one broke" width="640" height="400" loading="lazy"></a>
+<div class="text">
 <h3 class="title"><a href="/research/veriplan/">VeriPlan</a></h3>
 <p class="desc">Checks an LLM's plan against rules the user confirms, using model checking, and sends any violations back to the user and the LLM.</p>
 <p class="links"><a href="/research/veriplan/">Try the demo</a><a href="https://doi.org/10.1145/3706598.3714113">Paper</a></p>
+</div>
 </article>
 </div>
 </section>
 <section class="year-group">
 <h2 class="year">Revise</h2>
 <div class="year-pubs">
-<article class="pub">
+<article class="pub proj">
+<a class="thumb" href="/research/promptpath/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/promptpath.webp" alt="PromptPath demo: an enhanced prompt colored by where each word came from" width="640" height="400" loading="lazy"></a>
+<div class="text">
 <h3 class="title"><a href="/research/promptpath/">PromptPath</a></h3>
 <p class="desc">Keeps a persistent profile of the user and uses it to repair short prompts, showing which words came from the prompt, the profile, or the AI.</p>
 <p class="links"><a href="/research/promptpath/">Try the demo</a></p>
+</div>
 </article>
 </div>
 </section>
