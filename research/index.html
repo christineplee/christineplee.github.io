@@ -100,27 +100,14 @@
   .rs[data-layout="c"] .th, .rs[data-layout="c"] .entries, .rs[data-layout="c"] #mechanisms .th, .rs[data-layout="c"] #mechanisms .entries { padding-left: 18px; padding-right: 18px; }
 }
 
-/* main thread: header across the top (title | intro and mechanisms), demos in two columns below */
-.rs[data-layout="c"] #mechanisms { display: block; }
-.rs[data-layout="c"] #mechanisms .th { position: static; margin: 0; border-right: 0; border-bottom: 1px solid #eee6ec; display: grid; grid-template-columns: 260px minmax(0, 1fr) minmax(0, 300px); column-gap: 36px; align-items: start; padding: 26px 28px; }
-.rs[data-layout="c"] #mechanisms .th h2 { margin: 0; }
-.rs[data-layout="c"] #mechanisms .th p { margin: 0; }
-.rs[data-layout="c"] #mechanisms .th .mech { margin: 0; }
-.rs[data-layout="c"] #mechanisms .th .aside { grid-column: 2 / -1; margin-top: 12px; }
-.rs[data-layout="c"] #mechanisms .entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 40px; }
-.rs[data-layout="c"] #mechanisms .entries .proj { grid-template-columns: 160px minmax(0, 1fr); gap: 16px; }
-.rs[data-layout="c"] #mechanisms .entries .proj.no-thumb { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); }
-@media (max-width: 1100px) {
-  .rs[data-layout="c"] #mechanisms .th { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); row-gap: 12px; }
-  .rs[data-layout="c"] #mechanisms .th h2 { grid-column: 1 / -1; }
-  .rs[data-layout="c"] #mechanisms .th .aside { grid-column: 1 / -1; }
-}
-@media (max-width: 900px) {
-  .rs[data-layout="c"] #mechanisms .th, .rs[data-layout="c"] #mechanisms .entries { display: block; }
-  .rs[data-layout="c"] #mechanisms .th .mech { margin-top: 10px; }
-  .rs[data-layout="c"] #mechanisms .entries .proj { margin-bottom: 26px; }
-}
-@media (max-width: 760px) { .rs[data-layout="c"] #mechanisms .entries .proj { grid-template-columns: minmax(0, 1fr); } }
+.fig1 { margin: 22px 0 0; max-width: 250px; }
+.fig1 svg { width: 100%; height: auto; display: block; }
+.fig1 .f-t { font: 500 11px "Hanken Grotesk", system-ui, sans-serif; fill: #232326; }
+.fig1 .f-w { font: 500 12px "Hanken Grotesk", system-ui, sans-serif; fill: #fff; }
+.fig1 .f-n { font: 700 9px "Hanken Grotesk", system-ui, sans-serif; fill: #fff; }
+.fig1 .f-s { font: 400 10.5px "Hanken Grotesk", system-ui, sans-serif; fill: #56545B; }
+.fig1 figcaption { font-size: 13.5px; color: var(--muted); margin-top: 8px; line-height: 1.45; }
+@media (max-width: 900px) { .fig1 { max-width: 260px; } }
 </style>
 </head>
 <body>
@@ -146,6 +133,32 @@
 <li><b>Revise</b> it as things change</li>
 </ol>
 <p class="aside">Each system here has a demo you can try in the browser.</p>
+<figure class="fig1" aria-labelledby="fig1c">
+<svg viewBox="0 0 240 250" role="img" aria-label="The person and the agent share an explicit representation of intent. The person specifies it (1) and checks the agent's choices against it (2), and it is revised over time (3).">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#56545B"/></marker></defs>
+<circle cx="120" cy="26" r="20" fill="#fff" stroke="#56545B"/>
+<text x="120" y="30" text-anchor="middle" class="f-t">You</text>
+<rect x="62" y="98" width="116" height="34" rx="6" fill="#6B2F5E"/>
+<text x="120" y="119" text-anchor="middle" class="f-w">Shared intent</text>
+<rect x="72" y="178" width="96" height="30" rx="6" fill="#232326"/>
+<text x="120" y="197" text-anchor="middle" class="f-w">Agent</text>
+<path d="M132 47 V95" stroke="#56545B" marker-end="url(#ah)"/>
+<path d="M108 95 V47" stroke="#56545B" marker-end="url(#ah)"/>
+<circle cx="146" cy="68" r="7" fill="#232326"/><text x="146" y="71" text-anchor="middle" class="f-n">1</text>
+<text x="157" y="72" class="f-s">specify</text>
+<circle cx="94" cy="68" r="7" fill="#232326"/><text x="94" y="71" text-anchor="middle" class="f-n">2</text>
+<text x="83" y="72" text-anchor="end" class="f-s">check</text>
+<path d="M178 108 C204 104 204 128 178 124" fill="none" stroke="#56545B" marker-end="url(#ah)"/>
+<circle cx="210" cy="116" r="7" fill="#232326"/><text x="210" y="119" text-anchor="middle" class="f-n">3</text>
+<text x="210" y="138" text-anchor="middle" class="f-s">revise</text>
+<path d="M112 135 V175" stroke="#56545B" marker-end="url(#ah)"/>
+<path d="M128 175 V135" stroke="#56545B" marker-end="url(#ah)"/>
+<ellipse cx="120" cy="232" rx="92" ry="14" fill="#fcfbfc" stroke="#b9aab5" stroke-dasharray="3 3"/>
+<text x="120" y="236" text-anchor="middle" class="f-s">many choices you do not see</text>
+<path d="M120 208 V218" stroke="#b9aab5" stroke-dasharray="2 2"/>
+</svg>
+<figcaption id="fig1c">Intent made explicit and shared between the person and the agent.</figcaption>
+</figure>
 </header>
 <div class="entries">
 <article class="pub proj">
