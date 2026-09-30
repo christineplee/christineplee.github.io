@@ -11,30 +11,73 @@
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css?v=4">
 <style>
-/* Same two-column layout as the Publications page: page title and intro on the left, groups on the right. */
-.pubs-head .intro-text { font-size: 15px; color: var(--ink); line-height: 1.6; }
+/* Layout: each research thread is its own band. The thread's title and framing sit in a left column that stays
+   in view only while that thread is on screen; entries run down the right. Alternate layouts (b, c) for comparison. */
+.rs { display: flex; flex-direction: column; padding: 48px 0 40px 24px; }
+@media (max-width: 1100px) { .rs { padding-left: 0; } }
+.rs-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; margin-bottom: 8px; }
+.rs-head h1 { margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.4px; line-height: 1.2; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 15px; }
+.toc a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.toc a:hover { color: var(--accent); border-color: var(--accent); }
+
+.thread { border-top: 1px solid var(--ink); padding: 28px 0 56px; scroll-margin-top: 16px; }
+.th h2 { margin: 0 0 12px; font-size: 26px; font-weight: 500; letter-spacing: -0.3px; line-height: 1.25; text-wrap: balance; }
+.th p { margin: 0 0 10px; font-size: 16px; line-height: 1.6; max-width: 46ch; }
+.th .aside { color: var(--muted); font-size: 15px; margin-top: 14px; }
+.mech { margin: 4px 0 0; padding-left: 20px; font-size: 16px; line-height: 1.5; display: flex; flex-direction: column; gap: 6px; }
+.mech b { font-weight: 500; }
+
+.entries { display: flex; flex-direction: column; gap: 30px; min-width: 0; }
+.pub { display: flex; flex-direction: column; gap: 3px; line-height: 1.55; }
+.pub p { margin: 0; }
+.pub .title { margin: 0; font-size: 16px; font-weight: 500; line-height: 1.55; }
+.pub .title a { color: var(--ink); text-decoration-color: #B9A8B5; }
+.pub .title a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.pub .me { font-weight: 700; white-space: nowrap; }
+.pub .venue { color: var(--muted); }
+.pub .award { color: var(--accent); }
+.pub .links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 2px; font-size: 14px; }
 .pub .desc { color: var(--ink); }
+.pub .authors, .pub .venue { font-size: 14px; }
+.pub .venue a { margin-left: 12px; }
 .proj { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 20px; align-items: start; }
+.proj.no-thumb { grid-template-columns: minmax(0, 1fr); }
 .proj .thumb { display: block; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; line-height: 0; }
 .proj .thumb img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
 .proj .thumb:hover { border-color: var(--accent); }
-.proj .text { display: flex; flex-direction: column; gap: 3px; }
-.year-pubs { gap: 30px; }
-.mech { margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.5; display: flex; flex-direction: column; gap: 6px; }
-.mech b { font-weight: 500; }
-.proj.no-thumb { grid-template-columns: minmax(0, 1fr); }
-.pubs-list { gap: 56px; }
-.thread h2 { font-size: 21px; font-weight: 500; line-height: 1.4; margin: 0 0 6px; }
-.thread-intro { margin: 0 0 20px; max-width: 64ch; color: var(--muted); }
-.entries { display: flex; flex-direction: column; gap: 30px; }
-.thread h2 + .entries { margin-top: 16px; }
-.pub .authors, .pub .venue { font-size: 14px; }
-.pub .venue a { margin-left: 12px; }
+.proj .text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .marks { display: flex; align-items: center; gap: 4px; margin: 2px 0 4px !important; }
 .marks .m { width: 18px; height: 18px; border-radius: 50%; border: 1px solid #cfc8cd; color: #b3abb1; font-size: 11px; line-height: 16px; text-align: center; font-variant-numeric: tabular-nums; }
 .marks .m.on { background: var(--ink); border-color: var(--ink); color: #fff; }
 .marks .mw { margin-left: 6px; font-size: 14px; color: var(--muted); }
-.mech li::marker { font-variant-numeric: tabular-nums; }
+
+/* A: bands. Title column is sticky only within its own thread. */
+.rs[data-layout="a"] .thread { display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 56px; align-items: start; }
+.rs[data-layout="a"] .th { position: sticky; top: 24px; }
+
+/* B: chapters. One column; each thread opens with a large title and framing, entries below. */
+.rs[data-layout="b"] .thread { max-width: 860px; }
+.rs[data-layout="b"] .th { margin-bottom: 28px; }
+.rs[data-layout="b"] .th h2 { font-size: 32px; }
+.rs[data-layout="b"] .th p { max-width: 62ch; font-size: 17px; }
+.rs[data-layout="b"] .mech { flex-direction: row; flex-wrap: wrap; gap: 6px 28px; }
+
+/* C: main thread first and large; the two supporting threads side by side and compact. */
+.rs[data-layout="c"] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; }
+.rs[data-layout="c"] .rs-head, .rs[data-layout="c"] #mechanisms { grid-column: 1 / -1; }
+.rs[data-layout="c"] #mechanisms { display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: 56px; align-items: start; }
+.rs[data-layout="c"] #mechanisms .th { position: sticky; top: 24px; }
+.rs[data-layout="c"] #foundations .proj, .rs[data-layout="c"] #embodied .proj { grid-template-columns: minmax(0, 1fr); }
+.rs[data-layout="c"] #foundations .th h2, .rs[data-layout="c"] #embodied .th h2 { font-size: 22px; }
+.rs[data-layout="c"] #foundations .thumb, .rs[data-layout="c"] #embodied .thumb { max-width: 260px; }
+.rs[data-layout="c"] #foundations, .rs[data-layout="c"] #embodied { padding-top: 24px; }
+
+@media (max-width: 900px) {
+  .rs[data-layout] .thread, .rs[data-layout="c"], .rs[data-layout="c"] #mechanisms { display: block; }
+  .rs[data-layout] .th { position: static; margin-bottom: 22px; }
+  .th p { max-width: 62ch; }
+}
 @media (max-width: 760px) { .proj { grid-template-columns: minmax(0, 1fr); gap: 10px; } .proj .thumb { max-width: 360px; } }
 </style>
 </head>
@@ -48,19 +91,20 @@
 <a href="/assets/pdf/christine-lee-cv.pdf">cv</a>
 </div>
 </nav>
-<main class="pubs-page">
-<header class="pubs-head">
-<h1>Research</h1>
-<p class="intro-text">AI agents make many choices on people's behalf that people do not see. I make a person's intent explicit and shared with the agent, so people can:</p>
+<main class="rs" data-layout="c">
+<header class="rs-head"><h1>Research</h1>
+<nav class="toc" aria-label="Research threads"><a href="#mechanisms">Specify, check, and revise</a><a href="#foundations">Foundations for people and AI to communicate</a><a href="#embodied">Toward embodied agents</a></nav></header>
+<section class="thread" id="mechanisms" aria-labelledby="mechanisms-t">
+<header class="th">
+<h2 id="mechanisms-t">Specify, check, and revise</h2>
+<p>AI agents make many choices on people's behalf that people do not see. I make a person's intent explicit and shared with the agent, so people can:</p>
 <ol class="mech">
 <li><b>Specify</b> what matters</li>
 <li><b>Check</b> the agent's choices against it</li>
 <li><b>Revise</b> it as things change</li>
 </ol>
+<p class="aside">Each system here has a demo you can try in the browser.</p>
 </header>
-<div class="pubs-list">
-<section class="thread">
-<h2>Specify, check, and revise</h2>
 <div class="entries">
 <article class="pub proj">
 <a class="thumb" href="/research/cip/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/cip.webp" alt="CIP demo: responses for participants with different profiles" width="640" height="400" loading="lazy"></a>
@@ -109,9 +153,11 @@
 </article>
 </div>
 </section>
-<section class="thread">
-<h2>Foundations for people and AI to communicate</h2>
-<p class="thread-intro">I have long been interested in how people and AI systems communicate: designing the foundation for it, and understanding how AI plays out in real settings.</p>
+<section class="thread" id="foundations" aria-labelledby="foundations-t">
+<header class="th">
+<h2 id="foundations-t">Foundations for people and AI to communicate</h2>
+<p>I have long been interested in how people and AI systems communicate: designing the foundation for it, and understanding how AI plays out in real settings.</p>
+</header>
 <div class="entries">
 <article class="pub proj no-thumb">
 <div class="text">
@@ -147,9 +193,11 @@
 </article>
 </div>
 </section>
-<section class="thread">
-<h2>Toward embodied agents</h2>
-<p class="thread-intro">My goal is to extend these mechanisms to embodied AI, as agents move into homes and shared spaces.</p>
+<section class="thread" id="embodied" aria-labelledby="embodied-t">
+<header class="th">
+<h2 id="embodied-t">Toward embodied agents</h2>
+<p>My goal is to extend these mechanisms to embodied AI, as agents move into homes and shared spaces.</p>
+</header>
 <div class="entries">
 <article class="pub proj no-thumb">
 <div class="text">
@@ -195,7 +243,6 @@
 </article>
 </div>
 </section>
-</div>
 </main>
 </div>
 </body>
