@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research · Christine P. Lee</title>
+<meta name="description" content="Research by Christine P. Lee on the gulf of delegation between people and AI agents, with interactive demos of the systems.">
+<link rel="canonical" href="https://christineplee.github.io/research/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=4">
+<style>
+/* Same two-column layout as the Publications page: page title and intro on the left, groups on the right. */
+.pubs-head .intro-text { font-size: 15px; color: var(--ink); line-height: 1.6; }
+.pub .desc { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+<nav class="nav" aria-label="Main">
+<a class="home" href="/">Christine P. Lee</a>
+<div class="links">
+<a href="/research/" aria-current="page">research</a>
+<a href="/publications/">publications</a>
+<a href="/assets/pdf/christine-lee-cv.pdf">cv</a>
+</div>
+</nav>
+<main class="pubs-page">
+<header class="pubs-head">
+<h1>Research</h1>
+<p class="intro-text">I study the <em>gulf of delegation</em>: how people can express what matters to them, assess whether an agent's work reflects their intentions, and shape how it acts and adapts without directing every step.</p>
+<p>Each system below has a demo you can try in the browser.</p>
+</header>
+<div class="pubs-list">
+<section class="year-group">
+<h2 class="year">Specify</h2>
+<div class="year-pubs">
+<article class="pub">
+<h3 class="title"><a href="/research/u-define/">U-Define</a></h3>
+<p class="desc">People state their own constraints in natural language and mark each one as hard or soft. Hard rules are checked with model checking, and soft preferences are rated by an LLM judge.</p>
+<p class="links"><a href="/research/u-define/">Try the demo</a><a href="https://arxiv.org/abs/2605.02765">Paper</a></p>
+</article>
+<article class="pub">
+<h3 class="title"><a href="/research/cip/">Communication Initialization Profile (CIP)</a></h3>
+<p class="desc">A 16-item profile that gives an LLM a starting point for how to communicate with someone before it has any history with them.</p>
+<p class="links"><a href="/research/cip/">Try the demo</a></p>
+</article>
+</div>
+</section>
+<section class="year-group">
+<h2 class="year">Check</h2>
+<div class="year-pubs">
+<article class="pub">
+<h3 class="title"><a href="/research/veriplan/">VeriPlan</a></h3>
+<p class="desc">Checks an LLM's plan against rules the user confirms, using model checking, and sends any violations back to the user and the LLM.</p>
+<p class="links"><a href="/research/veriplan/">Try the demo</a><a href="https://doi.org/10.1145/3706598.3714113">Paper</a></p>
+</article>
+</div>
+</section>
+<section class="year-group">
+<h2 class="year">Revise</h2>
+<div class="year-pubs">
+<article class="pub">
+<h3 class="title"><a href="/research/promptpath/">PromptPath</a></h3>
+<p class="desc">Keeps a persistent profile of the user and uses it to repair short prompts, showing which words came from the prompt, the profile, or the AI.</p>
+<p class="links"><a href="/research/promptpath/">Try the demo</a></p>
+</article>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body>
+</html>
