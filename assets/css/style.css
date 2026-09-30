@@ -79,8 +79,8 @@ a:hover { color: var(--accent-hover); }
 }
 .intro .contact { display: flex; gap: 20px; font-size: 15px; }
 .intro p { margin: 0; }
-.intro .lead { margin-top: 8px; font-size: 17px; line-height: 1.55; color: var(--ink); }
-.intro p:not(.lead):not(.personal) { color: #3a373c; }
+.intro .lead { margin-top: 8px; }
+.intro p:not(.personal) { color: #3a373c; }
 .intro .market { color: var(--accent); }
 .intro em.term { white-space: nowrap; }
 .intro .personal {
