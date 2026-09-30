@@ -23,7 +23,13 @@
 .mech { margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.5; display: flex; flex-direction: column; gap: 6px; }
 .mech b { font-weight: 500; }
 .proj.no-thumb { grid-template-columns: minmax(0, 1fr); }
-.pubs-list { gap: 34px; }
+.pubs-list { gap: 56px; }
+.thread h2 { font-size: 21px; font-weight: 500; line-height: 1.4; margin: 0 0 6px; }
+.thread-intro { margin: 0 0 20px; max-width: 64ch; color: var(--muted); }
+.entries { display: flex; flex-direction: column; gap: 30px; }
+.thread h2 + .entries { margin-top: 16px; }
+.pub .authors, .pub .venue { font-size: 14px; }
+.pub .venue a { margin-left: 12px; }
 .marks { display: flex; align-items: center; gap: 4px; margin: 2px 0 4px !important; }
 .marks .m { width: 18px; height: 18px; border-radius: 50%; border: 1px solid #cfc8cd; color: #b3abb1; font-size: 11px; line-height: 16px; text-align: center; font-variant-numeric: tabular-nums; }
 .marks .m.on { background: var(--ink); border-color: var(--ink); color: #fff; }
@@ -53,6 +59,9 @@
 </ol>
 </header>
 <div class="pubs-list">
+<section class="thread">
+<h2>Specify, check, and revise</h2>
+<div class="entries">
 <article class="pub proj">
 <a class="thumb" href="/research/cip/" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/cip.webp" alt="CIP demo: responses for participants with different profiles" width="640" height="400" loading="lazy"></a>
 <div class="text">
@@ -91,11 +100,101 @@
 </article>
 <article class="pub proj no-thumb">
 <div class="text">
-<h3 class="title">REX</h3>
-<p class="marks"><span class="m" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Revise</span></p>
-<p class="desc">A household robot whose plan failed, because family members' requests conflicted or circumstances changed, repairs its plan and explains the repair.</p>
+<h3 class="title"><a href="https://doi.org/10.1145/3706599.3719853">MAP: Multi-user Personalization with Collaborative LLM-powered Agents</a></h3>
+<p class="marks"><span class="m on" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m" aria-hidden="true">3</span><span class="mw">Specify</span></p>
+<p class="desc">Collaborative LLM-powered agents that personalize for several people at once and resolve conflicting preferences among household members.</p>
+<p class="authors"><span class="me">C. P. Lee</span>*, J. Choi*, and B. Mutlu</p>
+<p class="venue">CHI 2025 Extended Abstracts</p>
 </div>
 </article>
+</div>
+</section>
+<section class="thread">
+<h2>Foundations for people and AI to communicate</h2>
+<p class="thread-intro">I have long been interested in how people and AI systems communicate: designing the foundation for it, and understanding how AI plays out in real settings.</p>
+<div class="entries">
+<article class="pub proj no-thumb">
+<div class="text">
+<h3 class="title"><a href="https://doi.org/10.1145/3643834.3661576">The AI-DEC: A Card-based Design Method for User-centered AI Explanations</a></h3>
+<p class="desc">A card-based design method that helps people co-design explanations of AI systems around their own needs.</p>
+<p class="authors"><span class="me">C. P. Lee</span>, M. K. Lee*, and B. Mutlu*</p>
+<p class="venue">DIS 2024</p>
+</div>
+</article>
+<article class="pub proj no-thumb">
+<div class="text">
+<h3 class="title">From Tool to Agent: How Worker Needs Reorganize Across the Agentic Roles of Workplace AI</h3>
+<p class="desc">How workers' needs change as workplace AI takes on more agentic roles, and how authority and accountability can come apart.</p>
+<p class="authors"><span class="me">C. P. Lee</span>, M. K. Lee*, and B. Mutlu*</p>
+<p class="venue">HAI 2026, to appear</p>
+</div>
+</article>
+<article class="pub proj no-thumb">
+<div class="text">
+<h3 class="title"><a href="https://doi.org/10.1145/3706598.3713718">Bridging Generations using AI-Supported Co-Creative Activities</a></h3>
+<p class="desc">Co-creative activities supported by AI that bring grandparents and grandchildren together.</p>
+<p class="authors">C. Y. Kim, A. J. Sato, N. T. White, H.-R. Ho, <span class="me">C. P. Lee</span>, Y. Hwang, and B. Mutlu</p>
+<p class="venue">CHI 2025, <span class="award">Honorable Mention</span></p>
+</div>
+</article>
+<article class="pub proj no-thumb">
+<div class="text">
+<h3 class="title"><a href="https://arxiv.org/abs/2605.06257">LearnMate2: Design and Evaluation of an LLM-powered Personalized and Adaptive Support System for Online Learning</a></h3>
+<p class="desc">An LLM-powered system that gives online learners personalized plans and adaptive support.</p>
+<p class="authors">X. J. Wang, <span class="me">C. P. Lee</span>, and B. Mutlu</p>
+<p class="venue">DIS 2026</p>
+</div>
+</article>
+</div>
+</section>
+<section class="thread">
+<h2>Toward embodied agents</h2>
+<p class="thread-intro">My goal is to extend these mechanisms to embodied AI, as agents move into homes and shared spaces.</p>
+<div class="entries">
+<article class="pub proj no-thumb">
+<div class="text">
+<h3 class="title"><a href="https://doi.org/10.1145/3643834.3661559">REX: Designing User-centered Repair and Explanations to Address Robot Failures</a></h3>
+<p class="marks"><span class="m" aria-hidden="true">1</span><span class="m" aria-hidden="true">2</span><span class="m on" aria-hidden="true">3</span><span class="mw">Revise</span></p>
+<p class="desc">A household robot whose plan failed, because family members' requests conflicted or circumstances changed, repairs its plan and explains the repair.</p>
+<p class="authors"><span class="me">C. P. Lee</span>, P. Praveena, and B. Mutlu</p>
+<p class="venue">DIS 2024</p>
+</div>
+</article>
+<article class="pub proj no-thumb">
+<div class="text">
+<h3 class="title"><a href="https://doi.org/10.1145/3610977.3634966">Understanding Large-Language Model (LLM)-powered Human-Robot Interaction</a></h3>
+<p class="desc">The same LLM as a robot, a voice agent, and a text agent: people favored the robot for connection and deliberation, but its fluent speech raised expectations it could not meet.</p>
+<p class="authors">C. Y. Kim*, <span class="me">C. P. Lee</span>*, and B. Mutlu</p>
+<p class="venue">HRI 2024</p>
+</div>
+</article>
+<article class="pub proj">
+<a class="thumb" href="https://doi.org/10.1145/3491102.3501955" tabindex="-1" aria-hidden="true"><img src="/assets/img/research/unboxing.webp" alt="Two children watching a small robot beside its lit-up packaging" width="640" height="400" loading="lazy"></a>
+<div class="text">
+<h3 class="title"><a href="https://doi.org/10.1145/3491102.3501955">The Unboxing Experience: Exploration and Design of Initial Interactions Between Children and Social Robots</a></h3>
+<p class="desc">How children's first interactions with a social robot unfold, and how turning its packaging into a character shaped their expectations.</p>
+<p class="authors"><span class="me">C. P. Lee</span>, B. Cagiltay, and B. Mutlu</p>
+<p class="venue">CHI 2022, <span class="award">Honorable Mention</span> <a href="https://doi.org/10.1145/3568294.3580038">HRI 2023 demo</a></p>
+</div>
+</article>
+<article class="pub proj no-thumb">
+<div class="text">
+<h3 class="title"><a href="https://doi.org/10.1145/3757279.3785557">Speaking with Screens: Design Space and Guidelines for Informational Robot Screens</a></h3>
+<p class="desc">A design space and guidelines for the screens robots use to share information.</p>
+<p class="authors">Y. Kim, <span class="me">C. P. Lee</span>, and B. Mutlu</p>
+<p class="venue">HRI 2026</p>
+</div>
+</article>
+<article class="pub proj no-thumb">
+<div class="text">
+<h3 class="title"><a href="https://www.emerald.com/ftrob/issue/13/3">Formal Methods in Robot End-User Development: Progress, Gaps, and Opportunities</a></h3>
+<p class="desc">A review of how formal methods can help end users program robots, with the gaps that remain.</p>
+<p class="authors">Y. Hwang, <span class="me">C. P. Lee</span>, D. Porfirio, L. M. Hiatt, and B. Mutlu</p>
+<p class="venue">Foundations and Trends in Robotics, 2026</p>
+</div>
+</article>
+</div>
+</section>
 </div>
 </main>
 </div>
