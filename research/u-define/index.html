@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>U-Define demo · Christine P. Lee</title>
+<meta name="description" content="Try U-Define, a system that lets people define hard and soft constraints for LLM-based planning, checked with model checking and an LLM judge.">
+<link rel="canonical" href="https://christineplee.github.io/research/u-define/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=4">
+<style>
+/* Layout: site header, task panel, guide strip, then a replica of the U-Define canvas (Figure 2 of the paper):
+   inputs on the left, plans in the middle, verification results and feedback to the right. */
+:root {
+  --site-fg: var(--ink);
+  --site-muted: var(--muted);
+  --plum: var(--accent);
+  --plum-soft: #f3e9f0;
+  --rule-strong: #cfc6cd;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-ud: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* U-Define front end, as seen in Figure 2 */
+  --ud-canvas: #ffffff;
+  --ud-dot: #c9c9d1;
+  --ud-edge: #b1b1b7;
+  --ud-panel: #e9e9ed;
+  --ud-item: #f6f6f7;
+  --ud-line: #dcdce1;
+  --ud-text: #222;
+  --ud-btn: #8c8c8c;
+  --ud-green: #4caf50;
+  --ud-select: #e3f1fd;
+  --ud-star: #f5b301;
+  --ud-hard: #f06a6a;   /* callout a */
+  --ud-soft: #6d72f0;   /* callout b */
+  --ud-navy: #1f2b4d;   /* callouts c to f */
+  --ud-steel: #7fa4d6;  /* callouts g to j */
+  --ud-bad: #b4232a;
+}
+
+/* ---------- page ---------- */
+.demo { display: flex; flex-direction: column; padding: 32px 0 24px 24px; }
+@media (max-width: 1100px) { .demo { padding-left: 0; } }
+.demo-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.demo-head h1 { margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.4px; line-height: 1.2; }
+.demo-head .byline { margin: 0; font-size: 15px; color: var(--site-muted); }
+.demo-head .lede { margin: 0; max-width: 68ch; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+
+.task { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: 16px 40px; align-items: center; background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 18px 22px; margin-bottom: 18px; }
+.task h2 { font-size: 1.15rem; font-weight: 500; margin: 0 0 6px; }
+.task p { margin: 0; line-height: 1.55; max-width: 66ch; }
+.task .task-q { margin-top: 8px; color: var(--plum); font-weight: 500; }
+.kinds { display: flex; flex-direction: column; gap: 10px; }
+.kind { border-left: 4px solid var(--ud-hard); padding: 4px 0 4px 12px; font-size: 15px; line-height: 1.45; }
+.kind.soft { border-left-color: var(--ud-soft); }
+.kind b { font-weight: 500; display: block; }
+.kind span { color: var(--site-muted); }
+
+.guide { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 12px 0; margin-bottom: 14px; }
+.guide-now { flex: 1 1 420px; min-width: 0; margin: 0; line-height: 1.45; }
+.guide-now b { color: var(--plum); font-weight: 500; }
+.guide-ctl { display: flex; gap: 10px; align-items: center; font-size: 15px; }
+.guide-ctl label { display: flex; gap: 6px; align-items: center; cursor: pointer; color: var(--site-muted); }
+.guide-ctl input { accent-color: var(--plum); }
+.btn-site { font-family: inherit; font-size: 15px; font-weight: 500; border: 1px solid var(--plum); color: var(--plum); background: transparent; border-radius: 6px; padding: 5px 12px; cursor: pointer; }
+.btn-site:hover { background: var(--plum-soft); }
+
+/* ---------- canvas ---------- */
+.app { position: relative; height: 760px; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--ud-canvas); box-shadow: 0 1px 2px rgba(40,20,40,.04), 0 8px 24px rgba(40,20,40,.06); }
+.rf { position: absolute; inset: 0; overflow: hidden; cursor: grab; touch-action: none; background-color: var(--ud-canvas);
+  background-image: radial-gradient(circle, var(--ud-dot) 1px, transparent 1.2px); }
+.rf.dragging { cursor: grabbing; }
+.world { position: absolute; left: 0; top: 0; width: 1px; height: 1px; transform-origin: 0 0; }
+.world.anim { transition: transform .55s cubic-bezier(.3,.7,.2,1); }
+.edges { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
+.edges path { fill: none; stroke: var(--ud-edge); stroke-width: 1.2; }
+.edges path.anim { stroke-dasharray: 5; animation: dash .5s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -10; } }
+.controls { position: absolute; left: 14px; bottom: 14px; display: flex; flex-direction: column; box-shadow: 0 0 2px 1px rgba(0,0,0,.08); z-index: 5; }
+.controls button { width: 28px; height: 28px; background: #fefefe; border: 0; border-bottom: 1px solid #eee; display: grid; place-items: center; cursor: pointer; color: #333; padding: 0; }
+.controls button:hover { background: #f4f4f4; }
+.controls button:last-child { border-bottom: 0; }
+.hint-zoom { position: absolute; right: 12px; bottom: 10px; font-family: var(--font-ud); font-size: 11px; color: #a1a1aa; z-index: 5; }
+
+.node { position: absolute; font-family: var(--font-ud); color: var(--ud-text); font-size: 13px; line-height: 1.35; cursor: grab; }
+.node.enter { animation: pop .35s ease-out; }
+@keyframes pop { from { opacity: 0; transform: translateY(8px); } }
+.node-label { position: relative; font-weight: 700; font-style: italic; font-size: 12.5px; margin: 0 0 7px 14px; white-space: nowrap; }
+.node-label::before { content: ""; position: absolute; left: -12px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%; background: var(--ud-navy); }
+.panel { position: relative; background: var(--ud-panel); border-radius: 8px; padding: 10px; cursor: default; }
+.items { background: var(--ud-item); border-radius: 4px; overflow-y: auto; }
+.items > div { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--ud-line); }
+.items > div:last-child { border-bottom: 0; }
+.items .day { font-weight: 500; background: #efeff2; }
+.handle { position: absolute; width: 7px; height: 7px; background: #1a192b; border: 1px solid #fff; border-radius: 50%; z-index: 3; }
+.h-right { right: -4px; top: 50%; margin-top: -4px; }
+.h-left { left: -4px; top: 50%; margin-top: -4px; }
+
+.ud-btn { font-family: var(--font-ud); font-size: 13px; background: var(--ud-btn); color: #fff; border: 0; border-radius: 4px; padding: 7px 18px; cursor: pointer; }
+.ud-btn:hover:not(:disabled) { background: #777; }
+.ud-btn:disabled { opacity: .5; cursor: default; }
+.ud-btn.green { background: var(--ud-green); }
+.ud-btn.green:hover:not(:disabled) { background: #3d9a41; }
+.ud-row { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 10px; position: relative; }
+.icon-btn { background: transparent; border: 0; cursor: pointer; color: #333; padding: 4px; position: absolute; right: 4px; }
+.ud-input, .ud-area { width: 100%; font-family: var(--font-mono); font-size: 12px; border: 1px solid #c9c9cf; border-radius: 3px; padding: 6px 8px; background: #fff; color: var(--ud-text); resize: vertical; }
+.ud-input { font-family: var(--font-ud); font-size: 13px; }
+.ud-area.soft-text { font-family: var(--font-ud); font-size: 12.5px; line-height: 1.45; text-align: center; background: var(--ud-item); border: 0; }
+.note { color: var(--ud-bad); font-size: 12px; margin: 6px 0 0; text-align: center; }
+
+/* hard rules */
+.hard-list > div { display: flex; gap: 10px; align-items: center; text-align: center; }
+.cb { flex: 0 0 18px; width: 18px; height: 22px; border: 1.5px solid #333; border-radius: 2px; background: #fff; padding: 0; cursor: pointer; display: grid; place-items: center; }
+.cb svg { opacity: 0; }
+.cb[aria-checked="true"] { background: #333; }
+.cb[aria-checked="true"] svg { opacity: 1; }
+.hard-list p { margin: 0; flex: 1; }
+.tr-rule { text-align: left !important; display: block !important; }
+.tr-rule .nl { margin: 0 0 4px; }
+.tr-rule code { display: block; font-family: var(--font-mono); font-size: 11px; color: #4a4f63; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* plans */
+.plan-title { display: flex; align-items: flex-start; gap: 8px; }
+.plan-title button.toggle { flex: 1; text-align: center; background: var(--ud-item); border: 0; border-radius: 4px; padding: 8px 10px; font: inherit; cursor: pointer; color: var(--ud-text); }
+.pick { flex: 0 0 24px; width: 24px; height: 24px; border: 2px solid #9a9aa2; border-radius: 4px; background: #fff; padding: 0; cursor: pointer; display: grid; place-items: center; }
+.pick svg { opacity: 0; }
+.pick[aria-checked="true"] { background: var(--ud-green); border-color: var(--ud-green); }
+.pick[aria-checked="true"] svg { opacity: 1; }
+.plan-body { margin-top: 8px; max-height: 380px; }
+.plan-body .tag { color: #5a5f73; }
+.viol .items > div { padding: 9px 12px; }
+.viol .ok { color: #2e7d32; }
+.mc-toggle { display: block; margin: 8px auto 0; background: transparent; border: 0; font: inherit; font-size: 12px; color: #4a4f63; text-decoration: underline; cursor: pointer; }
+.mc-out { display: none; margin-top: 8px; max-height: 240px; overflow: auto; background: #fff; border-radius: 4px; padding: 8px; }
+.mc-out.open { display: block; }
+.mc-out pre { margin: 0; font-family: var(--font-mono); font-size: 11px; line-height: 1.45; white-space: pre; }
+.soft .items { max-height: 300px; }
+.soft .items > div { text-align: center; }
+.stars { color: var(--ud-star); letter-spacing: 1px; font-size: 15px; }
+.stars .off { color: #d4d4d8; }
+.fb-opts { display: flex; flex-direction: column; gap: 8px; }
+.fb-opts button { background: #fff; border: 1px solid var(--ud-line); border-radius: 4px; padding: 8px 10px; font: inherit; cursor: pointer; color: var(--ud-text); }
+.fb-opts button:hover, .fb-opts button[aria-pressed="true"] { background: var(--ud-select); }
+.fb-title { font-weight: 700; font-size: 14px; margin: 2px 0 10px; text-align: center; }
+
+.thinking { display: flex; align-items: center; justify-content: center; gap: 8px; color: #555; padding: 12px; }
+.spin { width: 12px; height: 12px; border: 2px solid #d4d4d8; border-top-color: #555; border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* callouts, styled after Figure 2 */
+.gchip { position: absolute; top: -6px; right: -6px; transform: translateY(-100%); display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-ud); font-size: 12px; font-style: italic; font-weight: 600; color: #333; white-space: nowrap; z-index: 6; pointer-events: none; }
+.gchip b { font-style: normal; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 13px; background: var(--ud-navy); }
+.gchip.a b { background: var(--ud-hard); } .gchip.b b { background: var(--ud-soft); } .gchip.g b { background: var(--ud-steel); }
+.no-guide .gchip { display: none; }
+
+@media (max-width: 860px) {
+  .task { grid-template-columns: 1fr; padding: 16px; }
+  .app { height: 600px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .world.anim { transition: none; }
+  .node.enter, .spin, .edges path.anim { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+<nav class="nav" aria-label="Main">
+<a class="home" href="/">Christine P. Lee</a>
+<div class="links">
+<a href="/publications/">publications</a>
+<a href="/assets/pdf/christine-lee-cv.pdf">cv</a>
+</div>
+</nav>
+<main class="demo">
+  <header class="demo-head">
+    <h1>U-Define</h1>
+    <p class="byline">Christine P. Lee, Xinyu Jessica Wang, Aws Albarghouthi, David Porfirio, and Bilge Mutlu. arXiv preprint, 2026. <a href="https://arxiv.org/abs/2605.02765">Paper</a></p>
+    <p class="lede">U-Define lets people state their own constraints in natural language and mark each one as hard or soft. Hard rules are checked with model checking, and soft preferences are rated by an LLM judge. Try it on the family vacation task from the paper.</p>
+  </header>
+
+  <section class="task" aria-labelledby="taskTitle">
+    <div>
+      <h2 id="taskTitle">The task: a family trip to Venice</h2>
+      <p>You are a parent in a family of four: Mom, Dad, Bob (8), and Susan (3). You are planning a trip to Venice, Italy, and want an itinerary that works for everyone. Some needs are firm, like floatation devices for the children during water activities or a reminder for Dad's diabetes medication at meals. Others are preferences, like Mom's love of museums or a relaxed pace for the kids.</p>
+      <p class="task-q">Ask the planner for a 2-day itinerary.</p>
+    </div>
+    <div class="kinds">
+      <div class="kind"><b>Hard rules</b><span>Must never be broken. Checked by model checking against every step of the plan.</span></div>
+      <div class="kind soft"><b>Soft preferences</b><span>Flexible. Rated from one to five stars by an LLM judge.</span></div>
+    </div>
+  </section>
+
+  <div class="guide">
+    <p class="guide-now" id="guideNow" aria-live="polite"></p>
+    <div class="guide-ctl">
+      <label for="showGuide"><input type="checkbox" id="showGuide" checked> Figure labels</label>
+      <button class="btn-site" id="restart" type="button">Restart</button>
+    </div>
+  </div>
+
+  <div class="app" id="app">
+    <div class="rf" id="rf"><div class="world" id="world"><svg class="edges" id="edges"></svg></div></div>
+    <div class="controls">
+      <button type="button" id="zin" aria-label="Zoom in"><svg width="12" height="12" viewBox="0 0 32 32" fill="currentColor"><path d="M32 18.3H18.3V32h-4.6V18.3H0v-4.6h13.7V0h4.6v13.7H32z"/></svg></button>
+      <button type="button" id="zout" aria-label="Zoom out"><svg width="12" height="12" viewBox="0 0 32 5" fill="currentColor"><path d="M0 0h32v4.2H0z"/></svg></button>
+      <button type="button" id="zfit" aria-label="Fit view"><svg width="12" height="12" viewBox="0 0 32 30" fill="currentColor"><path d="M3.7 11.1V3.7h7.4V0H0v11.1h3.7zM20.9 0v3.7h7.4v7.4H32V0H20.9zM28.3 26.3h-7.4V30H32V18.9h-3.7v7.4zM3.7 18.9H0V30h11.1v-3.7H3.7v-7.4z"/></svg></button>
+    </div>
+    <div class="hint-zoom">Drag to pan. Ctrl + scroll to zoom.</div>
+  </div>
+</main>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+/* =====================================================================
+   Hard rules: text from Figure 2 of the paper. Each rule has an LTL
+   property (shown to the user after translation), a back-translation,
+   a Figure 4 style check question, a PRISM label, and a checker that
+   runs over the propositions of each plan step.
+   ===================================================================== */
+const TRAVEL = s => s.t.includes("transportation") || s.t.includes("outdoor") || s.t.includes("museum");
+function firstIdx(steps, f) { return steps.findIndex(f); }
+function mustPrecede(steps, trigger, action) {
+  const i = firstIdx(steps, trigger);
+  if (i < 0) return 0;
+  return steps.slice(0, i + 1).some(s => s.a.includes(action)) ? 0 : i + 1;
+}
+function everyHas(steps, tag, action) {
+  const i = steps.findIndex(s => s.t.includes(tag) && !s.a.includes(action));
+  return i < 0 ? 0 : i + 1;
+}
+const HARD = [
+  { n: 0, text: "If there are transportation, outdoor activities, museum or historical site visits, children must pack long sleeve shirts for air-conditioned spaces.",
+    back: "Before any travel, outdoor activity, or museum visit, the children pack long sleeve shirts.",
+    ltl: "(¬(transportation ∨ outdoor ∨ museum_historical) U pack_long_sleeves) ∨ G ¬(transportation ∨ outdoor ∨ museum_historical)",
+    q: "Long sleeves packed before travel or sightseeing?", check: S => mustPrecede(S, TRAVEL, "pack_long_sleeves") },
+  { n: 1, text: "If dining at a restaurant, the family must check for vegetarian options for mom.",
+    back: "Every restaurant visit includes checking for vegetarian options for Mom.",
+    ltl: "G (restaurant → check_vegetarian_options)",
+    q: "Vegetarian options checked at restaurants?", check: S => everyHas(S, "restaurant", "check_vegetarian_options") },
+  { n: 2, text: "Every time a restaurant is scheduled, dad must receive a reminder to pack his diabetes medication.",
+    back: "Every restaurant visit includes a diabetes medication reminder for Dad.",
+    ltl: "G (restaurant → diabetes_med_reminder)",
+    q: "Diabetes medication reminder at restaurants?", check: S => everyHas(S, "restaurant", "diabetes_med_reminder") },
+  { n: 3, text: "If the family is going on outdoor activities, mom and dad must take external battery chargers for their phones.",
+    back: "Before the first outdoor activity, Mom and Dad take external battery chargers.",
+    ltl: "(¬outdoor U take_battery_chargers) ∨ G ¬outdoor",
+    q: "Battery chargers taken before outdoor activities?", check: S => mustPrecede(S, s => s.t.includes("outdoor"), "take_battery_chargers") },
+  { n: 4, text: "Entertainment content must be approved by either mom or dad before being watched.",
+    back: "All entertainment is approved by Mom or Dad before it is watched.",
+    ltl: "G (entertainment → approved_by_parent)",
+    q: "Entertainment approved by a parent?", check: S => everyHas(S, "entertainment", "approved_by_parent") },
+  { n: 5, text: "Before starting water activities, children must wear floatation devices.",
+    back: "During every water activity, the children wear floatation devices.",
+    ltl: "G (water_activity → floatation_devices)",
+    q: "Floatation devices before water activities?", check: S => everyHas(S, "water", "floatation_devices") },
+  { n: 6, text: "If outdoor activities are planned, sunscreen must be applied to all family members.",
+    back: "Every outdoor activity includes sunscreen for the whole family.",
+    ltl: "G (outdoor → sunscreen_applied)",
+    q: "Sunscreen applied for outdoor activities?", check: S => everyHas(S, "outdoor", "sunscreen_applied") },
+  { n: 7, text: "At least one museum or historical site visit must be scheduled during the trip.",
+    back: "At least one museum or historical site visit is scheduled.",
+    ltl: "F museum_historical",
+    q: "Museum or historical site visited?", check: S => S.some(s => s.t.includes("museum")) ? 0 : S.length },
+  { n: 8, text: "Bob can get a souvenir per market visit.",
+    back: "Bob only gets a souvenir during a market visit.",
+    ltl: "G (souvenir → market)",
+    q: "Souvenirs only at market visits?", check: S => { const i = S.findIndex(s => s.a.includes("souvenir") && !s.t.includes("market")); return i < 0 ? 0 : i + 1; } },
+];
+const PROP = { transportation: "transportation", outdoor: "outdoor", museum: "museum_historical", restaurant: "restaurant", water: "water_activity", entertainment: "entertainment", market: "market" };
+const TAGTEXT = { transportation: "[transportation]", outdoor: "[outdoor]", museum: "[museum & historical site]", restaurant: "[restaurant]", water: "[water activity]", entertainment: "[entertainment]", market: "[market]" };
+
+const SOFT_TEXT = `Context: vacation preferences and needs for a four person family that has mom, dad, bob (child that is 8), susan (child that is 3).
+
+Mom
+Needs: Prefers a balanced itinerary with time for both sightseeing and relaxation. Wants the trip to include family bonding activities rather than splitting up often. Likes to have a mid-afternoon break.
+Dietary Preferences: Is vegetarian, and prefers healthy meals with fresh ingredients, low-sodium options. Avoids fried foods in excess but is open to local cuisine.
+Activity Preferences: Enjoys cultural experiences (museums, guided tours, historical sites) but prefers shorter visits over full-day museum tours. Likes reading by the beach or at a café during downtime.
+
+Dad
+Needs: Wants flexibility in the itinerary to allow for spontaneous activities. Prefers not to spend too long in lines.
+Activity Preferences: Enjoys outdoor activities and boat rides.
+
+Bob (8)
+Activity Preferences: Loves hands-on activities, animals, and anything on the water.
+
+Susan (3)
+Needs: Needs an afternoon nap and an early bedtime.`;
+
+/* ---------- plans (scripted LLM planner output) ---------- */
+// s(text, tags, actions): tags are shown in brackets; actions are extra propositions made true in that step
+const s = (text, t = [], a = []) => ({ text, t, a });
+const D = label => ({ day: label });
+const BASE = [
+  { id: "1.1", name: "Balanced Exploration and Relaxation", stars: 5,
+    reason: "PLAN 1.1 aligns exceptionally well with the family's preferences and constraints. It provides a balanced itinerary with a mix of sightseeing and relaxation, catering to Mom's need for a balanced vacation and her interest in cultural experiences. The plan includes family bonding activities and a mid-afternoon break, and the gondola ride gives Dad and Bob time on the water.",
+    steps: [D("Day 1 – Arrival and the Grand Canal"),
+      s("The family flies into Marco Polo Airport and takes a water taxi to the hotel", ["transportation"]),
+      s("Mom and Dad unpack while Bob and Susan play quietly with travel-friendly toys."),
+      s("The family walks along the Grand Canal to the Rialto Bridge, with sunscreen applied to everyone", ["outdoor"], ["sunscreen_applied"]),
+      s("Lunch at a trattoria near Rialto, where Dad is reminded to take his diabetes medication", ["restaurant"], ["diabetes_med_reminder"]),
+      s("Mid-afternoon break at the hotel while Susan naps."),
+      s("The family has a vegetarian-friendly dinner at the hotel restaurant, with options checked for Mom and a medication reminder for Dad", ["restaurant"], ["check_vegetarian_options", "diabetes_med_reminder"]),
+      D("Day 2 – Cultural and Outdoor Activities"),
+      s("The family enjoys a sit-down breakfast at the hotel, and Dad gets his medication reminder", ["restaurant"], ["diabetes_med_reminder"]),
+      s("A short guided tour of the Doge's Palace", ["museum"]),
+      s("A gondola ride, with Bob and Susan wearing life jackets", ["water"], ["floatation_devices"]),
+      s("An afternoon in the Giardini gardens after reapplying sunscreen", ["outdoor"], ["sunscreen_applied"])] },
+  { id: "1.2", name: "Flexible and Nature-Focused", stars: 3,
+    reason: "PLAN 1.2 aligns with the family's general preference for outdoor activities and includes elements that cater to individual needs, such as beach time for Mom and boat rides for Dad and Bob. However, it leaves out the cultural experiences Mom enjoys, and the full beach day offers little structure for Susan's nap and early bedtime.",
+    steps: [D("Day 1 – The Lido"),
+      s("The family takes the water bus from the airport to a hotel on the Lido", ["transportation"]),
+      s("A beach afternoon at the Lido with sunscreen for everyone, and Bob and Susan in floatation devices while they swim", ["outdoor", "water"], ["sunscreen_applied", "floatation_devices"]),
+      s("Seafood dinner by the beach, with vegetarian options checked for Mom and a medication reminder for Dad", ["restaurant"], ["check_vegetarian_options", "diabetes_med_reminder"]),
+      D("Day 2 – Islands and Open Air"),
+      s("A morning bike ride along the Lido, after sunscreen", ["outdoor"], ["sunscreen_applied"]),
+      s("A picnic lunch in a shaded park."),
+      s("A boat trip to Burano", ["transportation"]),
+      s("The family browses the Burano lace market, where Bob picks one souvenir", ["market"], ["souvenir"]),
+      s("Family movie night at the hotel, picked and approved by Dad", ["entertainment"], ["approved_by_parent"])] },
+  { id: "1.3", name: "Cultural Richness and Family Bonding", stars: 4,
+    reason: "PLAN 1.3 matches Mom's interest in museums and historical sites and keeps the family together throughout. The café lunch and early dinner suit Susan's schedule. It offers fewer outdoor and hands-on activities than Dad and Bob would like, and two museum visits in two days may feel long for the children.",
+    steps: [D("Day 1 – Arrival and Art"),
+      s("Before leaving, Bob and Susan pack long sleeve shirts for air-conditioned museums and trains.", [], ["pack_long_sleeves"]),
+      s("The family takes the train from the airport to Santa Lucia station", ["transportation"]),
+      s("Lunch at a café, with vegetarian options checked for Mom and a medication reminder for Dad", ["restaurant"], ["check_vegetarian_options", "diabetes_med_reminder"]),
+      s("A family visit to the Gallerie dell'Accademia", ["museum"]),
+      s("Bob picks a souvenir from the museum gift shop.", [], ["souvenir"]),
+      D("Day 2 – History and Canals"),
+      s("The Doge's Palace and the Bridge of Sighs", ["museum"]),
+      s("A gondola ride through the small canals", ["water"]),
+      s("An early dinner, with vegetarian options checked and a reminder for Dad's medication", ["restaurant"], ["check_vegetarian_options", "diabetes_med_reminder"]),
+      s("Bob and Susan watch a cartoon on a tablet at the hotel", ["entertainment"])] },
+];
+
+// Revised plans: the planner receives the selected plan, its hard-rule violations, and the feedback.
+function revised(theme, parentName, fbText, parentBroken) {
+  const T = {
+    relaxing: { title: "Adjusted Plan for a More Relaxing Experience", d1: "Day 1 – Arrival & Gentle Unwinding", d2: "Day 2 – Slow Mornings and Soft Evenings",
+      A: s("The family checks into a quiet suite and rests before lunch."),
+      B: s("A slow stroll through the Giardini gardens with shaded benches, with sunscreen applied to everyone", ["outdoor"], ["sunscreen_applied"]),
+      C: s("A calm gondola ride at sunset, with Bob and Susan wearing floatation devices", ["water"], ["floatation_devices"]),
+      E: s("A quiet movie night in the room, chosen and approved by Mom", ["entertainment"], ["approved_by_parent"]),
+      why: "The adjusted plan fits a more relaxing experience: it adds rest before lunch, keeps sightseeing short, and ends each day early for Susan." },
+    cozy: { title: "Adjusted Plan for a Cozier Experience", d1: "Day 1 – Settling In", d2: "Day 2 – Small Canals and Warm Evenings",
+      A: s("The family settles into an apartment-style suite with a small kitchen."),
+      B: s("A short walk through the quiet side canals of Cannaregio, after sunscreen", ["outdoor"], ["sunscreen_applied"]),
+      C: s("Browsing the Rialto Market, where Bob picks one souvenir", ["market"], ["souvenir"]),
+      E: s("Board games and a family cartoon approved by Dad", ["entertainment"], ["approved_by_parent"]),
+      why: "The adjusted plan feels cozier: it trades busy sights for quiet neighborhoods, a home-like suite, and evenings in together." },
+    adventurous: { title: "Adjusted Plan for a More Adventurous Experience", d1: "Day 1 – Straight to the Water", d2: "Day 2 – Islands and Glass",
+      A: s("The family drops their bags and heads straight out."),
+      B: s("A family kayak lesson on the lagoon, with sunscreen for everyone and floatation devices for Bob and Susan", ["outdoor", "water"], ["sunscreen_applied", "floatation_devices"]),
+      C: s("A boat trip to Murano to watch glassblowing and visit the island market, where Bob picks a souvenir", ["transportation", "market"], ["souvenir"]),
+      E: s("An evening puppet show, approved by Dad after reading the description", ["entertainment"], ["approved_by_parent"]),
+      why: "The adjusted plan is more adventurous: it adds a kayak lesson and an island trip that Dad and Bob will enjoy, while keeping Susan's nap window." },
+    cultural: { title: "Adjusted Plan for a More Cultural Experience", d1: "Day 1 – St. Mark's and the Basilica", d2: "Day 2 – Art and Music",
+      A: s("A brief rest at the hotel."),
+      B: s("A walking tour of St. Mark's Square and the Basilica exterior, with sunscreen applied", ["outdoor"], ["sunscreen_applied"]),
+      C: s("A short family tour of the Gallerie dell'Accademia", ["museum"]),
+      E: s("An early classical concert for families, approved by Mom in advance", ["entertainment"], ["approved_by_parent"]),
+      why: "The adjusted plan is more cultural: it adds a second short museum visit and a family concert, matching Mom's interests without long tours." },
+  }[theme];
+  return {
+    id: null, adjusted: true, name: T.title, stars: 5,
+    reason: `${T.why} It builds on "${parentName}"${parentBroken ? ` and fixes the hard rules that plan broke (${parentBroken})` : ""}. It keeps the family together, includes vegetarian-friendly meals for Mom, and leaves time for Susan's nap.` + (fbText ? ` Your feedback: "${fbText}".` : ""),
+    steps: [D(T.d1),
+      s("Before leaving, Bob and Susan pack long sleeve shirts for air-conditioned spaces, and Mom and Dad pack external battery chargers for their phones.", [], ["pack_long_sleeves", "take_battery_chargers"]),
+      s("The family takes a water taxi from the airport to the hotel", ["transportation"]),
+      T.A,
+      s("Lunch at a family trattoria, where they check the menu for vegetarian options for Mom and Dad gets a reminder to take his diabetes medication", ["restaurant"], ["check_vegetarian_options", "diabetes_med_reminder"]),
+      T.B,
+      D(T.d2),
+      s("Breakfast at the hotel, with vegetarian options confirmed for Mom and a medication reminder for Dad", ["restaurant"], ["check_vegetarian_options", "diabetes_med_reminder"]),
+      s("A short tour of the Doge's Palace", ["museum"]),
+      T.C,
+      s("An early dinner, with vegetarian options checked for Mom and a medication reminder for Dad", ["restaurant"], ["check_vegetarian_options", "diabetes_med_reminder"]),
+      T.E] };
+}
+const FEEDBACK = [["cozy", "Make the plan feel more cozy"], ["adventurous", "Make the plan feel more adventurous"], ["relaxing", "Make the plan feel more relaxing"], ["cultural", "Make the plan feel more cultural"]];
+function themeFor(text) {
+  const t = text.toLowerCase();
+  for (const [k] of FEEDBACK) if (t.includes(k) || (k === "relaxing" && /relax|calm|slow|rest/.test(t)) || (k === "adventurous" && /advent|active|exciting|outdoor/.test(t)) || (k === "cultural" && /cultur|museum|art|history/.test(t)) || (k === "cozy" && /cozy|cosy|warm|quiet/.test(t))) return k;
+  return "relaxing";
+}
+
+/* ---------- verification ---------- */
+const stepsOf = plan => plan.steps.filter(x => !x.day);
+function verify(plan, ruleIds) {
+  const S = stepsOf(plan);
+  const res = HARD.filter(r => ruleIds.includes(r.n)).map(r => ({ r, failAt: r.check(S) }));
+  return { res, broken: res.filter(x => x.failAt), valid: res.every(x => !x.failAt) };
+}
+function prismOf(plan, ruleIds) {
+  const S = stepsOf(plan);
+  const vars = [...new Set(S.flatMap(x => [...x.t.map(k => PROP[k]), ...x.a]))];
+  let out = "dtmc\nmodule veniceTrip\n  step : [0.." + S.length + "] init 0;\n";
+  vars.forEach(v => out += `  ${v} : bool init false;\n`);
+  let dayN = 0;
+  plan.steps.forEach(x => {
+    if (x.day) { dayN++; out += `  // Day ${dayN}\n`; return; }
+    const i = S.indexOf(x);
+    const on = new Set([...x.t.map(k => PROP[k]), ...x.a]);
+    const upd = vars.map(v => `(${v}'=${on.has(v)})`).join(" & ");
+    out += `  [] step=${i} -> (step'=${i + 1}) & ${upd};\n`;
+  });
+  out += "endmodule\n\n";
+  HARD.filter(r => ruleIds.includes(r.n)).forEach(r => out += `// Rule ${r.n}: ${r.ltl}\n`);
+  return out;
+}
+function checkerOut(v) {
+  return v.res.map(x => `${x.r.q}: ${x.failAt ? "False" : "True"}`).join("\n") + `\nIs this a valid schedule?: ${v.valid ? "True" : "False"}`;
+}
+
+/* ---------- state + DOM ---------- */
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const rf = $("rf"), world = $("world"), edgesSvg = $("edges");
+let st;
+const wait = ms => new Promise(res => { const t = setTimeout(res, ms); st.timers.push(t); });
+const guide = html => { $("guideNow").innerHTML = html; };
+const CHECK = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>`;
+const TRASH = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/></svg>`;
+
+/* ---------- canvas engine (same as the VeriPlan demo) ---------- */
+let view = { x: 0, y: 0, s: 1 };
+const nodes = new Map();
+let edges = [];
+let lastFocus = null;
+function applyView(animate) {
+  world.classList.toggle("anim", !!animate);
+  world.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.s})`;
+  rf.style.backgroundSize = `${20 * view.s}px ${20 * view.s}px`;
+  rf.style.backgroundPosition = `${view.x}px ${view.y}px`;
+}
+function addNode(id, x, y, html, chip, width) {
+  const el = document.createElement("div");
+  el.className = "node enter";
+  el.style.left = x + "px"; el.style.top = y + "px";
+  if (width) el.style.width = width + "px";
+  el.innerHTML = html + (chip ? `<span class="gchip ${chip[2] || ""}"><b>${chip[0]}</b>${chip[1] || ""}</span>` : "");
+  world.appendChild(el);
+  const n = { id, x, y, el };
+  nodes.set(id, n);
+  makeDraggable(n);
+  return el;
+}
+function removeNode(id) { const n = nodes.get(id); if (n) { n.el.remove(); nodes.delete(id); } edges = edges.filter(e => e.from !== id && e.to !== id); drawEdges(); }
+function offsetIn(el, anc) { let x = 0, y = 0; while (el && el !== anc) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x, y }; }
+function handlePos(id, side) {
+  const n = nodes.get(id); if (!n) return null;
+  const h = n.el.querySelector(".h-" + side); if (!h) return null;
+  const o = offsetIn(h, n.el);
+  return { x: n.x + o.x + h.offsetWidth / 2, y: n.y + o.y + h.offsetHeight / 2 };
+}
+function drawEdges() {
+  edgesSvg.innerHTML = edges.map(e => {
+    const a = handlePos(e.from, "right"), b = handlePos(e.to, "left");
+    if (!a || !b) return "";
+    const d = Math.max(40, Math.abs(b.x - a.x) * 0.5);
+    return `<path class="${e.anim ? "anim" : ""}" d="M${a.x},${a.y} C${a.x + d},${a.y} ${b.x - d},${b.y} ${b.x},${b.y}"/>`;
+  }).join("");
+}
+function addEdge(from, to, anim) { const e = { from, to, anim }; edges.push(e); drawEdges(); return e; }
+function frame(list, maxS, animate) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  list.forEach(n => { x0 = Math.min(x0, n.x - 10); y0 = Math.min(y0, n.y - 40); x1 = Math.max(x1, n.x + n.el.offsetWidth + 20); y1 = Math.max(y1, n.y + n.el.offsetHeight + 10); });
+  const W = rf.clientWidth, H = rf.clientHeight, pad = W < 600 ? 12 : 36;
+  const sc = Math.max(0.25, Math.min(maxS, (W - pad * 2) / (x1 - x0), (H - pad * 2) / (y1 - y0)));
+  view = { s: sc, x: (W - (x1 - x0) * sc) / 2 - x0 * sc, y: Math.max(pad, (H - (y1 - y0) * sc) / 2) - y0 * sc };
+  applyView(animate);
+}
+function focusNodes(ids, animate = true) {
+  lastFocus = ids;
+  const narrow = rf.clientWidth < 600;
+  const list = (narrow ? ids.slice(0, 1) : ids).map(i => nodes.get(i)).filter(Boolean);
+  if (list.length) frame(list, 0.95, animate);
+}
+function fitAll() { if (nodes.size) frame([...nodes.values()], 1, true); }
+function zoomAt(f, cx, cy) {
+  const sc = Math.max(0.2, Math.min(2, view.s * f));
+  view.x = cx - (cx - view.x) * (sc / view.s); view.y = cy - (cy - view.y) * (sc / view.s); view.s = sc;
+  applyView(false);
+}
+$("zin").onclick = () => zoomAt(1.2, rf.clientWidth / 2, rf.clientHeight / 2);
+$("zout").onclick = () => zoomAt(1 / 1.2, rf.clientWidth / 2, rf.clientHeight / 2);
+$("zfit").onclick = fitAll;
+rf.addEventListener("wheel", e => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  e.preventDefault();
+  const r = rf.getBoundingClientRect();
+  zoomAt(Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top);
+}, { passive: false });
+rf.addEventListener("pointerdown", e => {
+  if (e.target.closest(".node")) return;
+  const sx = e.clientX, sy = e.clientY, vx = view.x, vy = view.y;
+  rf.classList.add("dragging"); rf.setPointerCapture(e.pointerId);
+  const move = ev => { view.x = vx + ev.clientX - sx; view.y = vy + ev.clientY - sy; applyView(false); };
+  const up = () => { rf.classList.remove("dragging"); rf.removeEventListener("pointermove", move); rf.removeEventListener("pointerup", up); rf.removeEventListener("pointercancel", up); };
+  rf.addEventListener("pointermove", move); rf.addEventListener("pointerup", up); rf.addEventListener("pointercancel", up);
+});
+const INTERACTIVE = "button, input, textarea, label, a, .items, .mc-out";
+function makeDraggable(n) {
+  n.el.addEventListener("pointerdown", e => {
+    if (e.target.closest(INTERACTIVE)) return;
+    e.stopPropagation();
+    const sx = e.clientX, sy = e.clientY, nx = n.x, ny = n.y;
+    n.el.setPointerCapture(e.pointerId);
+    const move = ev => { n.x = nx + (ev.clientX - sx) / view.s; n.y = ny + (ev.clientY - sy) / view.s; n.el.style.left = n.x + "px"; n.el.style.top = n.y + "px"; drawEdges(); };
+    const up = () => { n.el.removeEventListener("pointermove", move); n.el.removeEventListener("pointerup", up); };
+    n.el.addEventListener("pointermove", move); n.el.addEventListener("pointerup", up);
+  });
+}
+
+/* ---------- layout (world coordinates, after Figure 2) ---------- */
+const X = { input: 0, request: 520, plan: 900, viol: 1250, soft: 1590, fb: 1960, adj: 2320, adjViol: 2670, adjSoft: 3010 };
+
+/* ---------- Step 1: hard rules (a) ---------- */
+function renderHardInput() {
+  const el = nodes.get("hard")?.el;
+  const body = st.rulesDone
+    ? `<div class="items" style="max-height:380px">${HARD.filter(r => st.rules.includes(r.n)).map(r => `
+        <div class="tr-rule"><p class="nl">Rule ${r.n}: ${esc(r.back)}</p><code>${esc(r.ltl)}</code></div>`).join("") || `<div>No hard rules selected.</div>`}</div>
+       <div class="ud-row"><button type="button" class="ud-btn" id="editRules">Edit Rules</button></div>`
+    : `<div class="items hard-list" style="max-height:330px">${HARD.map(r => `
+        <div><button type="button" class="cb" role="checkbox" aria-checked="${st.rules.includes(r.n)}" data-r="${r.n}" aria-label="Rule ${r.n}">${CHECK}</button>
+        <p>Rule ${r.n}: ${esc(r.text)}</p></div>`).join("")}</div>
+       <textarea class="ud-area" id="hardText" rows="2" placeholder="Enter hard rules here, one per line" style="margin-top:10px"></textarea>
+       <p class="note" id="hardNote" hidden></p>
+       <div class="ud-row"><button type="button" class="ud-btn" id="submitRules">Submit Selected Rules</button>
+       <button type="button" class="icon-btn" id="clearRules" aria-label="Clear selection">${TRASH}</button></div>`;
+  const html = `<div class="node-label">${st.rulesDone ? "Step 1. Hard Rules (translated for model checking)" : "Step 1. Hard Rules Input (by selection)"}</div>
+    <div class="panel">${body}<span class="handle h-right"></span></div>`;
+  if (!el) addNode("hard", X.input, 0, html, ["a", "", "a"], 420);
+  else el.innerHTML = html + `<span class="gchip a"><b>a</b></span>`;
+  const n = nodes.get("hard").el;
+  n.querySelectorAll(".cb").forEach(b => b.addEventListener("click", () => {
+    const r = +b.dataset.r, on = !st.rules.includes(r);
+    st.rules = on ? [...st.rules, r].sort((p, q) => p - q) : st.rules.filter(x => x !== r);
+    b.setAttribute("aria-checked", on);
+  }));
+  n.querySelector("#submitRules")?.addEventListener("click", submitRules);
+  n.querySelector("#clearRules")?.addEventListener("click", () => { st.rules = []; renderHardInput(); });
+  n.querySelector("#editRules")?.addEventListener("click", () => {
+    if (st.busy) return;
+    st.rulesDone = false; renderHardInput(); drawEdges();
+    guide("<b>Edit the hard rules.</b> Change the selection and press Submit Selected Rules. Every existing plan is checked again against the new rules.");
+  });
+  requestAnimationFrame(drawEdges);
+}
+async function submitRules() {
+  const typed = $("hardText").value.trim();
+  if (typed) { const n = $("hardNote"); n.hidden = false; n.textContent = "Translating typed rules needs the live system. In this demo, select rules from the list."; return; }
+  if (!st.rules.length) { const n = $("hardNote"); n.hidden = false; n.textContent = "Select at least one hard rule."; return; }
+  st.rulesDone = true;
+  renderHardInput();
+  if (st.plans.length) {
+    st.plans.forEach(p => renderVerification(p));
+    guide("<b>Plans checked again.</b> The model checker re-verified every plan against your updated hard rules.");
+    return;
+  }
+  guide("<b>Rule translator.</b> Each hard rule was translated into a temporal logic (LTL) property for the model checker, then back into plain language so you can confirm it. Step 2 holds the family's soft preferences. Edit them if you like, then send the request in Step 3.");
+  requestAnimationFrame(() => focusNodes(["hard", "soft", "req"]));
+}
+
+/* ---------- Step 2 (b) and Step 3 (c) ---------- */
+function renderInputs() {
+  addNode("soft", X.input, 560, `<div class="node-label">Step 2. Soft Rules Input</div>
+    <div class="panel"><textarea class="ud-area soft-text" id="softText" rows="14" aria-label="Soft rules">${esc(SOFT_TEXT)}</textarea><span class="handle h-right"></span></div>`,
+    ["b", "", "b"], 420);
+  addNode("req", X.request, 520, `<div class="node-label">Step 3. User Input</div>
+    <div class="panel"><input class="ud-input" id="reqText" value="Create a 2-day family trip to Venice, Italy" aria-label="Planning request">
+    <p class="note" id="reqNote" hidden></p>
+    <div class="ud-row"><button type="button" class="ud-btn" id="submitReq">Submit</button></div>
+    <span class="handle h-left"></span><span class="handle h-right"></span></div>`, ["c"], 300);
+  addEdge("hard", "req"); addEdge("soft", "req");
+  $("submitReq").addEventListener("click", submitRequest);
+}
+
+/* ---------- plans (d), hard violations (e), soft explanations (f) ---------- */
+function planHtml(p, label, open) {
+  const items = p.steps.map(x => x.day ? `<div class="day">${esc(x.day)}</div>` : `<div>${esc(x.text)}${x.t.length ? ` <span class="tag">${x.t.map(k => TAGTEXT[k]).join(" ")}</span>` : ""}${/[.]$/.test(x.text) ? "" : "."}</div>`);
+  const numbered = []; let k = 0;
+  p.steps.forEach((x, i) => { if (x.day) { numbered.push(items[i]); k = 0; } else { k++; numbered.push(items[i].replace("<div>", `<div>${k}. `)); } });
+  return `<div class="node-label">${esc(label)}</div>
+    <div class="panel">
+      <div class="plan-title"><button type="button" class="toggle" aria-expanded="${open}">${open ? "" : "&gt; "}${p.adjusted ? "### " : "PLAN " + p.id + ": "}${esc(p.name)}</button>
+      <button type="button" class="pick" role="checkbox" aria-checked="${st.selected === p.key}" aria-label="Select ${esc(p.name)}">${CHECK}</button></div>
+      <div class="items plan-body" ${open ? "" : "hidden"}>${numbered.join("")}</div>
+      <span class="handle h-left"></span><span class="handle h-right"></span>
+    </div>`;
+}
+function bindPlan(p) {
+  const el = nodes.get(p.key).el;
+  el.querySelector(".toggle").addEventListener("click", () => {
+    p.open = !p.open;
+    el.querySelector(".plan-body").hidden = !p.open;
+    const t = el.querySelector(".toggle");
+    t.setAttribute("aria-expanded", p.open);
+    t.innerHTML = (p.open ? "" : "&gt; ") + (p.adjusted ? "### " : "PLAN " + p.id + ": ") + esc(p.name);
+    drawEdges();
+  });
+  el.querySelector(".pick").addEventListener("click", () => selectPlan(p));
+}
+function starHtml(n) { return `<span class="stars" aria-label="${n} of 5 stars">${"★".repeat(n)}<span class="off">${"★".repeat(5 - n)}</span></span>`; }
+function renderVerification(p) {
+  const v = verify(p, st.rules);
+  p.v = v;
+  const list = v.broken.length
+    ? v.broken.map(x => `<div>Rule ${x.r.n} was broken: ${esc(x.r.text)}</div>`).join("")
+    : `<div class="ok">No hard rules were broken.</div>`;
+  const html = `<div class="node-label">Hard Violations</div>
+    <div class="panel viol"><div class="items">${list}</div>
+    <button type="button" class="mc-toggle" aria-expanded="false">Model checker output</button>
+    <div class="mc-out"><pre>${esc(prismOf(p, st.rules))}\n${esc(checkerOut(v))}</pre></div>
+    <span class="handle h-left"></span><span class="handle h-right"></span></div>`;
+  const id = p.key + "-viol";
+  const chip = p.firstOfKind ? (p.adjusted ? ["i"] : ["e"]) : null;
+  const chipHtml = chip ? `<span class="gchip ${p.adjusted ? "g" : ""}"><b>${chip[0]}</b></span>` : "";
+  if (nodes.has(id)) nodes.get(id).el.innerHTML = html + chipHtml;
+  else { addNode(id, p.adjusted ? X.adjViol : X.viol, p.y, html, chip && [chip[0], "", p.adjusted ? "g" : ""], 310); addEdge(p.key, id); }
+  const el = nodes.get(id).el;
+  el.querySelector(".mc-toggle").addEventListener("click", ev => {
+    const out = el.querySelector(".mc-out"); out.classList.toggle("open");
+    ev.target.setAttribute("aria-expanded", out.classList.contains("open")); drawEdges();
+  });
+  requestAnimationFrame(drawEdges);
+}
+function renderSoft(p) {
+  const id = p.key + "-soft";
+  const chip = p.firstOfKind ? [p.adjusted ? "j" : "f", "", p.adjusted ? "g" : ""] : null;
+  addNode(id, p.adjusted ? X.adjSoft : X.soft, p.y, `<div class="node-label">Soft Explanations</div>
+    <div class="panel soft"><div class="items"><div>Plan: ${p.adjusted ? "" : "PLAN " + p.id + ": "}${esc(p.name)}<br>Rating: ${starHtml(p.stars)} (${p.stars} stars)<br><br>Reasoning: ${esc(p.reason)}</div></div>
+    <span class="handle h-left"></span></div>`, chip, 320);
+  addEdge(p.key + "-viol", id);
+}
+
+async function submitRequest() {
+  if (st.busy) return;
+  const note = $("reqNote");
+  if (!st.rulesDone) { note.hidden = false; note.textContent = "Submit the hard rules in Step 1 first."; return; }
+  if (st.plans.length) { note.hidden = false; note.textContent = "Plans are ready. Select one to give feedback, or press Restart."; return; }
+  note.hidden = true;
+  st.busy = true; $("submitReq").disabled = true;
+  guide("<b>Generating and verifying.</b> The LLM planner drafts three candidate plans. Each is converted into a PRISM model and checked against your hard rules, and an LLM judge rates it against the soft preferences.");
+  const pending = addNode("pending", X.plan, 200, `<div class="node-label">Plans</div><div class="panel"><div class="thinking"><span class="spin"></span>LLM Planner is generating 3 plans...</div><span class="handle h-left"></span></div>`, null, 300);
+  const pe = addEdge("req", "pending", true);
+  requestAnimationFrame(() => focusNodes(["req", "pending"]));
+  await wait(2600);
+  removeNode("pending");
+  // rank by number of hard violations (fewest first), as U-Define does
+  const ranked = BASE.map(b => ({ ...b, key: "p" + b.id.replace(".", ""), v: verify(b, st.rules) }))
+    .sort((a, b) => a.v.broken.length - b.v.broken.length);
+  const Y = [0, 560, 1000];
+  for (let i = 0; i < ranked.length; i++) {
+    const p = ranked[i]; p.y = Y[i]; p.open = i === 0; p.firstOfKind = i === 0;
+    st.plans.push(p);
+    addNode(p.key, X.plan, p.y, planHtml(p, `Plan ${i + 1}`, p.open), i === 0 ? ["d"] : null, 300);
+    bindPlan(p);
+    addEdge("req", p.key);
+  }
+  requestAnimationFrame(() => focusNodes(["p" + ranked[0].id.replace(".", "")]));
+  await wait(1200);
+  for (const p of ranked) { renderVerification(p); await wait(500); }
+  for (const p of ranked) { renderSoft(p); await wait(400); }
+  st.busy = false;
+  requestAnimationFrame(() => focusNodes([ranked[0].key, ranked[0].key + "-viol", ranked[0].key + "-soft"]));
+  guide("<b>Compare the plans.</b> They are ranked by the number of hard rules each one breaks. Open a plan with its title, open Model checker output to see the verification, then check the box on the plan you prefer.");
+}
+
+/* ---------- feedback (g) and revised plans (h to j) ---------- */
+function selectPlan(p) {
+  if (st.busy) return;
+  st.selected = p.key;
+  document.querySelectorAll("#world .pick").forEach(b => b.setAttribute("aria-checked", "false"));
+  nodes.get(p.key).el.querySelector(".pick").setAttribute("aria-checked", "true");
+  if (!nodes.has("fb")) {
+    addNode("fb", X.fb, 0, `<div class="panel" style="background:#fff;border:1px solid var(--ud-line);box-shadow:0 2px 8px rgba(0,0,0,.08)">
+      <p class="fb-title">User Feedback</p>
+      <div class="fb-opts">${FEEDBACK.map(([k, t]) => `<button type="button" data-k="${k}" aria-pressed="false">${t}</button>`).join("")}</div>
+      <textarea class="ud-area" id="fbText" rows="4" style="margin-top:10px" aria-label="Feedback"></textarea>
+      <div class="ud-row" style="justify-content:flex-end"><button type="button" class="ud-btn green" id="fbSubmit">Submit</button></div>
+      <span class="handle h-left"></span><span class="handle h-right"></span></div>`, ["g", "", "g"], 300);
+    const el = nodes.get("fb").el;
+    el.querySelectorAll(".fb-opts button").forEach(b => b.addEventListener("click", () => {
+      el.querySelectorAll(".fb-opts button").forEach(o => o.setAttribute("aria-pressed", "false"));
+      b.setAttribute("aria-pressed", "true"); $("fbText").value = b.textContent;
+    }));
+    $("fbSubmit").addEventListener("click", submitFeedback);
+  }
+  edges = edges.filter(e => e.to !== "fb"); addEdge(p.key, "fb");
+  requestAnimationFrame(() => focusNodes(["fb", p.key]));
+  guide(`<b>Feedback loop.</b> You selected ${esc(p.adjusted ? p.name : "PLAN " + p.id)}. Pick a suggestion or write your own, then press Submit. The planner revises this plan using your feedback and the hard rules it broke.`);
+}
+async function submitFeedback() {
+  if (st.busy) return;
+  const text = $("fbText").value.trim();
+  if (!text) { $("fbText").focus(); return; }
+  const parent = st.plans.find(p => p.key === st.selected);
+  st.busy = true; $("fbSubmit").disabled = true;
+  const k = st.adjustedCount++;
+  const y = k * 1000;
+  guide(`<b>Revising.</b> The planner receives ${esc(parent.adjusted ? "the selected plan" : "PLAN " + parent.id)}, the hard rules it broke (${parent.v.broken.length ? esc(parent.v.broken.map(x => "Rule " + x.r.n).join(", ")) : "none"}), and your feedback.`);
+  addNode("pending", X.adj, y + 100, `<div class="node-label">Plan ${4 + k}</div><div class="panel"><div class="thinking"><span class="spin"></span>Regenerating plan...</div><span class="handle h-left"></span></div>`, null, 320);
+  addEdge("fb", "pending", true);
+  requestAnimationFrame(() => focusNodes(["fb", "pending"]));
+  await wait(2600);
+  removeNode("pending");
+  const theme = themeFor(text);
+  const p = { ...revised(theme, parent.adjusted ? parent.name : "PLAN " + parent.id + ": " + parent.name, FEEDBACK.some(f => f[1] === text) ? "" : text, parent.v.broken.map(x => "Rule " + x.r.n).join(", ")), key: "adj" + k, y, open: true, firstOfKind: k === 0 };
+  st.plans.push(p);
+  addNode(p.key, X.adj, y, planHtml(p, `Plan ${4 + k}`, true), k === 0 ? ["h", "", "g"] : null, 320);
+  bindPlan(p);
+  addEdge("fb", p.key);
+  await wait(900);
+  renderVerification(p);
+  await wait(500);
+  renderSoft(p);
+  st.busy = false; $("fbSubmit").disabled = false;
+  requestAnimationFrame(() => focusNodes([p.key, p.key + "-viol", p.key + "-soft"]));
+  guide(`<b>Revised plan verified.</b> ${p.v.valid ? "It satisfies all of your hard rules." : "It still breaks a hard rule."} Select any plan to give more feedback, or press Edit Rules in Step 1 to change the hard rules and re-check every plan.`);
+}
+
+/* ---------- reset ---------- */
+function reset() {
+  if (st) st.timers.forEach(clearTimeout);
+  st = { rules: [], rulesDone: false, plans: [], selected: null, busy: false, adjustedCount: 0, timers: [] };
+  nodes.forEach(n => n.el.remove()); nodes.clear(); edges = []; drawEdges(); lastFocus = null;
+  renderHardInput(); renderInputs();
+  requestAnimationFrame(() => focusNodes(["hard", "req"], false));
+  guide("<b>Step 1.</b> Select the hard rules this trip must never break, then press Submit Selected Rules.");
+}
+$("restart").addEventListener("click", reset);
+$("showGuide").addEventListener("change", e => $("app").classList.toggle("no-guide", !e.target.checked));
+window.addEventListener("resize", () => { if (nodes.size && lastFocus) focusNodes(lastFocus, false); });
+reset();
+})();
+</script>
+</body>
+</html>
