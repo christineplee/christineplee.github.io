@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAP demo · Christine P. Lee</title>
+<meta name="description" content="Try MAP (CHI 2025 Extended Abstracts), collaborative LLM-powered agents that personalize for several people at once and resolve conflicts between their preferences.">
+<link rel="canonical" href="https://christineplee.github.io/research/map/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css?v=4">
+<style>
+/* Layout: site header above a Chainlit chat panel (the MAP prototype ran on Chainlit with Langroid)
+   on the left, and the residents' documents in the document store on the right. */
+:root {
+  color-scheme: light;
+  --site-bg: var(--paper);
+  --site-fg: var(--ink);
+  --site-muted: var(--muted);
+  --plum: var(--accent);
+  --plum-soft: #f3e9f0;
+  --rule: #e6e0e5;
+  --rule-strong: #cfc6cd;
+  --room: #f6f2f5;
+  --font-site: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  /* MAP Figure 1 */
+  --map-navy: #1d3557;
+  --map-slate: #5f6f86;
+  --map-bubble: #d6e8f7;
+  --map-bubble-line: #b5d0ea;
+  --map-red: #c62f2f;
+  --hl-soft: #fff9e0;
+  --hl-soft-line: #f2e2a6;
+  --hl-strong: #ffd666;
+  --hl-new: #e2f3e6;
+  --hl-new-line: #8cc99b;
+  /* Chainlit 1.0 light theme */
+  --cl-bg: #fafafa; --cl-paper: #ffffff; --cl-border: #e4e4e7; --cl-muted: #71717a;
+  --cl-primary: #F80061; --cl-user: #27272a;
+  --font-cl: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+a:focus-visible, button:focus-visible, textarea:focus-visible, li:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+
+/* ---------- demo header ---------- */
+.demo { display: flex; flex-direction: column; padding: 32px 0 24px 24px; }
+@media (max-width: 1100px) { .demo { padding-left: 0; } }
+.demo-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.demo-head h1 { margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.4px; line-height: 1.2; }
+.demo-head .byline { margin: 0; font-size: 15px; color: var(--site-muted); }
+.demo-head .byline a + a { margin-left: 10px; }
+.demo-head .lede { margin: 0; max-width: 68ch; }
+.demo-head .disclose { margin: 0; max-width: 72ch; font-size: 15px; color: var(--site-muted); }
+
+/* ---------- task ---------- */
+.task { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 16px 40px; align-items: center; background: #fff; border: 1px solid var(--rule); border-radius: 10px; padding: 18px 22px; margin-bottom: 18px; }
+.task h2 { font-size: 1.15rem; font-weight: 500; margin: 0 0 6px; text-wrap: balance; }
+.task p { margin: 0; line-height: 1.55; max-width: 66ch; }
+.task .task-q { margin-top: 8px; color: var(--plum); font-weight: 500; }
+.task-fig { width: 100%; max-width: 400px; height: auto; }
+.tf-h { font-family: var(--font-site); font-size: 12px; font-weight: 700; fill: var(--site-fg); }
+.tf-s { font-family: var(--font-site); font-size: 11px; fill: var(--site-muted); }
+.tf-w { font-family: var(--font-site); font-size: 11.5px; font-weight: 700; fill: #fff; }
+@media (max-width: 860px) { .task { grid-template-columns: 1fr; padding: 16px; } }
+
+/* ---------- guide strip ---------- */
+.guide { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 12px 0; margin-bottom: 14px; }
+.guide-now { flex: 1 1 420px; min-width: 0; margin: 0; font-size: 0.98rem; line-height: 1.45; }
+.guide-now b { color: var(--plum); font-weight: 500; }
+.btn-site { font-family: var(--font-site); font-size: 0.9rem; font-weight: 600; border: 1px solid var(--plum); color: var(--plum); background: transparent; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.btn-site:hover { background: var(--plum-soft); }
+
+/* ---------- app frame ---------- */
+.app { display: flex; height: 760px; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(40,20,40,.04), 0 8px 24px rgba(40,20,40,.06); }
+.left { flex: 9 1 0; min-width: 0; background: var(--cl-bg); padding: 10px; display: flex; }
+.right { flex: 11 1 0; min-width: 0; display: flex; flex-direction: column; border-left: 1px solid var(--cl-border); background: #fbfbfc; }
+
+/* ---------- Chainlit panel ---------- */
+.cl { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--cl-paper); border-radius: 22px; border: 1px solid var(--cl-border); font-family: var(--font-cl); color: #18181b; overflow: hidden; }
+.cl-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--cl-border); }
+.cl-title { font-size: 13px; font-weight: 600; color: #3f3f46; }
+.cl-me { width: 26px; height: 26px; border-radius: 50%; background: var(--cl-primary); color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; }
+.cl-msgs { flex: 1; overflow-y: auto; padding: 14px 16px 8px; display: flex; flex-direction: column; gap: 16px; }
+.msg { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.55; }
+.av { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; margin-top: 1px; }
+.av.planner { background: var(--map-navy); }
+.av.you { background: var(--cl-user); }
+.msg-body { flex: 1; min-width: 0; }
+.msg-meta { display: flex; gap: 8px; align-items: baseline; margin-bottom: 2px; }
+.msg-meta b { font-size: 14px; font-weight: 600; }
+.msg-meta time { font-size: 12px; color: var(--cl-muted); }
+.msg-text p { margin: 0 0 6px; }
+.msg-text p:last-child { margin-bottom: 0; }
+.instr { border: 1px solid var(--cl-border); border-radius: 8px; padding: 10px 12px; background: #fcfcfd; font-size: 13px; }
+.instr h4 { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+.instr p { margin: 0; }
+.step { border: 1px solid var(--cl-border); border-radius: 6px; margin-top: 6px; font-size: 13px; background: #fff; }
+.step > button { width: 100%; display: flex; align-items: center; gap: 8px; background: transparent; border: 0; padding: 6px 10px; font: inherit; color: #3f3f46; cursor: pointer; text-align: left; }
+.step > button .who { font-weight: 600; }
+.step > button .arrow { color: var(--cl-muted); }
+.step > button .chev { margin-left: auto; transition: transform .15s; color: var(--cl-muted); flex: none; }
+.step.open > button .chev { transform: rotate(180deg); }
+.step-body { display: none; border-top: 1px solid var(--cl-border); padding: 8px 10px; max-height: 280px; overflow: auto; }
+.step.open .step-body { display: block; }
+.step-body .q { color: #3f3f46; margin: 0 0 6px; }
+.step-body .q b, .step-body .a b { font-weight: 600; }
+.step-body .a { margin: 0; color: #27272a; }
+.step-body pre { margin: 0; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+.step-body pre .k { color: #7a3d8c; } .step-body pre .s { color: #2f6f5a; }
+.spin { width: 12px; height: 12px; border: 2px solid #e4e4e7; border-top-color: var(--cl-primary); border-radius: 50%; animation: spin .8s linear infinite; flex: 0 0 auto; }
+.done-dot { width: 12px; height: 12px; border-radius: 50%; background: #22c55e; flex: 0 0 auto; position: relative; }
+.done-dot::after { content: ""; position: absolute; left: 4px; top: 2px; width: 3px; height: 6px; border: solid #fff; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.typing { display: inline-flex; gap: 3px; padding: 4px 0; }
+.typing i { width: 5px; height: 5px; background: #a1a1aa; border-radius: 50%; animation: blink 1s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes blink { 50% { opacity: .25; } }
+
+/* plan answers: each line points at the rules it used */
+.plan { list-style: none; margin: 4px 0 6px; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.plan li { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 8px; padding: 4px 6px; border-radius: 6px; cursor: default; }
+.plan li.nt { grid-template-columns: minmax(0, 1fr); }
+.plan li:hover, .plan li:focus-visible, .plan li.hot { background: #fff6d8; }
+.plan .t { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--map-navy); white-space: nowrap; }
+.plan .conf { display: block; margin-top: 3px; font-size: 12.5px; color: var(--map-red); }
+.plan .conf::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--map-red); margin-right: 6px; vertical-align: 1px; }
+.rules-sum { margin: 4px 0 6px; padding-left: 18px; }
+.rules-sum li { margin: 3px 0; }
+.rules-sum b { font-weight: 600; }
+.hint { font-size: 12.5px; color: var(--cl-muted); }
+
+.cl-foot { padding: 8px 12px 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip { font-family: var(--font-cl); font-size: 12.5px; line-height: 1.35; text-align: left; border: 1px solid var(--cl-border); background: #fff; color: #3f3f46; border-radius: 14px; padding: 5px 11px; cursor: pointer; }
+.chip:hover { border-color: var(--cl-primary); color: var(--cl-primary); }
+.chip.sel { border-color: var(--cl-primary); background: #fff1f5; color: var(--cl-primary); }
+.chip.go { background: var(--cl-primary); border-color: var(--cl-primary); color: #fff; font-weight: 600; }
+.cl-input { display: flex; align-items: flex-end; gap: 8px; border: 1px solid var(--cl-border); border-radius: 12px; padding: 8px 8px 8px 12px; background: #fff; }
+.cl-input textarea { flex: 1; min-width: 0; border: 0; outline: none; resize: none; font-family: var(--font-cl); font-size: 14px; line-height: 1.45; color: #18181b; background: transparent; cursor: default; }
+.cl-input textarea::placeholder { color: #a1a1aa; }
+.cl-send { border: 0; background: transparent; color: var(--cl-primary); cursor: pointer; padding: 4px; border-radius: 6px; display: grid; place-items: center; }
+.cl-send:disabled { color: #d4d4d8; cursor: default; }
+.cl-send.pulse:not(:disabled) { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { background: #ffe4ee; } }
+.cl-built { text-align: center; font-size: 11.5px; color: var(--cl-muted); margin-top: 6px; }
+
+/* ---------- workflow stages (after the paper's Figure 1) ---------- */
+.stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 12px 14px 10px; border-bottom: 1px solid var(--cl-border); font-family: var(--font-cl); }
+.stage { border-radius: 8px; padding: 6px 10px; border: 1px solid transparent; color: #8b8b93; }
+.stage b { display: block; font-size: 12.5px; font-weight: 600; }
+.stage span { display: block; font-size: 11.5px; line-height: 1.35; }
+.stage.on { background: #fff; border-color: var(--map-bubble-line); color: #27272a; box-shadow: 0 1px 3px rgba(29,53,87,.08); }
+.stage.on b { color: var(--map-navy); }
+.stage.done b::after { content: " \2713"; color: #22a05a; }
+
+/* ---------- document store ---------- */
+.store-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 14px 6px; font-family: var(--font-cl); }
+.store-head h2 { margin: 0; font-size: 13px; font-weight: 600; color: #3f3f46; font-style: italic; }
+.legend { display: flex; gap: 12px; font-size: 11.5px; color: var(--cl-muted); flex-wrap: wrap; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+.legend .l-used { background: var(--hl-soft); border: 1px solid var(--hl-soft-line); }
+.legend .l-new { background: var(--hl-new); border: 1px solid var(--hl-new-line); }
+.docs { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 4px 14px 14px; font-family: var(--font-cl); }
+.doc { min-width: 0; display: flex; flex-direction: column; background: #fff; border: 1px solid var(--cl-border); border-radius: 10px; overflow: hidden; }
+.doc-h { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--cl-border); }
+.doc-h .ic { width: 16px; height: 20px; border: 1.5px solid #9aa3b5; border-radius: 2px; position: relative; flex: none; }
+.doc-h .ic::before, .doc-h .ic::after { content: ""; position: absolute; left: 3px; right: 3px; height: 1.5px; background: #b9c0cd; top: 6px; }
+.doc-h .ic::after { top: 11px; }
+.doc-h b { font-size: 13.5px; font-weight: 600; }
+.doc-h small { margin-left: auto; font-size: 11.5px; color: var(--cl-muted); font-variant-numeric: tabular-nums; }
+.doc ol { list-style: none; margin: 0; padding: 6px 6px 10px; overflow-y: auto; flex: 1; scroll-behavior: smooth; }
+.doc li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 4px; font-size: 12px; line-height: 1.42; color: #52525b; padding: 4px 5px; border-radius: 5px; border: 1px solid transparent; transition: background-color .25s, border-color .25s, color .25s; }
+.doc li .n { color: #a1a1aa; font-variant-numeric: tabular-nums; text-align: right; }
+.doc li.used { background: var(--hl-soft); border-color: var(--hl-soft-line); color: #27272a; }
+.doc li.hot { background: var(--hl-strong); border-color: #d9a400; color: #18181b; box-shadow: 0 0 0 1px #d9a400; }
+.doc li.scan { background: #eef5fc; border-color: transparent; color: #27272a; }
+.doc li.new { background: var(--hl-new); border-color: var(--hl-new-line); color: #18181b; animation: pop .4s ease-out; }
+.doc li.new .n { color: #2f7d48; }
+@keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+.facility { margin: 0 14px 12px; padding: 7px 10px; border-radius: 8px; border: 1px dashed #c4cbd8; font-family: var(--font-cl); font-size: 12px; color: #52525b; transition: background-color .25s, border-color .25s; }
+.facility b { font-weight: 600; color: #3f3f46; }
+.facility.used { background: var(--hl-soft); border: 1px solid var(--hl-soft-line); }
+.facility.hot { background: var(--hl-strong); border: 1px solid #d9a400; }
+
+@media (max-width: 860px) {
+  .app { flex-direction: column; height: auto; }
+  .left { height: 700px; flex: none; }
+  .right { flex: none; border-left: 0; border-top: 1px solid var(--cl-border); }
+  .docs { grid-template-columns: 1fr; }
+  .doc ol { max-height: 260px; }
+  .stages { grid-template-columns: 1fr; }
+  .stage span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin, .typing i, .cl-send.pulse, .doc li.new { animation: none; }
+  .doc ol { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+<nav class="nav" aria-label="Main">
+<a class="home" href="/">Christine P. Lee</a>
+<div class="links">
+<a href="/research/">research</a>
+<a href="/publications/">publications</a>
+<a href="/assets/pdf/christine-lee-cv.pdf">cv</a>
+</div>
+</nav>
+
+<main class="demo">
+  <header class="demo-head">
+    <h1>MAP</h1>
+    <p class="byline">Christine P. Lee*, Jihye Choi*, and Bilge Mutlu (* equal contribution). CHI 2025 Extended Abstracts. <a href="https://doi.org/10.1145/3706599.3719853">Paper</a><a href="/assets/pdf/papers/lee-chi25ea-map.pdf">PDF</a><a href="https://github.com/jihyechoi77/MAP">Code</a></p>
+    <p class="lede">MAP coordinates LLM-powered agents to personalize for several people at once. It gathers each person's rules, plans around the conflicts between them, explains its choices, and takes feedback. Try it on the assisted care scenario from the paper.</p>
+    <p class="disclose">The agents' responses are scripted for this demo. The residents' documents and the rule for resolving conflicts are the ones the system used.</p>
+  </header>
+
+  <section class="task" aria-labelledby="taskTitle">
+    <div>
+      <h2 id="taskTitle">The task: assisted care</h2>
+      <p>A care facility's robot looks after three residents, Blaine, Ryan, and Susie. Each gave it a document of preferences and schedules, 20 rules each. Their needs often overlap, and when they do, the facility's rule is to serve residents in alphabetical order of their first names.</p>
+      <p class="task-q">Ask the robot how it will care for them.</p>
+    </div>
+    <svg class="task-fig" viewBox="0 0 400 176" role="img" aria-labelledby="figT">
+      <title id="figT">Three residents' documents go into a document store. The Rule Retriever searches it, the Rule Manager organizes the rules for each resident, and the Planner uses them to answer the user.</title>
+      <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#8b8b93"/></marker></defs>
+      <g>
+        <rect x="8" y="14" width="64" height="40" rx="6" fill="#fff" stroke="var(--rule-strong)"/><text x="40" y="38" text-anchor="middle" class="tf-h">Blaine</text>
+        <rect x="8" y="66" width="64" height="40" rx="6" fill="#fff" stroke="var(--rule-strong)"/><text x="40" y="90" text-anchor="middle" class="tf-h">Ryan</text>
+        <rect x="8" y="118" width="64" height="40" rx="6" fill="#fff" stroke="var(--rule-strong)"/><text x="40" y="142" text-anchor="middle" class="tf-h">Susie</text>
+      </g>
+      <path d="M76 34 C96 34 96 80 112 84" fill="none" stroke="#8b8b93" stroke-width="1.3" marker-end="url(#arr)"/>
+      <path d="M76 86 H112" fill="none" stroke="#8b8b93" stroke-width="1.3" marker-end="url(#arr)"/>
+      <path d="M76 138 C96 138 96 92 112 88" fill="none" stroke="#8b8b93" stroke-width="1.3" marker-end="url(#arr)"/>
+      <rect x="116" y="64" width="58" height="44" rx="6" fill="var(--room)" stroke="var(--rule-strong)"/>
+      <text x="145" y="83" text-anchor="middle" class="tf-s">document</text><text x="145" y="97" text-anchor="middle" class="tf-s">store</text>
+      <rect x="196" y="22" width="86" height="28" rx="14" fill="var(--map-slate)"/><text x="239" y="40" text-anchor="middle" class="tf-w">Rule Manager</text>
+      <rect x="196" y="122" width="86" height="28" rx="14" fill="var(--map-slate)"/><text x="239" y="140" text-anchor="middle" class="tf-w">Rule Retriever</text>
+      <path d="M178 104 C186 124 188 132 192 134" fill="none" stroke="#8b8b93" stroke-width="1.3" marker-start="url(#arr)"/>
+      <path d="M232 118 V56" fill="none" stroke="#8b8b93" stroke-width="1.3" marker-end="url(#arr)"/>
+      <path d="M246 56 V118" fill="none" stroke="#8b8b93" stroke-width="1.3" marker-end="url(#arr)"/>
+      <rect x="308" y="22" width="70" height="28" rx="14" fill="var(--map-navy)"/><text x="343" y="40" text-anchor="middle" class="tf-w">Planner</text>
+      <path d="M284 36 H304" fill="none" stroke="#8b8b93" stroke-width="1.3" marker-end="url(#arr)"/>
+      <circle cx="343" cy="122" r="16" fill="var(--plum)"/><text x="343" y="126" text-anchor="middle" class="tf-w">You</text>
+      <path d="M337 54 V102" fill="none" stroke="#8b8b93" stroke-width="1.3" marker-start="url(#arr)" marker-end="url(#arr)"/>
+      <text x="343" y="160" text-anchor="middle" class="tf-s">ask, give feedback</text>
+    </svg>
+  </section>
+
+  <div class="guide">
+    <p class="guide-now" id="guideNow" aria-live="polite"></p>
+    <button class="btn-site" id="restart" type="button">Restart</button>
+  </div>
+
+  <div class="app" id="app">
+    <div class="left">
+      <section class="cl" aria-label="Chat with the robot">
+        <div class="cl-head">
+          <span class="cl-title">Assistive care robot</span>
+          <div class="cl-me" aria-hidden="true">U</div>
+        </div>
+        <div class="cl-msgs" id="msgs" aria-live="polite"></div>
+        <div class="cl-foot">
+          <div class="chips" id="chips"></div>
+          <form class="cl-input" id="form">
+            <textarea id="input" rows="2" readonly aria-label="Message" placeholder="Pick a message above"></textarea>
+            <button class="cl-send" id="send" type="submit" aria-label="Send" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10.1 15 12 3.4 13.9Z"/></svg>
+            </button>
+          </form>
+          <div class="cl-built">Built with Chainlit</div>
+        </div>
+      </section>
+    </div>
+    <div class="right">
+      <div class="stages" id="stages">
+        <div class="stage" data-stage="reflection"><b>Stage 1. Reflection</b><span>Gather every resident's rules from their documents</span></div>
+        <div class="stage" data-stage="analysis"><b>Stage 2. Analysis</b><span>Plan, resolve conflicts, and explain</span></div>
+        <div class="stage" data-stage="feedback"><b>Stage 3. Feedback</b><span>Take in changes and update the rules</span></div>
+      </div>
+      <div class="store-head">
+        <h2>Residents' documents</h2>
+        <div class="legend"><span><i class="l-used"></i>used in the latest answer</span><span><i class="l-new"></i>added from feedback</span></div>
+      </div>
+      <div class="docs" id="docs"></div>
+      <p class="facility" id="facility"><b>Facility rule.</b> When any residents' preferences and schedules overlap, serve them in alphabetical order of their first names.</p>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+/* =====================================================================
+   Residents' documents: docs/scenario2_assistive.txt in the MAP
+   repository (github.com/jihyechoi77/MAP), with two typos fixed.
+   ===================================================================== */
+const DOCS = {
+  Blaine: [
+    "For her wake-up alarm, Blaine wants the robot to enter her room and give a greeting.",
+    "For her to take her walk, Blaine wants the robot to prepare her wheelchair next to her bed.",
+    "When waking Blaine up, she wants a glass of water.",
+    "Blaine likes to have breakfast with other residents in the common room.",
+    "For breakfast, Blaine likes to have mixed fruits and green tea. She wants the food to be prepared in the common room.",
+    "For yoga class, Blaine wants the robot to deliver the required materials to be left on her bed.",
+    "For her weekly doctor appointments, Blaine wants the robot to escort her to the front door 15 minutes before her appointment.",
+    "Blaine likes her mail and packages to be delivered directly to her.",
+    "Between eating breakfast and before lunch, Blaine must take her medications. She wants the robot to drop by sometime before lunch to check on whether she took her medications.",
+    "If Blaine has to take new medications, Blaine wants the robot to alert the human caretaker to come to Blaine and assist her in taking new medications.",
+    "Everyday, Blaine will wake up at 7 am.",
+    "Everyday, Blaine will have breakfast in the common area at 9 am.",
+    "Blaine always takes a walk at 7:30 on Monday, Wednesday, and Friday.",
+    "Blaine likes to have social interaction with the robot. She wants the robot to discuss various topics with her, such as global issues, animals, and nature, for 30 minutes after breakfast on Monday, Wednesday, and Friday.",
+    "Blaine will join the book club on Friday 10:30 am",
+    "Blaine will join the yoga club on Tuesday 10:30 am",
+    "Blaine will join the art club on Wednesday 10:30 am. Blaine wants a reminder.",
+    "Blaine has weekly doctor checkups on Monday 10:30 am.",
+    "Blaine will join an outdoor exercise session on Thursday at 11 am.",
+    "Blaine has lunch at 12pm with her children who visit every Friday. She wants her children escorted from the front door to her room when they arrive at 11:30am."
+  ],
+  Ryan: [
+    "Ryan shaves on Monday, Wednesday, and Fridays right after he wakes up. While you wake him up, you should deliver a razor, shaving foam, and a towel on his bed stand.",
+    "For a wakeup call, Ryan likes three knocks on his door.",
+    "For breakfast, Ryan likes oatmeal, milk, and fruit.",
+    "Ryan likes 2 water bottles to be delivered to his room after breakfast.",
+    "Ryan wants the robot to gather his laundry at 12pm everyday, when he is off to lunch.",
+    "Ryan likes to have the newspaper delivered to him after he wakes up and before breakfast.",
+    "Ryan wants the robot to knock on the door twice before entering his room, so that Ryan knows that it is him.",
+    "Ryan wants all delivery packages left in front of his door, the mail should be left on top of the packages.",
+    "Ryan likes fresh flowers to be placed in the vase next to his bed every time he returns from his doctor’s appointment to cheer him up.",
+    "Ryan is especially into gardening indoor plants. He wants the robot to make sure he watered them around lunchtime.",
+    "Ryan will wake up at 7 am every weekday.",
+    "Ryan will always have breakfast in his own room between 8:30 and 9:30 am.",
+    "Ryan has weekly doctor checkups on Tuesday 10:30am. Ryan likes a reminder 30 minutes before his appointment.",
+    "Ryan will host his birthday party on Thursday 10:30 am. He wants the robot to provide reminders 1 hour before to all residents.",
+    "Ryan will join the book club on Friday 10:30 am",
+    "Ryan will join the yoga club on Monday 10:30 am",
+    "Ryan will join the art club on Wednesday 10:30 am. Ryan wants a reminder 30 minutes before.",
+    "Ryan has physical therapy on Friday 10 am.",
+    "Ryan will join an outdoor hiking session at Friday 12pm.",
+    "Ryan has a lunch appointment with a friend at 12pm on Wednesday. He wants a reminder 15 minutes before."
+  ],
+  Susie: [
+    "Susie is independent and takes privacy important, so she doesn’t want the robot to enter her room unless confirmed by her. The robot should knock for confirmation. If she does not answer, the robot should assume that she is not available.",
+    "Every morning, Susie wants the local newspaper delivered to her by the robot. On Mondays and Wednesdays, she also wants the New York Times delivered as well to do the crossword puzzle.",
+    "For yoga class, Susie wants the robot to deliver required materials to be left at her door.",
+    "On Monday, Wednesday, and Friday, Susie wants to have breakfast with others in the common room.",
+    "Susie has a mail basket on her door for mail delivery. She wants the robot to leave the mail in the basket rather than directly delivering it to her.",
+    "Susie wants the robot to deliver all other packages directly to her. If she is not available, she wants the robot to deliver the packages to the human caretaker.",
+    "Susie wants the robot to deliver a glass of water and her vitamins to her after lunch.",
+    "Susie wants the robot to empty the trash can in her room after lunch.",
+    "Susie needs insulin shots after her lunch. She wants the robot to check sometime after lunch to make sure she took the shot.",
+    "Susie likes when the robot delivers and offers coffee or tea spontaneously in her room.",
+    "On Tuesdays and Thursdays, Susie likes to have breakfast by herself at 8 am.",
+    "On Monday, Wednesday, and Friday, she will have breakfast in the common area with other residents at 9am.",
+    "Susie has weekly physical therapy at 10:30 am on Wednesdays.",
+    "Susie will join the book club on Monday and Friday 10:30 am",
+    "Susie will join the yoga club on Tuesday at 10:30 am. Susie wants her yoga mat delivered to her door at 10am.",
+    "Susie will join Ryan’s birthday party on Thursday 10:30 am. Susie wants a reminder at 10am.",
+    "Susie takes a walk everyday at 6:30 am, and wants her water bottle filled with water delivered to her door at 6am.",
+    "On Thursday, Susie wants wrapping material delivered to her sometime before Ryan’s birthday party to wrap her gift.",
+    "Susie wants coffee delivered to her room after breakfast at 10:00 am.",
+    "Susie goes to volunteer at the community center at 12pm on Friday for reading stories to children. She wants child books to be prepared and left at her door at 11:30am."
+  ]
+};
+const ORDER = ["Blaine", "Ryan", "Susie"];
+const KEY = { B: "Blaine", R: "Ryan", S: "Susie" };
+
+/* =====================================================================
+   Script. Rule references: B = Blaine, R = Ryan, S = Susie, F = the
+   facility's alphabetical-order rule (from the Planner's system prompt).
+   ===================================================================== */
+const ALL = id => DOCS[KEY[id]].map((_, i) => id + (i + 1));
+
+const RETRIEVE = [
+  { who: "Blaine", q: "What is Blaine's preference and schedule?",
+    a: "Blaine wakes up at 7 am every day and wants the robot to enter her room, greet her, and bring a glass of water. She walks at 7:30 on Monday, Wednesday, and Friday, with her wheelchair prepared next to her bed. She has breakfast at 9 am in the common room (mixed fruits and green tea), followed by 30 minutes of conversation on Monday, Wednesday, and Friday. She takes her medications before lunch and wants the robot to check on her; for new medications, the human caretaker should be alerted. Her activities: doctor checkup Monday 10:30 am (escort to the front door 15 minutes before), yoga Tuesday 10:30 am (materials left on her bed), art club Wednesday 10:30 am (with a reminder), outdoor exercise Thursday 11 am, book club Friday 10:30 am. Her children visit for lunch every Friday at 12 pm and should be escorted from the front door to her room at 11:30 am. Mail and packages go directly to her." },
+  { who: "Susie", q: "What is Susie's preference and schedule?",
+    a: "Susie values her privacy: the robot must knock and wait for her confirmation before entering, and assume she is unavailable if she does not answer. She walks every day at 6:30 am and wants her water bottle filled and left at her door at 6 am. She wants the local newspaper every morning, plus the New York Times on Monday and Wednesday. She has breakfast in the common room at 9 am on Monday, Wednesday, and Friday, and alone at 8 am on Tuesday and Thursday, with coffee delivered to her room at 10 am. After lunch she wants water and vitamins, her trash emptied, and a check that she took her insulin shot. Her activities: book club Monday and Friday 10:30 am, yoga Tuesday 10:30 am (mat at her door at 10 am), physical therapy Wednesday 10:30 am, Ryan's birthday party Thursday 10:30 am (reminder at 10 am, wrapping material before), volunteering Friday 12 pm (children's books at her door at 11:30 am). Mail goes in the basket on her door; other packages go directly to her, or to the human caretaker if she is not available." },
+  { who: "Ryan", q: "What is Ryan's preference and schedule?",
+    a: "Ryan wakes up at 7 am every weekday and likes three knocks on his door as a wake-up call; the robot should knock twice before entering his room. On Monday, Wednesday, and Friday he shaves right after waking, so a razor, shaving foam, and a towel go on his bed stand during the wake-up. He wants the newspaper after waking and before breakfast, breakfast in his room between 8:30 and 9:30 am (oatmeal, milk, and fruit), and 2 water bottles after breakfast. At 12 pm every day the robot gathers his laundry, and around lunchtime it checks that his indoor plants are watered. His activities: yoga Monday 10:30 am, doctor checkup Tuesday 10:30 am (reminder 30 minutes before; fresh flowers in his vase when he returns), art club Wednesday 10:30 am (reminder 30 minutes before), lunch with a friend Wednesday 12 pm (reminder 15 minutes before), birthday party he hosts Thursday 10:30 am (remind all residents 1 hour before), physical therapy Friday 10 am, book club Friday 10:30 am, hiking Friday 12 pm. Packages are left in front of his door with the mail on top." }
+];
+
+const RULE_INFO = `{
+  "request": "rule_info",
+  "rules": {
+    "Blaine": "Wakes at 7 am daily; enter, greet, bring water. Walk Mon/Wed/Fri 7:30 (wheelchair by bed). Breakfast 9 am in common room, mixed fruits and green tea; 30 min conversation after breakfast Mon/Wed/Fri. Medication check before lunch. Doctor Mon 10:30 (escort 15 min early), yoga Tue 10:30, art club Wed 10:30 (reminder), exercise Thu 11:00, book club Fri 10:30. Children for lunch Fri 12 pm (escort at 11:30). Mail and packages directly to her.",
+    "Susie": "Knock and wait for confirmation before entering. Water bottle at door 6 am for 6:30 walk. Local newspaper daily, NYT Mon/Wed. Breakfast 9 am in common room Mon/Wed/Fri, alone 8 am Tue/Thu. Coffee 10 am. After lunch: water and vitamins, empty trash, insulin check. Book club Mon/Fri 10:30, yoga Tue 10:30 (mat at door 10 am), PT Wed 10:30, Ryan's party Thu 10:30 (reminder 10 am), volunteering Fri 12 pm (books at door 11:30). Mail in door basket; packages to her or the caretaker.",
+    "Ryan": "Wakes at 7 am weekdays; three knocks; knock twice before entering. Shaving supplies on bed stand Mon/Wed/Fri. Newspaper before breakfast. Breakfast in room 8:30-9:30, oatmeal, milk, fruit; 2 water bottles after. Laundry at 12 pm; check plants watered around lunch. Yoga Mon 10:30, doctor Tue 10:30 (reminder 30 min; flowers after), art club Wed 10:30 (reminder 30 min), lunch Wed 12 pm (reminder 15 min), hosts party Thu 10:30 (remind all 1 hr before), PT Fri 10:00, book club Fri 10:30, hiking Fri 12 pm. Packages at door, mail on top."
+  }
+}`;
+
+const MONDAY = {
+  ask: "What are your caretaking tasks for Monday morning?",
+  intro: "Here is my caretaking plan for Monday morning:",
+  items: [
+    { t: "6:00am", x: "Fill Susie's water bottle and leave it at her door before her 6:30 walk.", r: ["S17"] },
+    { t: "7:00am", x: "Enter Blaine's room, greet her, and bring her a glass of water.", r: ["B1", "B3", "B11", "F"],
+      c: "Blaine and Ryan both wake up at 7am. Serving in alphabetical order: Blaine first." },
+    { t: "7:05am", x: "Wake Ryan with three knocks, then knock twice before entering. Leave a razor, shaving foam, and a towel on his bed stand, since he shaves on Mondays.", r: ["R1", "R2", "R7", "R11"] },
+    { t: "7:15am", x: "Prepare Blaine's wheelchair next to her bed for her 7:30 walk.", r: ["B2", "B13"] },
+    { t: "7:20am", x: "Deliver the newspaper to Ryan before his breakfast.", r: ["R6"] },
+    { t: "8:00am", x: "Knock on Susie's door. Once she confirms, deliver the local newspaper and the New York Times for her crossword. If she doesn't answer, I'll assume she isn't available.", r: ["S1", "S2"] },
+    { t: "8:30am", x: "Knock twice and bring Ryan his breakfast in his room: oatmeal, milk, and fruit.", r: ["R3", "R7", "R12"] },
+    { t: "9:00am", x: "Serve breakfast in the common room, with mixed fruits and green tea for Blaine. Susie joins them.", r: ["B4", "B5", "B12", "S4", "S12"] },
+    { t: "9:30am", x: "Talk with Blaine for 30 minutes about global issues, animals, or nature.", r: ["B14", "F"],
+      c: "Ryan's water bottles are due after his breakfast at the same time. Serving in alphabetical order: Blaine first." },
+    { t: "10:00am", x: "Deliver two water bottles to Ryan's room.", r: ["R4", "F"],
+      c: "Susie's coffee is also due at 10:00am. Serving in alphabetical order: Ryan first." },
+    { t: "10:05am", x: "Knock on Susie's door and, once she confirms, bring her coffee.", r: ["S1", "S19"] },
+    { t: "10:15am", x: "Escort Blaine to the front door for her 10:30 doctor checkup.", r: ["B7", "B18"] },
+    { t: "11:30am", x: "Check that Blaine took her medications before lunch.", r: ["B9"] },
+    { t: "12:00pm", x: "Gather Ryan's laundry while he's at lunch, and make sure his indoor plants are watered.", r: ["R5", "R10"] }
+  ],
+  why: {
+    ask: "Why do you see Blaine before Ryan at 7:00?",
+    html: `<p>Blaine and Ryan both wake up at 7am. Blaine wants me to enter her room, greet her, and bring her a glass of water. Ryan wants three knocks on his door, and on Mondays I also leave his shaving supplies on his bed stand.</p>
+<p>I can't do both at 7:00, and when residents' needs overlap, I serve them in alphabetical order of their first names. So Blaine comes first, and I wake Ryan right after, at 7:05. The same rule puts Blaine's conversation ahead of Ryan's water bottles at 9:30, and Ryan's water bottles ahead of Susie's coffee at 10:00.</p>`,
+    r: ["B1", "B3", "B11", "R1", "R2", "R11", "B14", "R4", "S19", "F"]
+  },
+  sum: {
+    html: `<p>Here are the rules I referred to:</p>
+<ul class="rules-sum">
+<li><b>Blaine:</b> wakes at 7am every day and wants a greeting and a glass of water (1, 3, 11); walks at 7:30 on Mondays, Wednesdays, and Fridays with her wheelchair ready (2, 13); has breakfast in the common room at 9am with mixed fruits and green tea (4, 5, 12); talks with me for 30 minutes after breakfast on Mondays, Wednesdays, and Fridays (14); is escorted to the front door 15 minutes before her Monday 10:30 checkup (7, 18); and gets a medication check before lunch (9).</li>
+<li><b>Ryan:</b> wakes at 7am on weekdays with three knocks (2, 11); wants two knocks before I enter (7); gets shaving supplies on Mondays, Wednesdays, and Fridays (1); gets the newspaper before breakfast (6); has breakfast in his room between 8:30 and 9:30 (3, 12); gets two water bottles after breakfast (4); and has his laundry gathered at 12pm and his plants checked around lunch (5, 10).</li>
+<li><b>Susie:</b> wants a knock and her confirmation before I enter (1); gets her water bottle at her door at 6am for her 6:30 walk (17); gets the local newspaper every morning and the New York Times on Mondays (2); has breakfast in the common room at 9am on Mondays (4, 12); and gets coffee at 10am (19).</li>
+<li><b>Facility:</b> when residents' needs overlap, I serve them in alphabetical order.</li>
+</ul>`,
+    r: ["B1", "B2", "B3", "B4", "B5", "B7", "B9", "B11", "B12", "B13", "B14", "B18", "R1", "R2", "R3", "R4", "R5", "R6", "R7", "R10", "R11", "R12", "S1", "S2", "S4", "S12", "S17", "S19", "F"]
+  }
+};
+
+const MAIL = {
+  ask: "Mail and a package arrived for each resident. How will you deliver them?",
+  intro: "Each resident wants their mail and packages handled differently:",
+  items: [
+    { t: "Blaine", x: "I'll bring her mail and her package directly to her.", r: ["B8"] },
+    { t: "Ryan", x: "I'll leave his package in front of his door and put his mail on top of it.", r: ["R8"] },
+    { t: "Susie", x: "I'll leave her mail in the basket on her door. For the package, I'll knock and hand it to her once she confirms. If she doesn't answer, I'll give it to the human caretaker instead.", r: ["S1", "S5", "S6"] }
+  ],
+  sum: {
+    html: `<p>Here are the rules I referred to:</p>
+<ul class="rules-sum">
+<li><b>Blaine:</b> likes her mail and packages delivered directly to her (8).</li>
+<li><b>Ryan:</b> wants packages left in front of his door, with the mail on top (8).</li>
+<li><b>Susie:</b> wants her mail left in the basket on her door (5), and other packages delivered directly to her, or to the human caretaker if she isn't available (6). I knock and wait for her confirmation before entering (1).</li>
+</ul>`,
+    r: ["B8", "R8", "S1", "S5", "S6"]
+  }
+};
+
+const FEEDBACK = {
+  ask: "Blaine has a new exercise session on Friday at 12pm.",
+  html: `<p>That overlaps with Blaine's lunch with her children, who visit every Friday at 12pm. I also escort them from the front door to her room when they arrive at 11:30am.</p><p>How should I proceed?</p>`,
+  r: ["B20"],
+  move: {
+    ask: "Move the exercise session to Friday at 2pm.",
+    html: `<p>Got it. I'll schedule Blaine's exercise session on Fridays at 2pm, after lunch with her children, and I've added it to her rules.</p>`,
+    r: ["B20"],
+    add: { who: "Blaine", text: "Blaine will join an exercise session on Friday at 2pm." }
+  },
+  ask2: {
+    ask: "Ask Blaine which she prefers.",
+    html: `<p>I'll ask Blaine when I greet her at 7am and won't change her schedule until she confirms. Her Friday lunch with her children stays as it is.</p>`,
+    r: ["B1", "B11", "B20"]
+  },
+  susie: {
+    ask: "Susie will join that session too.",
+    html: `<p>I've added the 2pm exercise session to Susie's rules too. It comes after her volunteering at the community center at 12pm, so nothing else overlaps.</p><p>Since Blaine and Susie will both need help getting ready at 2pm, I'll help Blaine first and then Susie, in alphabetical order.</p>`,
+    r: ["S1", "S20", "F"],
+    add: { who: "Susie", text: "Susie will join an exercise session on Friday at 2pm." }
+  }
+};
+
+/* =====================================================================
+   Rendering helpers
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const msgs = $("msgs"), chipsEl = $("chips"), input = $("input"), send = $("send"), guide = $("guideNow");
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait = ms => new Promise(r => setTimeout(r, reduce ? Math.min(ms, 120) : ms));
+const clock = () => new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let run = 0;
+const alive = r => r === run;
+
+function renderDocs() {
+  const wrap = $("docs");
+  wrap.innerHTML = "";
+  for (const who of ORDER) {
+    const d = document.createElement("section");
+    d.className = "doc";
+    d.setAttribute("aria-label", who + "'s document");
+    d.innerHTML = `<div class="doc-h"><span class="ic" aria-hidden="true"></span><b>${who}</b><small id="cnt-${who}">${DOCS[who].length} rules</small></div><ol id="doc-${who}"></ol>`;
+    wrap.appendChild(d);
+    const ol = d.querySelector("ol");
+    DOCS[who].forEach((txt, i) => ol.appendChild(line(who[0] + (i + 1), i + 1, txt)));
+  }
+}
+function line(id, n, txt) {
+  const li = document.createElement("li");
+  li.dataset.id = id;
+  li.innerHTML = `<span class="n">${n}</span><span>${esc(txt)}</span>`;
+  return li;
+}
+function lineEl(id) { return id === "F" ? $("facility") : document.querySelector(`.doc li[data-id="${id}"]`); }
+
+function clearMarks(cls) { document.querySelectorAll("." + cls).forEach(e => { if (e.matches(".doc li, .facility")) e.classList.remove(cls); }); }
+function markUsed(ids) {
+  clearMarks("used"); clearMarks("hot");
+  ids.forEach(id => { const e = lineEl(id); if (e) e.classList.add("used"); });
+  scrollToFirst(ids);
+}
+function markHot(ids) {
+  clearMarks("hot");
+  ids.forEach(id => { const e = lineEl(id); if (e) e.classList.add("hot"); });
+  scrollToFirst(ids);
+}
+function scrollToFirst(ids) {
+  for (const who of ORDER) {
+    const first = ids.map(lineEl).find(e => e && e.closest && e.closest(`#doc-${who}`));
+    if (first) {
+      const ol = $("doc-" + who);
+      ol.scrollTop = Math.max(0, first.offsetTop - ol.offsetTop - 8);
+    }
+  }
+}
+function addRule(who, text) {
+  DOCS[who].push(text);
+  const n = DOCS[who].length;
+  const li = line(who[0] + n, n, text);
+  li.classList.add("new");
+  $("doc-" + who).appendChild(li);
+  $("cnt-" + who).textContent = n + " rules";
+  const ol = $("doc-" + who);
+  ol.scrollTop = ol.scrollHeight;
+}
+
+function setStage(s) {
+  const order = ["reflection", "analysis", "feedback"];
+  document.querySelectorAll(".stage").forEach(el => {
+    const i = order.indexOf(el.dataset.stage), cur = order.indexOf(s);
+    el.classList.toggle("on", i === cur);
+    el.classList.toggle("done", cur > i && s !== null);
+  });
+}
+
+function addMsg(author, html) {
+  const m = document.createElement("div");
+  m.className = "msg";
+  const you = author === "You";
+  m.innerHTML = `<div class="av ${you ? "you" : "planner"}" aria-hidden="true">${you ? "U" : "P"}</div>
+    <div class="msg-body"><div class="msg-meta"><b>${you ? "User" : author}</b><time>${clock()}</time></div><div class="msg-text">${html}</div></div>`;
+  msgs.appendChild(m);
+  msgs.scrollTop = msgs.scrollHeight;
+  return m.querySelector(".msg-text");
+}
+function addStep(parent, from, to, bodyHTML, open = false) {
+  const s = document.createElement("div");
+  s.className = "step" + (open ? " open" : "");
+  s.innerHTML = `<button type="button" aria-expanded="${open}"><span class="spin" aria-hidden="true"></span><span class="who">${from}</span><span class="arrow" aria-hidden="true">→</span><span class="who">${to}</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="step-body">${bodyHTML}</div>`;
+  const b = s.querySelector("button");
+  b.addEventListener("click", () => { s.classList.toggle("open"); b.setAttribute("aria-expanded", s.classList.contains("open")); });
+  parent.appendChild(s);
+  msgs.scrollTop = msgs.scrollHeight;
+  return {
+    el: s,
+    body: s.querySelector(".step-body"),
+    done() { const sp = s.querySelector(".spin"); if (sp) sp.className = "done-dot"; },
+    close() { s.classList.remove("open"); b.setAttribute("aria-expanded", "false"); }
+  };
+}
+async function typing(r) {
+  const t = addMsg("Planner", `<span class="typing" aria-label="Planner is typing"><i></i><i></i><i></i></span>`);
+  await wait(900);
+  const m = t.closest(".msg");
+  if (alive(r)) m.remove();
+  return alive(r);
+}
+
+function planHTML(p) {
+  const rows = p.items.map((it, i) => `<li tabindex="0" data-i="${i}"><span class="t">${it.t}</span><span>${esc(it.x)}${it.c ? `<span class="conf">${esc(it.c)}</span>` : ""}</span></li>`).join("");
+  return `<p>${esc(p.intro)}</p><ol class="plan">${rows}</ol><p class="hint">Point at a line to see the rules behind it.</p>`;
+}
+function wirePlan(textEl, p) {
+  textEl.querySelectorAll(".plan li").forEach(li => {
+    const ids = p.items[+li.dataset.i].r;
+    const on = () => { textEl.querySelectorAll(".plan li.hot").forEach(x => x.classList.remove("hot")); li.classList.add("hot"); markHot(ids); };
+    li.addEventListener("mouseenter", on);
+    li.addEventListener("focus", on);
+    li.addEventListener("click", on);
+  });
+}
+const union = items => [...new Set(items.flatMap(i => i.r))];
+
+/* =====================================================================
+   Chips and sending
+   ===================================================================== */
+let pending = null;
+function setChips(list, text) {
+  chipsEl.innerHTML = "";
+  pending = null;
+  input.value = "";
+  send.disabled = true;
+  send.classList.remove("pulse");
+  list.forEach(c => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip" + (c.go ? " go" : "");
+    b.textContent = c.label;
+    b.addEventListener("click", () => {
+      if (c.go) { chipsEl.innerHTML = ""; c.act(); return; }
+      chipsEl.querySelectorAll(".chip").forEach(x => x.classList.remove("sel"));
+      b.classList.add("sel");
+      pending = c;
+      input.value = c.label;
+      send.disabled = false;
+      send.classList.add("pulse");
+      send.focus();
+    });
+    chipsEl.appendChild(b);
+  });
+  if (text) guide.innerHTML = text;
+}
+$("form").addEventListener("submit", e => {
+  e.preventDefault();
+  if (!pending) return;
+  const c = pending;
+  setChips([]);
+  addMsg("You", `<p>${esc(c.label)}</p>`);
+  c.act();
+});
+
+/* =====================================================================
+   Flow
+   ===================================================================== */
+const seen = new Set();
+
+function start() {
+  run++;
+  seen.clear();
+  msgs.innerHTML = "";
+  DOCS.Blaine.length = 20; DOCS.Susie.length = 20;
+  renderDocs();
+  $("facility").classList.remove("used", "hot");
+  setStage(null);
+  const t = addMsg("Planner", `<div class="instr"><h4>Hello! I am your personal robot, in charge of assistive care!</h4><p>Before we talk, I'll collect every resident's schedules and preferences.</p></div>`);
+  setChips([{ label: "Start", go: true, act: reflect }],
+    `<b>Stage 1, Reflection.</b> Before the robot talks to you, its Planner asks the Rule Manager to gather every resident's rules from their documents. Press <b>Start</b> to watch the agents work.`);
+}
+
+async function reflect() {
+  const r = run;
+  setStage("reflection");
+  guide.innerHTML = `<b>Reflection.</b> The Rule Manager asks the Rule Retriever about one resident at a time. The retrieved rules light up in the documents on the right.`;
+  const t = addMsg("Planner", "");
+  const s0 = addStep(t, "Planner", "Rule Manager", `<p class="q">Collect the schedules and preferences of every resident.</p>`, true);
+  await wait(700); if (!alive(r)) return;
+  for (const q of RETRIEVE) {
+    const s = addStep(s0.body, "Rule Manager", "Rule Retriever", `<p class="q"><b>Q:</b> ${esc(q.q)}</p>`, true);
+    const ol = $("doc-" + q.who);
+    const lis = [...ol.children];
+    for (let i = 0; i < lis.length; i++) {
+      lis[i].classList.add("scan");
+      if (i % 4 === 3) { ol.scrollTop = lis[i].offsetTop - ol.offsetTop - 120; await wait(110); if (!alive(r)) return; }
+    }
+    await wait(350); if (!alive(r)) return;
+    s.body.insertAdjacentHTML("beforeend", `<p class="a"><b>A:</b> ${esc(q.a)}</p>`);
+    s.done();
+    msgs.scrollTop = msgs.scrollHeight;
+    await wait(900); if (!alive(r)) return;
+    s.close();
+    ol.scrollTop = 0;
+  }
+  const tool = addStep(s0.body, "Rule Manager", "Planner", `<pre>${hl(RULE_INFO)}</pre>`, true);
+  await wait(600); if (!alive(r)) return;
+  tool.done();
+  await wait(900); if (!alive(r)) return;
+  tool.close(); s0.done(); s0.close();
+  document.querySelectorAll(".doc li.scan").forEach(e => e.classList.remove("scan"));
+  if (!(await typing(r))) return;
+  addMsg("Planner", `<p>Welcome! I've collected the schedules and preferences of Blaine, Ryan, and Susie. I can plan the day's caretaking tasks, deliver meals, mail, and packages, escort residents, and send reminders for their appointments and activities.</p><p>What can I help you with?</p>`);
+  setStage("analysis");
+  menu();
+}
+function hl(json) {
+  return esc(json).replace(/&quot;([^&]*?)&quot;(\s*:)/g, '<span class="k">"$1"</span>$2').replace(/:\s&quot;([\s\S]*?)&quot;/g, ': <span class="s">"$1"</span>');
+}
+
+function menu(extra = []) {
+  const list = [...extra];
+  if (!seen.has("monday")) list.push({ label: MONDAY.ask, act: () => answerPlan(MONDAY, "monday") });
+  if (!seen.has("mail")) list.push({ label: MAIL.ask, act: () => answerPlan(MAIL, "mail") });
+  if (!seen.has("feedback")) list.push({ label: FEEDBACK.ask, act: feedback });
+  if (!list.length) {
+    setChips([], `That's the full workflow. Point at any line of a plan to see its rules again, or <b>Restart</b> to try other paths.`);
+    return;
+  }
+  const g = seen.has("feedback")
+    ? `Ask the robot something else, or <b>Restart</b> to try other paths.`
+    : seen.size
+      ? `Point at a line of the plan to see the rules behind it, or ask a follow-up. When you're ready for <b>Stage 3, Feedback</b>, tell the robot about a change to Blaine's schedule.`
+      : `<b>Stage 2, Analysis.</b> Pick a request and send it. The Planner answers from the rules it gathered, and serves residents in alphabetical order when their needs overlap.`;
+  setChips(list, g);
+}
+
+async function answerPlan(p, key) {
+  const r = run;
+  seen.add(key);
+  setStage("analysis");
+  if (!(await typing(r))) return;
+  const t = addMsg("Planner", planHTML(p));
+  wirePlan(t, p);
+  markUsed(union(p.items));
+  msgs.scrollTop = msgs.scrollHeight - t.closest(".msg").offsetHeight - 40;
+  const extra = [];
+  if (p.why) extra.push({ label: p.why.ask, act: () => explain(p.why, p) });
+  extra.push({ label: "Summarize the rules you referred to.", act: () => explain(p.sum, p) });
+  menu(extra);
+}
+
+async function explain(x, p) {
+  const r = run;
+  if (!(await typing(r))) return;
+  addMsg("Planner", x.html);
+  markUsed(x.r);
+  const extra = [];
+  if (p.why && x !== p.why) extra.push({ label: p.why.ask, act: () => explain(p.why, p) });
+  if (x !== p.sum) extra.push({ label: "Summarize the rules you referred to.", act: () => explain(p.sum, p) });
+  menu(extra);
+}
+
+async function feedback() {
+  const r = run;
+  seen.add("feedback");
+  setStage("feedback");
+  if (!(await typing(r))) return;
+  addMsg("Planner", FEEDBACK.html);
+  markUsed(FEEDBACK.r);
+  setChips([
+    { label: FEEDBACK.move.ask, act: async () => {
+      if (!(await typing(r))) return;
+      addMsg("Planner", FEEDBACK.move.html);
+      markUsed(FEEDBACK.move.r);
+      addRule(FEEDBACK.move.add.who, FEEDBACK.move.add.text);
+      setChips([{ label: FEEDBACK.susie.ask, act: async () => {
+        if (!(await typing(r))) return;
+        addMsg("Planner", FEEDBACK.susie.html);
+        markUsed(FEEDBACK.susie.r);
+        addRule(FEEDBACK.susie.add.who, FEEDBACK.susie.add.text);
+        menu();
+      } }], `<b>Feedback.</b> The robot recorded the change as a new rule in Blaine's document. Now add Susie to the session.`);
+    } },
+    { label: FEEDBACK.ask2.ask, act: async () => {
+      if (!(await typing(r))) return;
+      addMsg("Planner", FEEDBACK.ask2.html);
+      markUsed(FEEDBACK.ask2.r);
+      menu();
+    } }
+  ], `<b>Stage 3, Feedback.</b> The robot checked the new session against Blaine's rules and found an overlap. Tell it how to proceed.`);
+}
+
+$("restart").addEventListener("click", start);
+start();
+})();
+</script>
+</body>
+</html>
